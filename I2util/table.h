@@ -12,6 +12,7 @@
 **	File:		table.h
 **
 **	Author:		Anatoly Karp
+**			Jeff Boote
 **
 **	Date:		Thu Apr 19 13:47:17  EDT 2002
 **
@@ -75,6 +76,11 @@ extern int
 I2HashDelete(
 	I2Table	table,
 	I2Datum	key
+	);
+
+extern void
+I2HashClean(
+	I2Table table
 	);
 
 extern I2TableDataSizeT

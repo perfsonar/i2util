@@ -413,3 +413,30 @@ done_iterate:
 	}
 	table->in_iterate = False;
 }
+
+void
+I2HashClean(
+	I2Table			table
+	      )
+{
+	I2TableDataSizeT	i;
+	I2Binding		*p;
+	I2Binding		q;
+
+	assert(table);
+	assert(!table->in_iterate);
+
+	for (i = 0;((i < table->size) && (table->length > 0)); i++){
+		p = &table->buckets[i];
+		while(*p){
+			q = *p;
+			*p = q->next;
+			free_binding(table,q);
+			table->length--;
+		}
+	}
+
+	assert(table->length == 0);
+
+	return;
+}
