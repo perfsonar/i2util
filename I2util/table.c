@@ -52,7 +52,7 @@ cmpatom(const I2datum *x, const I2datum *y)
 static unsigned long
 hashatom(const I2datum *key)
 {
-	int i;
+	unsigned long i;
 	unsigned char *ptr = (unsigned char *)(key->dptr);
 	unsigned long ret = 0;
 	for (i = 0; i < key->dsize; i++, ptr++)
@@ -193,6 +193,7 @@ I2hash_delete(
 	return 0;
 }
 
+#define OWP_PRINT_DEBUG
 /*
 ** Look up the value corresponding to a given key. Returns
 ** the value datum on success, or NULL on failure.
@@ -210,7 +211,7 @@ I2hash_fetch(I2table table, const I2datum *key){
 
 #ifdef OWP_PRINT_DEBUG
 	printf("DEBUG: searching for key = `%s' with hash = %d...\n",
-	       key->dptr, i);
+	       (char *)(key->dptr), i);
 #endif
 
 	for (p = table->buckets[i]; p; p = p->link){
@@ -236,7 +237,7 @@ I2hash_print(I2table table, FILE* fp)
 #ifdef OWP_PRINT_DEBUG
 			j = (*table->hash)(p->key)%table->size;
 			printf("DEBUG: the key `%s' has hash value %d\n",
-			       p->key->dptr, j);
+			       (char *)(p->key->dptr), j);
 #endif
 		}
 }
