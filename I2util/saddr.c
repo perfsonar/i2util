@@ -21,7 +21,7 @@
  *	Generic socket functions used here to abstract away addr family
  *	differences.
  */
-
+#include <string.h>
 #include <I2util/saddr.h>
 
 /*
@@ -162,20 +162,21 @@ I2SockAddrEqual(
  */
 int
 I2SockAddrIsLoopback(
-	const struct sockaddr	*sa1,
-	socklen_t		sa1_len
+	const struct sockaddr	*sa,
+	socklen_t		sa_len
 	)
 {
-	switch(sa1->sa_family){
+	switch(sa->sa_family){
 #ifdef	AF_INET6
 	case AF_INET6:
 		return IN6_IS_ADDR_LOOPBACK(
-				&((struct sockaddr_in6*)sa1)->sin6_addr);
+				&((struct sockaddr_in6*)sa)->sin6_addr);
 
 		break;
 #endif
 	case AF_INET:
-		return (INADDR_LOOPBACK == ((struct sockaddr_in*)sa)->sin_addr);
+		return (INADDR_LOOPBACK ==
+				(((struct sockaddr_in*)sa)->sin_addr.s_addr));
 
 		break;
 
