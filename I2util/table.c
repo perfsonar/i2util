@@ -44,7 +44,7 @@ struct I2Table {
 	int			hint;
 	I2HashCmpFunc		cmp;
 	I2HashFunc		hash;
-	int			length;
+	I2TableDataSizeT	length;
 	I2Binding		*buckets;
 	I2Binding		freelist;
 	I2Binding		*alist;

@@ -433,6 +433,6 @@ void	I2ErrLogSyslogReset(
 	closelog();
 	*data = NULL;
 
-	return True;
+	return;
 }
 
