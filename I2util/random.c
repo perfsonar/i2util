@@ -20,18 +20,32 @@
  */
 #include <stdlib.h>
 #include <sys/types.h>
+#include <stdio.h>
+
+#define OWP_RAND_DEV_PATH "/dev/urandom"
 
 /*
 ** This function generates <count> many random bytes and
 ** places them in the location pointed to by <ptr>. It is
 ** a responsibility of the caller to have allocated
-** sufficient space.
+** sufficient space. Returns 0 on success, and -1 on failure.
 */
-void
+int
 I2RandomBytes(unsigned char *ptr, int count)
 {
+	static FILE* fp = NULL;
 	int i;
-	long scale = (RAND_MAX / 1<<8);
-	for (i = 0; i < count; i++)
-		*(u_int8_t *)(ptr+i) = random()/scale; 
+
+	if (!fp) {
+		if ((fp = fopen(OWP_RAND_DEV_PATH, "rb")) == NULL) {
+			perror("I2randomBytes: fopen() failed");
+			return -1;
+		}
+	}
+
+	/* Interpet short count as error. */
+	if (fread(ptr, 1, count, fp) != count)
+		return -1;
+
+	return 0;
 }
