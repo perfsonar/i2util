@@ -46,6 +46,6 @@ typedef unsigned int    I2Boolean;
 #include <I2util/errlog.h>
 #include <I2util/options.h>
 #include <I2util/table.h>
+#include <I2util/random.h>
 
-#include <I2util/arithm.h>
 #endif	/*	_I2_util_h_	*/
