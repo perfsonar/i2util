@@ -41,6 +41,7 @@
 #define _i2_errlog_h_
 
 #include <stdio.h>
+#include <stdarg.h>
 #include <I2util/util.h>
 
 
@@ -132,15 +133,26 @@ extern void	I2ErrLocation_(
 	int		line
 );
 
+extern void
+I2ErrLogVT(
+	I2ErrHandle	dpeh,
+	int		level,
+	int		code,
+	const char	*format,
+	va_list		ap
+	);
+
 extern void	I2ErrLogFunction_(
 	I2ErrHandle	dpeh,
-	const char	*format, ...
+	const char	*format,
+	...
 );
 
 extern void	I2ErrLogPFunction_(
 	I2ErrHandle	dpeh,
 	int		err_code,
-	const char	*format, ...
+	const char	*format,
+	...
 );
 
 extern void	I2ErrLogTFunction_(

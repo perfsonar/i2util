@@ -664,6 +664,18 @@ ErrLogRealFunction_(
 }
 
 void
+I2ErrLogVT(
+	I2ErrHandle	dpeh,
+	int		level,
+	int		code,
+	const char	*format,
+	va_list		ap
+	)
+{
+	ErrLogRealFunction_(dpeh,level,code,format,ap);
+}
+
+void
 I2ErrLogTFunction_(
 	I2ErrHandle	dpeh,
 	int		level,
