@@ -253,12 +253,24 @@ main(
 	rc = I2ParseKeyFile(NULL,fromfp,0,&lbuf,&lbuf_max,tofp,idname,
 			NULL,NULL);
 	if(rc < 0){
-		fprintf(stderr,"%s:I2ParseKeyFile('%s'): error line %d\n",
+		fprintf(stderr,"%s: I2ParseKeyFile('%s'): error line %d\n",
 				progname,keyfname,rc);
 		exit(1);
 	}
 
-	if(!do_delete){
+	if(do_delete){
+		/*
+		 * If we are deleting, the identity should have been found.
+		 */
+		if(!rc){
+			fprintf(stderr,"%s: Identity '%s' not found\n",
+					progname,idname);
+			exit(1);
+		}
+	}else{
+		/*
+		 * Not deleting, add the new/changed key line.
+		 */
 		if(I2WriteKeyLine(NULL,tofp,idname,aeskey) < 0){
 			fprintf(stderr,"%s:I2WriteKeyLine('%s'): %s\n",
 					progname,keyfname,strerror(errno));
