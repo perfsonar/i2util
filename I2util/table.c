@@ -193,6 +193,10 @@ I2hash_delete(
 	return 0;
 }
 
+/*
+** Look up the value corresponding to a given key. Returns
+** the value datum on success, or NULL on failure.
+*/
 I2datum *
 I2hash_fetch(I2table table, const I2datum *key){
 	int i;
