@@ -28,9 +28,18 @@
 #include <stdarg.h>
 #include <I2util/util.h>
 
+/*
+** Types of randomness sources.
+*/
+#define RAND_DEV      0
+#define RAND_DAEMON   1
+
 BEGIN_C_DECLS
 
-extern void
+extern int
+I2RandomSourceInit(I2ErrHandle eh, int type, void* data);
+
+extern int
 I2RandomBytes(
 	unsigned char	*ptr,
 	int		count
