@@ -49,7 +49,6 @@
 /*
  * May support threading in future.
  */
-/*NOTUSED*/
 static I2ThreadMutex_T	MyMutex = I2PTHREAD_MUTEX_INITIALIZER;
 
 #define	TABLE_SIZE	10
@@ -728,42 +727,6 @@ void	I2ErrLogPFunction_(
 	return;
 }
 
-#ifdef	NOT
-{
-	va_list		ap;
-
-	ErrHandle	*eh = (ErrHandle *) dpeh;
-	char		new_format[MSG_BUF_SIZE];
-	char		buf[MSG_BUF_SIZE];
-
-	if (! eh) {
-	I2ThreadMutexUnlock(&MyMutex);
-
-		return;
-	}
-
-	(void)esnprintf(eh,new_format,sizeof(new_format),format,code);
-
-	eh->code = code;
-
-	/*
-	 * deal with variable args
-	 */
-        va_start(ap, format);
-        (void) vsnprintf(buf,sizeof(buf),new_format,ap);
-        va_end(ap);
-
-	eh->log_func(
-		eh->program_name, errorFile, errorLine, 
-		errorDate, buf, eh->log_func_arg, &(eh->data)
-	);
-	I2ThreadMutexUnlock(&MyMutex);
-
-
-	return;
-}
-#endif
-
 /*
  * Function:	I2ErrLogFunction_()
  *
@@ -815,42 +778,3 @@ void	I2ErrLogFunction_(
 
 	return;
 }
-#ifdef	NOT
-{
-	va_list		ap;
-
-	ErrHandle *eh = (ErrHandle *) dpeh;
-	char		new_format[MSG_BUF_SIZE];
-	char		buf[MSG_BUF_SIZE];
-
-	if (! eh) {
-	I2ThreadMutexUnlock(&MyMutex);
-
-		return;
-	}
-
-	/*
-	 * handle any '%M' or '%N' format specifiers
-	 */
-	(void) esnprintf(eh,new_format,sizeof(new_format),format,errno);
-
-	eh->code = errno;
-
-	/*
-	 * deal with variable args
-	 */
-        va_start(ap, format);
-        (void) vsnprintf(buf,sizeof(buf),new_format, ap);
-        va_end(ap);
-
-	eh->log_func(
-		eh->program_name, errorFile, errorLine, 
-		errorDate, buf, eh->log_func_arg, &(eh->data)
-	);
-
-	I2ThreadMutexUnlock(&MyMutex);
-
-
-	return;
-}
-#endif

@@ -79,18 +79,6 @@ typedef void	(*I2ErrLogFuncPtr) (	/* client logging function	*/
 		void			**data
 		);
 
-#ifdef	NOT
-typedef void	(*I2ErrLogFuncPtr) (	/* client logging function	*/
-	const char	*program_name,
-	const char      *file,  
-	int             line,
-	const char      *date,  
-	const char      *msg,
-	void            *arg,
-	void		**data
-	);
-#endif
-
 typedef	char	*(*I2ErrRetrieveFuncPtr)(      /* client fetch func    	*/
 	void	*arg,
 	void	**data
