@@ -68,7 +68,7 @@ extern int	I2ErrLogSyslogPriority(
 	const char	*name
 	);
 
-const char *IErrLogSyslogPriorityName(
+const char *I2ErrLogSyslogPriorityName(
 		int	prio
 		);
 

@@ -46,8 +46,11 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _READPASSPHRASE_H_
-#define _READPASSPHRASE_H_
+#ifndef _i2_readpassphrase_h_
+#define _i2_readpassphrase_h_
+
+#include <sys/cdefs.h>
+#include <I2util/util.h>
 
 #define I2RPP_ECHO_OFF    0x00		/* Turn off echo (default). */
 #define I2RPP_ECHO_ON     0x01		/* Leave echo on. */
@@ -56,10 +59,11 @@
 #define I2RPP_FORCEUPPER  0x08		/* Force input to upper case. */
 #define I2RPP_SEVENBIT    0x10		/* Strip the high bit from input. */
 
-#include <sys/cdefs.h>
 
 BEGIN_C_DECLS
+
 char * I2ReadPassPhrase(const char *, char *, size_t, int);
+
 END_C_DECLS
 
-#endif /* !_READPASSPHRASE_H_ */
+#endif /* !_i2_readpassphrase_h_ */

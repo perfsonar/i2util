@@ -24,27 +24,29 @@ These notices must be retained in any copies of any part of this
 documentation and/or software.
  */
 
-#ifndef _SYS_MD5_H_
-#define _SYS_MD5_H_
+#ifndef _I2_md5_h_
+#define _I2_md5_h_
+#include <sys/cdefs.h>
+#include <I2util/util.h>
+
 /* MD5 context. */
-typedef struct MD5Context {
+typedef struct I2MD5Context {
   u_int32_t state[4];	/* state (ABCD) */
   u_int32_t count[2];	/* number of bits, modulo 2^64 (lsb first) */
   unsigned char buffer[64];	/* input buffer */
-} MD5_CTX;
+} I2MD5_CTX;
 
-#include <sys/cdefs.h>
 
-__BEGIN_DECLS
-void   MD5Init (MD5_CTX *);
-void   MD5Update (MD5_CTX *, const unsigned char *, unsigned int);
-void   MD5Pad (MD5_CTX *);
-void   MD5Final (unsigned char [16], MD5_CTX *);
-char * MD5End(MD5_CTX *, char *);
-char * MD5File(const char *, char *);
-char * MD5Data(const unsigned char *, unsigned int, char *);
-#ifdef _KERNEL
-void MD5Transform __P((u_int32_t [4], const unsigned char [64]));
-#endif
-__END_DECLS
-#endif /* _SYS_MD5_H_ */
+BEGIN_C_DECLS
+
+void   I2MD5Init (I2MD5_CTX *);
+void   I2MD5Update (I2MD5_CTX *, const unsigned char *, unsigned int);
+void   I2MD5Pad (I2MD5_CTX *);
+void   I2MD5Final (unsigned char [16], I2MD5_CTX *);
+char * I2MD5End(I2MD5_CTX *, char *);
+char * I2MD5File(const char *, char *);
+char * I2MD5Data(const unsigned char *, unsigned int, char *);
+
+END_C_DECLS
+
+#endif /* _I2_md5_h_ */

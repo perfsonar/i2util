@@ -163,7 +163,7 @@ I2SockAddrEqual(
 int
 I2SockAddrIsLoopback(
 	const struct sockaddr	*sa,
-	socklen_t		sa_len
+	socklen_t		sa_len __attribute__((unused))
 	)
 {
 	switch(sa->sa_family){

@@ -98,7 +98,7 @@ I2GetConfLine(
 				rc++;
 				continue;
 			}
-			I2ErrLog(eh,EINVAL,"Invalid use of \'\\\'");
+			I2ErrLogP(eh,EINVAL,"Invalid use of \'\\\'");
 			return -rc;
 		}
 
@@ -117,7 +117,7 @@ I2GetConfLine(
 				 * null context case - so use strerror
 				 * directly.
 				 */
-				I2ErrLog(eh,errno,"realloc(%u): %M",*lbuf_max);
+				I2ErrLog(eh,"realloc(%u): %M",*lbuf_max);
 				return -rc;
 			}
 			line = *lbuf;
@@ -249,9 +249,10 @@ getkeyfileline(
 	)
 {
 	int	c;
+	size_t	i;
 	char	*line = *lbuf;
-	size_t	nc=0; # number of "significant" chars in the line
-	size_t	ns=0; # number of leading spaces
+	size_t	nc=0; // number of "significant" chars in the line
+	size_t	ns=0; // number of leading spaces
 
 	while((c = fgetc(fp)) != EOF){
 
@@ -276,7 +277,7 @@ getkeyfileline(
 		if(!nc && c == '#'){
 			if(tofp){
 				/* preserve leading spaces */
-				for(j=0;j<ns;j++) fprintf(tofp," ");
+				for(i=0;i<ns;i++) fprintf(tofp," ");
 				fprintf(tofp,"#");
 			}
 			while((c = fgetc(fp)) != EOF){
@@ -310,7 +311,7 @@ getkeyfileline(
 				if(line){
 					free(line);
 				}
-				I2ErrLog(eh,errno,"realloc(%u): %M",*lbuf_max);
+				I2ErrLog(eh,"realloc(%u): %M",*lbuf_max);
 				return -rc;
 			}
 			line = *lbuf;
@@ -373,7 +374,6 @@ I2ParseKeyFile(
 	)
 {
 	char		*line;
-	int		rc;
 	int		i;
 	char		rbuf[I2MAXIDENTITYLEN+1]; /* add one extra byte */
 	char		*keystart;
@@ -412,7 +412,7 @@ I2ParseKeyFile(
 		}
 
 		if( i > I2MAXIDENTITYLEN){
-			I2ErrLog(eh,EINVAL,"Invalid identity name (too long)");
+			I2ErrLogP(eh,EINVAL,"Invalid identity name (too long)");
 			return -rc;
 		}
 		rbuf[i] = '\0';
@@ -435,7 +435,7 @@ I2ParseKeyFile(
 		}
 
 		if(i != I2KEYLEN){
-			I2ErrLog(eh,EINVAL,"Invalid key length");
+			I2ErrLogP(eh,EINVAL,"Invalid key length");
 			return -rc;
 		}
 
@@ -448,14 +448,14 @@ I2ParseKeyFile(
 				break;
 			}
 			if(!isspace(*line)){
-				I2ErrLog(eh,EINVAL,"Invalid chars after key");
+				I2ErrLogP(eh,EINVAL,"Invalid chars after key");
 				return -rc;
 			}
 			line++;
 		}
 
 		if(!I2HexDecode(keystart,kbuf,I2KEYLEN)){
-			I2ErrLog(eh,EINVAL,"Invalid key: not hex?");
+			I2ErrLogP(eh,EINVAL,"Invalid key: not hex?");
 			return -rc;
 		}
 
@@ -467,7 +467,7 @@ I2ParseKeyFile(
 			/*
 			 * Write line to tofp, then 'continue'
 			 */
-			if(tofp) fprintf(tofp,"%s\n",lbuf);
+			if(tofp) fprintf(tofp,"%s\n",*lbuf);
 			continue;
 		}
 

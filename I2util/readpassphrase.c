@@ -86,7 +86,7 @@ restart:
 	 * Read and write to /dev/tty if available.  If not, read from
 	 * stdin and write to stderr unless a tty is required.
 	 */
-	if ((input = output = _open(_PATH_TTY, O_RDWR)) == -1) {
+	if ((input = output = open(_PATH_TTY, O_RDWR)) == -1) {
 		if (flags & I2RPP_REQUIRE_TTY) {
 			errno = ENOTTY;
 			return(NULL);
@@ -103,13 +103,13 @@ restart:
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;		/* don't restart system calls */
 	sa.sa_handler = handler;
-	(void)_sigaction(SIGINT, &sa, &saveint);
-	(void)_sigaction(SIGHUP, &sa, &savehup);
-	(void)_sigaction(SIGQUIT, &sa, &savequit);
-	(void)_sigaction(SIGTERM, &sa, &saveterm);
-	(void)_sigaction(SIGTSTP, &sa, &savetstp);
-	(void)_sigaction(SIGTTIN, &sa, &savettin);
-	(void)_sigaction(SIGTTOU, &sa, &savettou);
+	(void)sigaction(SIGINT, &sa, &saveint);
+	(void)sigaction(SIGHUP, &sa, &savehup);
+	(void)sigaction(SIGQUIT, &sa, &savequit);
+	(void)sigaction(SIGTERM, &sa, &saveterm);
+	(void)sigaction(SIGTSTP, &sa, &savetstp);
+	(void)sigaction(SIGTTIN, &sa, &savettin);
+	(void)sigaction(SIGTTOU, &sa, &savettou);
 
 	/* Turn off echo if possible. */
 	if (tcgetattr(input, &oterm) == 0) {
@@ -124,9 +124,9 @@ restart:
 		memset(&oterm, 0, sizeof(oterm));
 	}
 
-	(void)_write(output, prompt, strlen(prompt));
+	(void)write(output, prompt, strlen(prompt));
 	end = buf + bufsiz - 1;
-	for (p = buf; (nr = _read(input, &ch, 1)) == 1 && ch != '\n' && ch != '\r';) {
+	for (p = buf; (nr = read(input, &ch, 1)) == 1 && ch != '\n' && ch != '\r';) {
 		if (p < end) {
 			if ((flags & I2RPP_SEVENBIT))
 				ch &= 0x7f;
@@ -142,20 +142,20 @@ restart:
 	*p = '\0';
 	save_errno = errno;
 	if (!(term.c_lflag & ECHO))
-		(void)_write(output, "\n", 1);
+		(void)write(output, "\n", 1);
 
 	/* Restore old terminal settings and signals. */
 	if (memcmp(&term, &oterm, sizeof(term)) != 0)
 		(void)tcsetattr(input, TCSANOW|TCSASOFT, &oterm);
-	(void)_sigaction(SIGINT, &saveint, NULL);
-	(void)_sigaction(SIGHUP, &savehup, NULL);
-	(void)_sigaction(SIGQUIT, &savequit, NULL);
-	(void)_sigaction(SIGTERM, &saveterm, NULL);
-	(void)_sigaction(SIGTSTP, &savetstp, NULL);
-	(void)_sigaction(SIGTTIN, &savettin, NULL);
-	(void)_sigaction(SIGTTOU, &savettou, NULL);
+	(void)sigaction(SIGINT, &saveint, NULL);
+	(void)sigaction(SIGHUP, &savehup, NULL);
+	(void)sigaction(SIGQUIT, &savequit, NULL);
+	(void)sigaction(SIGTERM, &saveterm, NULL);
+	(void)sigaction(SIGTSTP, &savetstp, NULL);
+	(void)sigaction(SIGTTIN, &savettin, NULL);
+	(void)sigaction(SIGTTOU, &savettou, NULL);
 	if (input != STDIN_FILENO)
-		(void)_close(input);
+		(void)close(input);
 
 	/*
 	 * If we were interrupted by a signal, resend it to ourselves

@@ -148,7 +148,7 @@ static unsigned char PADDING[64] = {
 /* MD5 basic transformation. Transforms state based on block. */
 
 static void
-MD5Transform(
+I2MD5Transform(
 	u_int32_t		state[4],
 	const unsigned char	block[64]
 )
@@ -257,8 +257,8 @@ MD5Transform(
 /* MD5 initialization. Begins an MD5 operation, writing a new context. */
 
 void
-MD5Init(
-	MD5_CTX *context
+I2MD5Init(
+	I2MD5_CTX *context
        )
 {
 
@@ -278,10 +278,10 @@ MD5Init(
  */
 
 void
-MD5Update(
-	MD5_CTX			*context;
-	const unsigned char	*input;
-	unsigned int		inputLen;
+I2MD5Update(
+	I2MD5_CTX			*context,
+	const unsigned char	*input,
+	unsigned int		inputLen
 )
 {
 	unsigned int i, index, partLen;
@@ -301,10 +301,10 @@ MD5Update(
 	if (inputLen >= partLen) {
 		memcpy((void *)&context->buffer[index], (const void *)input,
 		    partLen);
-		MD5Transform (context->state, context->buffer);
+		I2MD5Transform (context->state, context->buffer);
 
 		for (i = partLen; i + 63 < inputLen; i += 64)
-			MD5Transform (context->state, &input[i]);
+			I2MD5Transform (context->state, &input[i]);
 
 		index = 0;
 	}
@@ -321,8 +321,8 @@ MD5Update(
  */
 
 void
-MD5Pad(
-	MD5_CTX	*context;
+I2MD5Pad(
+	I2MD5_CTX	*context
 )
 {
 	unsigned char bits[8];
@@ -334,10 +334,10 @@ MD5Pad(
 	/* Pad out to 56 mod 64. */
 	index = (unsigned int)((context->count[0] >> 3) & 0x3f);
 	padLen = (index < 56) ? (56 - index) : (120 - index);
-	MD5Update (context, PADDING, padLen);
+	I2MD5Update (context, PADDING, padLen);
 
 	/* Append length (before padding) */
-	MD5Update (context, bits, 8);
+	I2MD5Update (context, bits, 8);
 }
 
 /*
@@ -346,13 +346,13 @@ MD5Pad(
  */
 
 void
-MD5Final(
+I2MD5Final(
 	unsigned char	digest[16],
-	MD5_CTX		*context
+	I2MD5_CTX		*context
 	)
 {
 	/* Do padding. */
-	MD5Pad (context);
+	I2MD5Pad (context);
 
 	/* Store state in digest */
 	Encode (digest, context->state, 16);

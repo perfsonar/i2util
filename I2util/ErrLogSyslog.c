@@ -189,7 +189,6 @@ const char
 		)
 {
 	CODE	*ptr = facilitynames;
-	int	i;
 
 	while(ptr->c_name){
 		if(ptr->c_val == fac)
@@ -252,7 +251,6 @@ const char
 		)
 {
 	CODE	*ptr = prioritynames;
-	int	i;
 
 	while(ptr->c_name){
 		if(ptr->c_val == fac)
