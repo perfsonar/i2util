@@ -56,7 +56,9 @@
 
 #ifdef	HAVE_SYSLOG_NAMES
 #define	SYSLOG_NAMES
+#include <syslog.h>
 #else
+#include <syslog.h>
 /*
  * Copyright (c) 1982, 1986, 1988, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -113,17 +115,13 @@ static CODE prioritynames[] = {
 static CODE facilitynames[] = {
 	{ "auth",	LOG_AUTH,	},
 	{ "authpriv",	LOG_AUTHPRIV,	},
-	{ "console", 	LOG_CONSOLE,	},
 	{ "cron", 	LOG_CRON,	},
 	{ "daemon",	LOG_DAEMON,	},
 	{ "ftp",	LOG_FTP,	},
 	{ "kern",	LOG_KERN,	},
 	{ "lpr",	LOG_LPR,	},
 	{ "mail",	LOG_MAIL,	},
-	{ "mark", 	INTERNAL_MARK,	},	/* INTERNAL */
 	{ "news",	LOG_NEWS,	},
-	{ "ntp",	LOG_NTP,	},
-	{ "security",	LOG_SECURITY,	},
 	{ "syslog",	LOG_SYSLOG,	},
 	{ "user",	LOG_USER,	},
 	{ "uucp",	LOG_UUCP,	},
@@ -138,10 +136,6 @@ static CODE facilitynames[] = {
 	{ NULL,		-1,		}
 };
 #endif
-/*
- * This has to be after the previous ifdef...
- */
-#include <syslog.h>
 
 /*
  * Function:	I2ErrLogSyslogFacility
