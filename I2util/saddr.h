@@ -54,5 +54,21 @@ I2SockAddrEqual(
 	u_int32_t		chk_what
 	);
 
+/*
+ * I2SockAddrIsLoopback
+ * 	This function is used to determine if the given sockaddr is
+ * 	a loopback. It currently supports IPv4/IPv6.
+ *
+ * returns:
+ * >0: true
+ * ==0: false
+ * <0: error
+ */
+extern int
+I2SockAddrIsLoopback(
+	const struct sockaddr	*sa1,
+	socklen_t		sa1_len
+		);
+
 END_C_DECLS
 #endif	/*	_i2_saddr_h_	*/

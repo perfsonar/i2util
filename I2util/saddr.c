@@ -143,3 +143,45 @@ I2SockAddrEqual(
 
 	return -1;
 }
+
+/*
+ * Function:	I2SockAddrIsLoopback
+ *
+ * Description:	
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * 	<0	: error/unsupported addr family
+ * 	0	: false
+ * 	>0	: true
+ * Side Effect:	
+ */
+int
+I2SockAddrIsLoopback(
+	const struct sockaddr	*sa1,
+	socklen_t		sa1_len
+	)
+{
+	switch(sa1->sa_family){
+#ifdef	AF_INET6
+	case AF_INET6:
+		return IN6_IS_ADDR_LOOPBACK(
+				&((struct sockaddr_in6*)sa1)->sin6_addr);
+
+		break;
+#endif
+	case AF_INET:
+		return (INADDR_LOOPBACK == ((struct sockaddr_in*)sa)->sin_addr);
+
+		break;
+
+	default:
+		return -1;
+	}
+
+	return 0;
+}
