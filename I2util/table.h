@@ -28,8 +28,8 @@ typedef struct I2table *I2table;
 ** This type is used to represent keys and values in a hash.
 */
 typedef struct {
-             void	*dptr;
-             int	dsize;
+             void		*dptr;
+             unsigned long	dsize;
 } I2datum;
 
 /*
@@ -70,12 +70,18 @@ extern I2table I2hash_init(
 	I2hash_print_func	print_I2binding
 	);
 
-extern I2datum* I2hash_fetch(I2table hash, const I2datum *key);
+extern I2datum*
+I2hash_fetch(
+	I2table		hash,
+	const I2datum	*key
+	);
+
 extern int I2hash_store(
-		      I2table table, 
-		      const I2datum *key, 
-		      I2datum *value
-		      );
+	I2table		table, 
+	const I2datum	*key, 
+	I2datum		*value
+	);
+
 extern int
 I2hash_delete(
 	I2table		table,

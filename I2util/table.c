@@ -35,6 +35,7 @@ struct I2table {
 	int			length;
 	struct I2binding	**buckets;
 	I2hash_print_func	print_binding;
+	I2Boolean		in_iterate;
 };
 
 /* Static functions (used by default unless specified). */
@@ -97,6 +98,8 @@ I2hash_init(
 		print_binding : simple_print_binding;
 	table->length = 0;
 
+	table->in_iterate=False;
+
 	return table;
 }
 
@@ -104,6 +107,7 @@ void
 I2hash_close(I2table table)
 {
 	assert(table);
+	assert(!table->in_iterate);
 
 	if (table->length > 0){
 		int i;
@@ -126,6 +130,8 @@ I2hash_store(I2table table, const I2datum *key, I2datum *value)
 
 	assert(table);
 	assert(key);
+
+	assert(!table->in_iterate);
 
 	/* Search table for key. */
 	i = (*table->hash)(key)%table->size;
@@ -162,6 +168,7 @@ I2hash_delete(
 
 	assert(table);
 	assert(key);
+	assert(!table->in_iterate);
 
 	/* Search table for key. */
 	i = (*table->hash)(key)%table->size;
@@ -191,6 +198,7 @@ I2hash_fetch(I2table table, const I2datum *key){
 
 	assert(table);
 	assert(key);
+	assert(!table->in_iterate);
 
 	/* Search table for key. */
 	i = (*table->hash)(key)%table->size;
@@ -228,9 +236,11 @@ I2hash_iterate(
 	assert(table);
 	assert(ifunc);
 
+	table->in_iterate = True;
 	for (i = 0; i < table->size; i++)
 		for (p = table->buckets[i]; p; p = p->link){
 			if(!((*ifunc)(p->key,p->value,app_data)))
 				return;
 		}
+	table->in_iterate = False;
 }
