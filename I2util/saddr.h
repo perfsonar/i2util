@@ -34,6 +34,17 @@ BEGIN_C_DECLS
 #define	I2SADDR_PORT	(I2SADDR_ADDR<<1)
 #define	I2SADDR_ALL	(I2SADDR_ADDR|I2SADDR_PORT)
 
+/*
+ * I2SockAddrEqual
+ * 	This function is used to compare to sockaddrs. chk_what is used
+ * 	to determine which parts of the sockaddr to look at when comparing.
+ * 	(The above #define's are used to indicate this.)
+ *
+ * returns:
+ * >0: true
+ * ==0: false
+ * <0: error
+ */
 extern int
 I2SockAddrEqual(
 	const struct sockaddr	*sa1,
