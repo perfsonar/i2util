@@ -25,6 +25,10 @@
 #define	_I2_util_h_
 #include <I2util/config.h>
 
+#ifndef	HAVE___ATTRIBUTE__
+#define	__attribute__(x)
+#endif
+
 typedef unsigned int    I2Boolean;
 
 #ifndef	False
