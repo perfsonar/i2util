@@ -23,13 +23,14 @@
 #include <I2util/util.h>
 
 typedef struct I2table *I2table;
+typedef unsigned long	I2_dsize_t;
 
 /*
 ** This type is used to represent keys and values in a hash.
 */
 typedef struct {
              void		*dptr;
-             unsigned long	dsize;
+             I2_dsize_t		dsize;
 } I2datum;
 
 /*
