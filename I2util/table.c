@@ -29,6 +29,7 @@
 
 /* Types used to define a hash table. */
 struct T {
+	I2ErrHandle	eh;
 	int size;
 	int (*cmp)(const I2datum *x, const I2datum *y);
 	unsigned long (*hash)(const I2datum *key);
@@ -85,6 +86,7 @@ I2hash_init(
 		exit(1);
 	}
 
+	table->eh = eh;
 	table->size = primes[i-1];
 	table->cmp = cmp? cmp : cmpatom;
 	table->hash = hash ? hash : hashatom;
@@ -116,7 +118,7 @@ I2hash_close(T *table)
 }
 
 int 
-I2hash_store(I2ErrHandle eh, T table, const I2datum *key, I2datum *value)
+I2hash_store(T table, const I2datum *key, I2datum *value)
 {
 	int i;
 	struct I2binding *p;
@@ -135,7 +137,7 @@ I2hash_store(I2ErrHandle eh, T table, const I2datum *key, I2datum *value)
 	if (p == NULL){ /* not found */
 		p = (void *)malloc(sizeof(*p));
 		if (p == NULL){
-			I2ErrLogP(eh, ENOMEM,"FATAL: malloc for hash table");
+			I2ErrLogP(table->eh,ENOMEM,"FATAL: malloc for hash table");
 			return -1;
 		}
 		p->key = key;

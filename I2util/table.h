@@ -60,7 +60,6 @@ extern T I2hash_init(
 		   );
 extern I2datum* I2hash_fetch(T hash, const I2datum *key);
 extern int I2hash_store(
-		      I2ErrHandle eh, 
 		      T table, 
 		      const I2datum *key, 
 		      I2datum *value
