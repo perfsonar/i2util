@@ -20,10 +20,15 @@
  */
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <limits.h>
 #include <errno.h>
-#include <assert.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <ctype.h>
 #include <libgen.h>
+#include <assert.h>
 #include <I2util/util.h>
 
 #if defined HAVE_DECL_OPTRESET && !HAVE_DECL_OPTRESET
@@ -69,9 +74,13 @@ main(
 	char		lockfname[PATH_MAX];
 	char		*dname;
 	size_t		len;
-	int		lockfd;
 	struct flock	flk;
+	FILE		*fromfp;
+	FILE		*tofp;
 	u_int8_t	aeskey[I2KEYLEN];
+	char		*lbuf=NULL;
+	size_t		lbuf_max;
+	int		rc;
 
 	if((progname = strrchr(argv[0],'/'))){
 		progname++;
@@ -135,13 +144,13 @@ main(
 
 	fromfp = fopen(keyfname,"r+");
 	if(do_create && (fromfp != NULL)){
-		fprintf(stderr,"%s: -n option specified: %s exists\n",
+		fprintf(stderr,"%s: -n option specified: %s exists\n\n",
 				progname,keyfname);
 		usage(progname,NULL);
 		exit(1);
 	}
 	if(!do_create && !fromfp){
-		fprintf(stderr,"%s: Can't open \'%s\': %s\n",
+		fprintf(stderr,"%s: Can't open \'%s\': %s\nSee -n option?\n\n",
 				progname,keyfname,strerror(errno));
 		usage(progname,NULL);
 		exit(1);
@@ -211,15 +220,17 @@ main(
 
 	if(!do_delete){
 		char		*passphrase;
-		char		ppbuf[MAX_PASSPHRASE];
-		char		prompt[MAX_PASSPROMPT];
+		char		ppbuf[1024];
+		char		prompt[1024];
 		I2MD5_CTX	mdc;
 		size_t		pplen;
 
-		if(snprintf(prompt,MAX_PASSPROMPT,
+		rc = snprintf(prompt,sizeof(prompt),
 				"Enter passphrase for identity '%s': ",
-				idname) >= MAX_PASSPROMPT){
-			fprintf(stderr,"%s: Invalid identity '%s'\n",progname);
+				idname);
+		if((rc < 0) || ((size_t)rc > sizeof(prompt))){
+			fprintf(stderr,"%s: Invalid identity '%s'\n",
+					progname,idname);
 			exit(1);
 		}
 
@@ -239,7 +250,8 @@ main(
 	/*
 	 * All records that don't match idname will be copied to idname.
 	 */
-	rc = I2ParseKeyFile(eh,fromfp,rc,lbuf,lbuf_max,tofp,idname,NULL,NULL);
+	rc = I2ParseKeyFile(NULL,fromfp,rc,&lbuf,&lbuf_max,tofp,idname,
+			NULL,NULL);
 	if(rc < 0){
 		fprintf(stderr,"%s:I2ParseKeyFile('%s'): error line %d\n",
 				progname,keyfname,rc);
@@ -247,7 +259,7 @@ main(
 	}
 
 	if(!do_delete){
-		if(I2WriteKeyLine(eh,tofp,idname,aeskey) < 0){
+		if(I2WriteKeyLine(NULL,tofp,idname,aeskey) < 0){
 			fprintf(stderr,"%s:I2WriteKeyLine('%s'): %s\n",
 					progname,keyfname,strerror(errno));
 			exit(1);
@@ -257,8 +269,9 @@ main(
 	/*
 	 * Copy all remaining records.
 	 */
-	rc = I2ParseKeyFile(eh,fromfp,rc,lbuf,lbuf_max,tofp,idname,NULL,NULL);
-	if(rc < 0){
+	rc = I2ParseKeyFile(NULL,fromfp,rc,&lbuf,&lbuf_max,tofp,idname,
+			NULL,NULL);
+	if(rc != 0){
 		fprintf(stderr,"%s:I2ParseKeyFile('%s'): error line %d\n",
 				progname,keyfname,rc);
 		exit(1);
@@ -267,7 +280,7 @@ main(
 	/*
 	 * Now close the keyfile, and rename the lockfile to the keyfile.
 	 */
-	fclose(fromfp);
+	if(fromfp) fclose(fromfp);
 	rename(lockfname,keyfname);
 	fclose(tofp);
 

@@ -33,6 +33,17 @@ AM_INIT_AUTOMAKE(I2util, 1.0, [no-define])
 AC_CONFIG_SRCDIR(I2util/ErrLog.c)
 AM_CONFIG_HEADER(I2util/config.h)
 
+# Insert local symbols
+I2UTILINCS='-I${top_srcdir}'
+I2UTIL_dir='${top_srcdir}/I2util'
+I2UTILLDFLAGS="-L$I2UTIL_dir"
+I2UTILLIBS="$I2UTILLDFLAGS -lI2util"
+I2UTILLIBDEPS="$I2UTIL_dir/libI2util.a"
+
+AC_SUBST(I2UTILINCS)
+AC_SUBST(I2UTILLIBS)
+AC_SUBST(I2UTILLIBDEPS)
+
 # Check for kernel support
 I2_RANDOMDEV
 
@@ -58,8 +69,6 @@ AC_FUNC_MALLOC
 AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([memset strdup strerror strtol strtoul])
 
-# AC_CONFIG_FILES([Makefile I2util/Makefile])
-
 AC_SUBST(ac_aux_dir)
-AC_OUTPUT([Makefile I2util/Makefile],
+AC_OUTPUT([Makefile I2util/Makefile aespasswd/Makefile],
 	[test -z "$CONFIG_HEADERS" || echo timestamp > I2util/stamp-h.in])
