@@ -100,6 +100,7 @@ typedef	struct	ErrHandle_ {
 	void		*log_func_arg;		/* client arg to log func*/
 	I2ErrRetrieveFuncPtr	retrieve_func;	/* client fetch func	*/
 	void		*retrieve_func_arg;	/* client arg to retrieve func*/
+	I2ErrLogResetFuncPtr	reset_func;	/* reset log_func	*/
 	} ErrHandle;
 
 /*
@@ -346,6 +347,66 @@ I2ErrHandle	I2ErrOpen(
 	add_ansiC_errors(eh);
 
 	return((I2ErrHandle) eh);
+}
+
+/*
+ * Function:	I2ErrSetResetFunc
+ *
+ * Description:	
+ * 		Used to assign the "reset" function. Not used, so it
+ * 		was not useful to add to the "open". (Plus, it would
+ * 		be hard to make "open" backward compat.)
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
+ */
+void	I2ErrSetResetFunc(
+		I2ErrHandle		dpeh,
+		I2ErrLogResetFuncPtr	reset_func
+	)
+{
+	ErrHandle	*eh = (ErrHandle *) dpeh;
+
+	eh->reset_func = reset_func;
+
+	return;
+}
+
+/*
+ * Function:	I2ErrReset
+ *
+ * Description:	
+ * 		If there is a "reset_func" assigned to the ErrHandle,
+ * 		call it.
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
+ */
+I2ErrHandle
+I2ErrReset(
+		I2ErrHandle	dpeh
+		)
+{
+	ErrHandle	*eh = (ErrHandle *) dpeh;
+
+	if(eh->reset_func){
+		if(!(eh->reset_func(eh->log_func_arg, &(eh->data)))){
+			I2ErrClose(dpeh);
+			return NULL;
+		}
+	}
+
+	return dpeh;
 }
 
 /*

@@ -75,15 +75,21 @@ struct I2ErrLogEvent{
 typedef	void	*I2ErrHandle;
 
 typedef void	(*I2ErrLogFuncPtr) (	/* client logging function	*/
-		struct I2ErrLogEvent	*err_event,
-		void			*arg,
-		void			**data
-		);
+	struct I2ErrLogEvent	*err_event,
+	void			*arg,
+	void			**data
+	);
+
+typedef I2Boolean	(*I2ErrLogResetFuncPtr)( /* reset logging function*/
+	void	*arg,
+	void	**data
+	);
 
 typedef	char	*(*I2ErrRetrieveFuncPtr)(      /* client fetch func    	*/
 	void	*arg,
 	void	**data
 	);
+
 
 /*
  * extern void I2ErrLog(eh,fmt,...);
@@ -111,6 +117,19 @@ extern I2ErrHandle	I2ErrOpen(
 		I2ErrRetrieveFuncPtr	retrieve_func,
 		void			*retrieve_func_arg
 );
+
+extern void	I2ErrSetResetFunc(
+		I2ErrHandle		eh,
+		I2ErrLogResetFuncPtr	reset_func
+		);
+
+/*
+ * If the ErrReset function fails, this will return NULL - and the
+ * ErrHandle will be invalid.
+ */
+extern I2ErrHandle	I2ErrReset(
+		I2ErrHandle		eh
+		);
 
 extern void	I2ErrClose(I2ErrHandle dpeh);
 

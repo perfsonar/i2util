@@ -56,6 +56,11 @@ extern void	I2ErrLogSyslog(
 	void			**data
 );
 
+extern void	I2ErrLogSyslogReset(
+	void		*arg,
+	void		**data
+	);
+
 extern int	I2ErrLogSyslogFacility(
 	const char	*name
 	);

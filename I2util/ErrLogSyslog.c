@@ -409,3 +409,30 @@ void	I2ErrLogSyslog(
 	else
 		syslog(sa->priority, "%s", buf);
 }
+
+/*
+ * Function:	I2ErrResetSyslog
+ *
+ * Description:	
+ * 		Used to reset syslog error logging. Useful in case of
+ * 		forking etc...
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
+ */
+void	I2ErrLogSyslogReset(
+		void	*arg,
+		void	**data
+		)
+{
+	closelog();
+	*data = NULL;
+
+	return True;
+}
+
