@@ -34,7 +34,6 @@ int
 I2RandomBytes(unsigned char *ptr, int count)
 {
 	static FILE* fp = NULL;
-	int i;
 
 	if (!fp) {
 		if ((fp = fopen(OWP_RAND_DEV_PATH, "rb")) == NULL) {
@@ -44,7 +43,7 @@ I2RandomBytes(unsigned char *ptr, int count)
 	}
 
 	/* Interpet short count as error. */
-	if (fread(ptr, 1, count, fp) != count)
+	if (fread(ptr, 1, count, fp) != (size_t)count)
 		return -1;
 
 	return 0;
