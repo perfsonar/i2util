@@ -21,6 +21,19 @@
 #			This script is used to bootstrap the autobuild
 #			process.
 #
+
+case "$1" in
+	ac257)
+		alias autoconf=autoconf257
+		alias autoheader=autoheader257
+		alias automake=automake17
+		alias aclocal=aclocal17
+		export AUTOCONF=autoconf257
+		;;
+	*)
+		;;
+esac
+
 set -x
 aclocal -I config
 autoheader

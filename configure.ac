@@ -70,5 +70,5 @@ AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([memset strdup strerror strtol strtoul])
 
 AC_SUBST(ac_aux_dir)
-AC_OUTPUT([Makefile I2util/Makefile aespasswd/Makefile],
+AC_OUTPUT([Makefile I2util/Makefile aespasswd/Makefile doc/Makefile],
 	[test -z "$CONFIG_HEADERS" || echo timestamp > I2util/stamp-h.in])
