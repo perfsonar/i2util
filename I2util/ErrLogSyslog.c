@@ -170,6 +170,37 @@ I2ErrLogSyslogFacility(
 }
 
 /*
+ * Function:	I2ErrLogSyslogFacilityName
+ *
+ * Description:	Given an integer, return a "name" for the facility that
+ * 		matches that integer.
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	const char * (static memory) or NULL
+ * Side Effect:	
+ */
+const char
+*I2ErrLogSyslogFacilityName(
+	int	fac
+		)
+{
+	CODE	*ptr = facilitynames;
+	int	i;
+
+	while(ptr->c_name){
+		if(ptr->c_val == fac)
+			return ptr->c_name;
+		ptr++;
+	}
+
+	return NULL;
+}
+
+/*
  * Function:	I2ErrLogSyslogPriority
  *
  * Description:	Given a string name, looks for the integer id that matches.
@@ -200,6 +231,38 @@ I2ErrLogSyslogPriority(
 
 	return val;
 }
+
+/*
+ * Function:	I2ErrLogSyslogPriorityName
+ *
+ * Description:	Given an integer, return a "name" for the "priority" that
+ * 		matches that integer.
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	const char * (static memory) or NULL
+ * Side Effect:	
+ */
+const char
+*I2ErrLogSyslogPriorityName(
+	int	fac
+		)
+{
+	CODE	*ptr = prioritynames;
+	int	i;
+
+	while(ptr->c_name){
+		if(ptr->c_val == fac)
+			return ptr->c_name;
+		ptr++;
+	}
+
+	return NULL;
+}
+
 
 /*
  * Function:	I2ErrLogSyslog()

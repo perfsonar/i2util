@@ -60,9 +60,17 @@ extern int	I2ErrLogSyslogFacility(
 	const char	*name
 	);
 
+const char *I2ErrLogSyslogFacilityName(
+		int	fac
+		);
+
 extern int	I2ErrLogSyslogPriority(
 	const char	*name
 	);
+
+const char *IErrLogSyslogPriorityName(
+		int	prio
+		);
 
 END_C_DECLS
 

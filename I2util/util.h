@@ -55,5 +55,9 @@ typedef unsigned int    I2Boolean;
 #include <I2util/random.h>
 #include <I2util/io.h>
 #include <I2util/saddr.h>
+#include <I2util/md5.h>
+#include <I2util/readpassphrase.h>
+#include <I2util/hex.h>
+#include <I2util/conf.h>
 
 #endif	/*	_I2_util_h_	*/

@@ -116,6 +116,10 @@ static	const char	*get_error(ErrHandle *eh, int error)
 		return("");
 	errnum = (unsigned int)error;
 
+	if(!eh){
+		return strerror(errnum);
+	}
+
 	for (i=0; i<eh->err_tab_num; i++) {
 		if(eh->err_tab[i].start > errnum)
 			continue;
@@ -624,11 +628,6 @@ I2ErrLogVT(
 	char			buf[MSG_BUF_SIZE];
 	struct I2ErrLogEvent	event;
 
-	if(!eh){
-		I2ThreadMutexUnlock(&MyMutex);
-		return;
-	}
-
 	event.mask = 0;
 
 	if(!code)
@@ -638,13 +637,20 @@ I2ErrLogVT(
 	}
 
 	(void)esnprintf(eh,new_format,sizeof(new_format),format,code);
-	eh->code = code;
 
 	/*
 	 * deal with variable args
 	 */
         (void) vsnprintf(buf,sizeof(buf),new_format,ap);
 
+	if(!eh){
+		fwrite(buf,sizeof(char),strlen(buf),stderr);
+		fwrite("\n",sizeof(char),1,stderr);
+		I2ThreadMutexUnlock(&MyMutex);
+		return;
+	}
+
+	eh->code = code;
 	event.name = eh->program_name;	event.mask |= I2NAME;
 	event.file = errorFile;		event.mask |= I2FILE;
 	event.line = errorLine;		event.mask |= I2LINE;
