@@ -26,10 +26,8 @@
 #include <string.h>
 #include "table.h"
 
-#define T I2table
-
 /* Types used to define a hash table. */
-struct T {
+struct I2table {
 	I2ErrHandle	eh;
 	int size;
 	int (*cmp)(const I2datum *x, const I2datum *y);
@@ -67,7 +65,7 @@ simple_print_binding(const struct I2binding *p, FILE* fp)
 		p->key->dptr, p->value->dptr);
 }
 
-T 
+I2table 
 I2hash_init(
 	    I2ErrHandle eh,
 	    int hint,
@@ -76,7 +74,7 @@ I2hash_init(
 	    void print_binding(const struct I2binding *p, FILE* fp)
 )
 {
-	T table;
+	I2table table;
 	int i;
 	static int primes[] = { 509, 509, 1021, 2053, 4093, 8191, 16381,
 	32771, 65521, INT_MAX };
@@ -106,7 +104,7 @@ I2hash_init(
 }
 
 void
-I2hash_close(T *table)
+I2hash_close(I2table *table)
 {
 	assert(table && *table);
 	if ((*table)->length > 0){
@@ -124,7 +122,7 @@ I2hash_close(T *table)
 }
 
 int 
-I2hash_store(T table, const I2datum *key, I2datum *value)
+I2hash_store(I2table table, const I2datum *key, I2datum *value)
 {
 	int i;
 	struct I2binding *p;
@@ -142,7 +140,8 @@ I2hash_store(T table, const I2datum *key, I2datum *value)
 	if (p == NULL){ /* not found */
 		p = (void *)malloc(sizeof(*p));
 		if (p == NULL){
-			I2ErrLogP(table->eh,ENOMEM,"FATAL: malloc for hash table");
+			I2ErrLogP(table->eh,ENOMEM,
+					"FATAL: malloc for hash table");
 			return -1;
 		}
 		p->key = key;
@@ -155,7 +154,7 @@ I2hash_store(T table, const I2datum *key, I2datum *value)
 }
 
 I2datum *
-I2hash_fetch(T table, const I2datum *key){
+I2hash_fetch(I2table table, const I2datum *key){
 	int i;
 	struct I2binding *p;
 	I2datum ret;
@@ -176,7 +175,7 @@ I2hash_fetch(T table, const I2datum *key){
 }
 
 void
-I2hash_print(T table, FILE* fp)
+I2hash_print(I2table table, FILE* fp)
 {
 	int i;
 	struct I2binding *p;
@@ -188,3 +187,22 @@ I2hash_print(T table, FILE* fp)
 			table->print_binding(p, fp);
 }
 
+void
+I2hash_iterate(
+	I2table			table,
+	I2hash_iterate_func	ifunc,
+	void			*app_data
+	      )
+{
+	int i;
+	struct I2binding *p;
+	
+	assert(table);
+	assert(ifunc);
+
+	for (i = 0; i < table->size; i++)
+		for (p = table->buckets[i]; p; p = p->link){
+			if(!((*ifunc)(p->key,p->value,app_data)))
+				return;
+		}
+}
