@@ -198,7 +198,6 @@ I2hash_fetch(I2table table, const I2datum *key){
 
 	assert(table);
 	assert(key);
-	assert(!table->in_iterate);
 
 	/* Search table for key. */
 	i = (*table->hash)(key)%table->size;
