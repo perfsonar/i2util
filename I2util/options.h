@@ -44,7 +44,7 @@
 #include <sys/types.h>
 
 #include <stdarg.h>
-#include <DCSTools/tools.h>
+#include <I2util/util.h>
 
 BEGIN_C_DECLS
 

@@ -42,7 +42,7 @@
 #include <errno.h>
 #include <I2util/util.h>
 
-static I2ThreadMutex_T MyMutex = PTHREAD_MUTEX_INITIALIZER;
+static I2ThreadMutex_T MyMutex = I2PTHREAD_MUTEX_INITIALIZER;
 
 /*
 ** Function:	I2GetSysErrList()
@@ -70,18 +70,15 @@ static I2ThreadMutex_T MyMutex = PTHREAD_MUTEX_INITIALIZER;
 char	**I2GetSysErrList(
 	int	*count
 ) {
-
-
 	/*
 	 *	The ANSI Standard does not define the globals `sys_nerr'
 	 *	and `sys_errlist'. Sigh. Hence there is no real way to 
-	 *	determine the range valid values of `errno'. Fortunately,
-	 *	all the OS's we care about retain definitions for these
-	 *	identifiers. For other systemsjust hard-wire these values
-	 *	NUM_ERRORS should be the "largest" number for all these
-	 *	systems we find.
+	 *	determine the range valid values of `errno'.
+	 *	Guess large and loop calling strerror...
+	 *	NUM_ERRORS should be the "largest" errno number for all the
+	 *	systems we care about.
 	 */
-#if	NOSYSNERR
+#ifndef	SYSNERRWORKS
 #define	NUM_ERRORS	152
 	const int	sys_nerr = NUM_ERRORS;
 	static char	*sys_errlist[NUM_ERRORS];

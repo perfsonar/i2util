@@ -1,0 +1,28 @@
+#
+#      $Id$
+#
+#########################################################################
+#									#
+#			   Copyright (C)  2002				#
+#	     			Internet2				#
+#			   All Rights Reserved				#
+#									#
+#########################################################################
+#
+#	File:		Make-rules
+#
+#	Author:		Jeff Boote
+#			Internet2
+#
+#	Date:		Wed Apr 24 09:59:44 EDT 2002
+#
+#	Description:	
+#
+#	Usage:
+#
+#	Environment:
+#
+#	Files:
+#
+#	Options:
+INCLUDES	=	-I$(top_builddir) -I$(top_srcdir)

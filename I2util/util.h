@@ -21,8 +21,9 @@
  *				* error logging
  *				* command-line parsing
  */
-#ifndef	_I2_tools_h_
-#define	_I2_tools_h_
+#ifndef	_I2_util_h_
+#define	_I2_util_h_
+#include <I2util/config.h>
 
 typedef unsigned int    I2Boolean;
 
@@ -41,7 +42,8 @@ typedef unsigned int    I2Boolean;
 #define	END_C_DECLS
 #endif
 
+#include <I2util/Pthread.h>
 #include <I2util/errlog.h>
 #include <I2util/options.h>
 
-#endif	/*	_I2_tools_h_	*/
+#endif	/*	_I2_util_h_	*/

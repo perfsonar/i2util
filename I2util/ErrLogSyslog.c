@@ -42,6 +42,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <I2util/util.h>
 
 /*
@@ -174,7 +175,7 @@ void	I2ErrLogSyslog(
 
 		time(&clock);
 		tm = localtime(&clock);
-		if( strftime(ftime,sizeof(ftime),la->tformat,tm)){
+		if( strftime(ftime,sizeof(ftime),sa->tformat,tm)){
 			rc = snprintf(bufptr,size,"RTIME=%s, ",ftime);
 			bufptr += rc;
 			size -= rc;

@@ -36,7 +36,7 @@ typedef	int	I2ThreadCondattr_T;
 #define	I2PTHREAD_MUTEX_INITIALIZER	0
 
 #define I2ThreadCreate(thread,attr,start,arg,msg)	(void)0
-#define	I2ThreadJoin(thread,retval,*msg)		(void)0
+#define	I2ThreadJoin(thread,retval,msg)			(void)0
 #define	I2ThreadSelf()					(void)0
 #define	I2ThreadMutexInit(mutex,attr)			(void)0
 #define	I2ThreadMutexLock(mutex)			(void)0

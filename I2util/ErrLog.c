@@ -43,12 +43,13 @@
 #include <string.h>
 #include <errno.h>
 #include <I2util/util.h>
+#include "mach_dep.h"
 
 
 /*
  * May support threading in future.
  */
-static I2ThreadMutex_T	MyMutex = PTHREAD_MUTEX_INITIALIZER;
+static I2ThreadMutex_T	MyMutex = I2PTHREAD_MUTEX_INITIALIZER;
 
 #define	TABLE_SIZE	10
 #define	MSG_BUF_SIZE	10240
