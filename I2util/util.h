@@ -46,6 +46,8 @@ typedef unsigned int    I2Boolean;
 #define	END_C_DECLS
 #endif
 
+#define	I2Number(arr)	(sizeof(arr)/sizeof(arr[0]))
+
 #include <I2util/Pthread.h>
 #include <I2util/errlog.h>
 #include <I2util/options.h>

@@ -28,18 +28,14 @@
 
 /* Types used to define a hash table. */
 struct I2table {
-	I2ErrHandle	eh;
-	int size;
-	int (*cmp)(const I2datum *x, const I2datum *y);
-	unsigned long (*hash)(const I2datum *key);
-	int length;
-	struct I2binding  **buckets;
-	I2print_binding_func print_binding;
+	I2ErrHandle		eh;
+	int			size;
+	I2hash_cmp_func		cmp;
+	I2hash_func		hash;
+	int			length;
+	struct I2binding	**buckets;
+	I2hash_print_func	print_binding;
 };
-
-#ifndef	MIN
-#define MIN(x,y)	((x<y)?x:y)
-#endif
 
 /* Static functions (used by default unless specified). */
 static int 
@@ -49,7 +45,7 @@ cmpatom(const I2datum *x, const I2datum *y)
 	assert(x);
 	assert(y);
 	return (!(x->dsize == y->dsize) ||
-			bcmp(x->dptr, y->dptr, MIN(x->dsize,y->dsize)));
+			memcmp(x->dptr, y->dptr, x->dsize));
 }
 
 static unsigned long
@@ -62,7 +58,7 @@ static void
 simple_print_binding(const struct I2binding *p, FILE* fp)
 {
 	fprintf(fp, "the value for key %s is %s\n", 
-		p->key->dptr, p->value->dptr);
+		(char*)p->key->dptr, (char*)p->value->dptr);
 }
 
 I2table 
@@ -76,49 +72,50 @@ I2hash_init(
 {
 	I2table table;
 	int i;
-	static int primes[] = { 509, 509, 1021, 2053, 4093, 8191, 16381,
-	32771, 65521, INT_MAX };
+	int primes[] = {509, 1021, 2053, 4093, 8191, 16381, 32771, 65521};
 	
-	assert(hint >= 0);
-	for (i = 1; primes[i] < hint; i++)
-		;
-	table = (void *)malloc(sizeof(*table) + 
-			       primes[i-1]*sizeof(table->buckets[0]));
-	if (table == NULL){
+	for(i=I2Number(primes)-1;
+			(i>0) && (primes[i] > hint);i--);
+
+	table = (void *)malloc(sizeof(*table));
+	if(!table){
 		I2ErrLogP(eh, ENOMEM, "FATAL: malloc for hash table");
-		
-		exit(1);
+		return NULL;
 	}
+	table->buckets = malloc(primes[i]*sizeof(table->buckets[0]));
+	if(!table->buckets){
+		I2ErrLogP(eh, ENOMEM, "FATAL: malloc for hash buckets");
+		return NULL;
+	}
+	memset(table->buckets,0,primes[i]*sizeof(table->buckets[0]));
 
 	table->eh = eh;
-	table->size = primes[i-1];
+	table->size = primes[i];
 	table->cmp = cmp? cmp : cmpatom;
 	table->hash = hash ? hash : hashatom;
 	table->print_binding = print_binding ? 
 		print_binding : simple_print_binding;
-	table->buckets = (struct I2binding **)(table + 1);
-	for (i = 0; i < table->size; i++)
-		table->buckets[i] = NULL;
 	table->length = 0;
+
 	return table;
 }
 
 void
-I2hash_close(I2table *table)
+I2hash_close(I2table table)
 {
-	assert(table && *table);
-	if ((*table)->length > 0){
+	assert(table);
+
+	if (table->length > 0){
 		int i;
 		struct I2binding *p, *q;
-		for (i = 0; i < (*table)->size; i++)
-			for (p = (*table)->buckets[i]; p; p = q){
+		for (i = 0; i < table->size; i++)
+			for (p = table->buckets[i]; p; p = q){
 				q = p->link;
-				if (p)
-					free(p);
+				free(p);
 			}
 	}
-	if (*table)
-		free(*table);
+	free(table->buckets);
+	free(table);
 }
 
 int 
@@ -150,6 +147,37 @@ I2hash_store(I2table table, const I2datum *key, I2datum *value)
 		table->length++;
 	}
 	p->value = value;
+	return 0;
+}
+
+int 
+I2hash_delete(
+	I2table		table,
+	const I2datum	*key
+	)
+{
+	int i;
+	struct I2binding	**p;
+	struct I2binding	*q;
+
+	assert(table);
+	assert(key);
+
+	/* Search table for key. */
+	i = (*table->hash)(key)%table->size;
+	for (p = &table->buckets[i]; *p; p = &(*p)->link){
+		if ((*table->cmp)(key, (*p)->key) == 0)
+			break;
+	}
+
+	if (!*p) /* not found */
+		return -1;
+
+	q = *p;
+	*p = q->link;
+	free(q);
+	table->length--;
+
 	return 0;
 }
 
