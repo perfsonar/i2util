@@ -129,11 +129,11 @@ I2GetConfLine(
 		line[i++] = c;
 	}
 
-	line[i] = '\0';
-
 	if(!i){
 		return 0;
 	}
+
+	line[i] = '\0';
 
 	if(c == EOF){
 		rc++;
@@ -323,11 +323,11 @@ getkeyfileline(
 		line[nc++] = c;
 	}
 
-	line[nc] = '\0';
-
 	if(!nc){
 		return 0;
 	}
+
+	line[nc] = '\0';
 
 	if(c == EOF){
 		rc++;
