@@ -19,6 +19,7 @@
  *	Description:	
  */
 #include <stdlib.h>
+#include <limits.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -530,4 +531,150 @@ I2WriteKeyLine(
 	if(ret > 0) ret = 0;
 
 	return ret;
+}
+
+/*
+ * Function:	I2StrToNum
+ *
+ * Description:	
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
+ */
+int
+I2StrToNum(
+		I2numT	*limnum,
+		char	*limstr
+		)
+{
+	size_t		silen=0;
+	size_t		len;
+	char		*endptr;
+	I2numT		ret, mult=1;
+
+	while(isdigit(limstr[silen])){
+		silen++;
+	}
+	len = strlen(limstr);
+
+	if(len != silen){
+		/*
+		 * Ensure that there is at most one non-digit and that it
+		 * is the last char.
+		 */
+		if((len - silen) > 1){
+			return -1;
+		}
+
+		switch (tolower(limstr[silen])){
+		case 'e':
+			mult *= 1000;	/* 1e18 */
+		case 'p':
+			mult *= 1000;	/* 1e15 */
+		case 't':
+			mult *= 1000;	/* 1e12 */
+		case 'g':
+			mult *= 1000;	/* 1e9 */
+		case 'm':
+			mult *= 1000;	/* 1e6 */
+		case 'k':
+			mult *= 1000;	/* 1e3 */
+			break;
+		default:
+			return -1;
+			/* UNREACHED */
+		}
+		limstr[silen] = '\0';
+	}
+	ret = strtoull(limstr, &endptr, 10);
+	if(endptr != &limstr[silen]){
+		return -1;
+	}
+
+	if(ret == 0){
+		*limnum = 0;
+		return 0;
+	}
+
+	/* Check for overflow. */
+	*limnum = ret * mult;
+	return (*limnum < ret || *limnum < mult)? (-1) : 0;
+}
+
+/*
+ * Function:	I2StrToByte
+ *
+ * Description:	
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
+ */
+int
+I2Str2Byte(
+		I2numT	*limnum,
+		char	*limstr
+		)
+{
+	size_t		silen=0;
+	size_t		len;
+	char		*endptr;
+	I2numT		ret, mult=1;
+
+	while(isdigit(limstr[silen])){
+		silen++;
+	}
+	len = strlen(limstr);
+
+	if(len != silen){
+		/*
+		 * Ensure that there is at most one non-digit and that it
+		 * is the last char.
+		 */
+		if((len - silen) > 1){
+			return -1;
+		}
+
+		switch (tolower(limstr[silen])){
+		case 'e':
+			mult <<= 10;
+		case 'p':
+			mult <<= 10;
+		case 't':
+			mult <<= 10;
+		case 'g':
+			mult <<= 10;
+		case 'm':
+			mult <<= 10;
+		case 'k':
+			mult <<= 10;
+			break;
+		default:
+			return -1;
+			/* UNREACHED */
+		}
+		limstr[silen] = '\0';
+	}
+	ret = strtoull(limstr, &endptr, 10);
+	if(endptr != &limstr[silen]){
+		return -1;
+	}
+
+	if(ret == 0){
+		*limnum = 0;
+		return 0;
+	}
+
+	/* Check for overflow. */
+	*limnum = ret * mult;
+	return (*limnum < ret || *limnum < mult)? (-1) : 0;
 }

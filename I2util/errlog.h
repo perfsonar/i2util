@@ -42,8 +42,8 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <syslog.h>
 #include <I2util/util.h>
-
 
 BEGIN_C_DECLS
 
@@ -57,9 +57,14 @@ BEGIN_C_DECLS
 #define	I2CODE		(1L << 6)
 #define	I2LEVEL		(1L << 7)
 
+/* basically used to disable syslog messages, but will work for others.    */
+/* set as "priority" to disable *ALL* syslog messages */
+#define I2LOG_NONE  8
+
 /*
  * mask is bitwise OR of above bitmasks indicating which of the
  * remaining fields are valid.
+ * (setting level to a negative number disables logging entirely.)
  */
 struct I2ErrLogEvent{
 	int		mask;
@@ -152,6 +157,20 @@ extern void	I2ErrLocation_(
 	int		line
 );
 
+/*
+ * Function:    I2ErrLogVT
+ *
+ * Description:    
+ *
+ * In Args:    
+ *  (setting level to a negative number disables logging entirely.)
+ *
+ * Out Args:    
+ *
+ * Scope:    
+ * Returns:    
+ * Side Effect:    
+ */
 extern void
 I2ErrLogVT(
 	I2ErrHandle	dpeh,

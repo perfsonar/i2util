@@ -43,9 +43,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <I2util/config.h>
+#ifdef  HAVE_SYSLOG_NAMES
+#define SYSLOG_NAMES
+#endif
+#include <syslog.h>
+
 #include <I2util/util.h>
-
-
 /*
  * I prefer to get these arrays from syslog.h... But, they doesn't exist on
  * all systems. I do what I can.
@@ -53,12 +57,7 @@
  * If it isn't in the system's syslog.h - I have taken the portion I need
  * from freebsd.
  */
-
-#ifdef	HAVE_SYSLOG_NAMES
-#define	SYSLOG_NAMES
-#include <syslog.h>
-#else
-#include <syslog.h>
+#ifndef	HAVE_SYSLOG_NAMES
 /*
  * Copyright (c) 1982, 1986, 1988, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -220,13 +219,18 @@ I2ErrLogSyslogPriority(
 	CODE	*ptr = prioritynames;
 	int	val=-1;
 
-	while(ptr->c_name){
+        if(strncasecmp(name,"none",5) == 0){
+            val = I2LOG_NONE;
+        }
+        else{
+	    while(ptr->c_name){
 		if(strncasecmp(ptr->c_name,name,strlen(ptr->c_name)) == 0){
 			val = ptr->c_val;
-			break;
+                        break;
 		}
 		ptr++;
-	}
+	    }
+        }
 
 	return val;
 }
@@ -251,6 +255,11 @@ const char
 		)
 {
 	CODE	*ptr = prioritynames;
+        static char *none = "none";
+
+        if(fac == I2LOG_NONE){
+            return none;
+        }
 
 	while(ptr->c_name){
 		if(ptr->c_val == fac)
@@ -350,6 +359,7 @@ void	I2ErrLogSyslog(
 	char			buf[4096], *bufptr;
 	size_t			size=sizeof(buf);
 	int			rc;
+        int                     prio;
 	
 	bufptr = buf;
 
@@ -405,9 +415,14 @@ void	I2ErrLogSyslog(
 		return;
 
 	if(ev->mask & I2LEVEL)
-		syslog(ev->level, "%s", buf);
+            prio = ev->level;
 	else
-		syslog(sa->priority, "%s", buf);
+            prio = sa->priority;
+
+        if(prio != I2LOG_NONE)
+	    syslog(prio, "%s", buf);
+
+        return;
 }
 
 /*

@@ -92,4 +92,23 @@ I2WriteKeyLine(
 	const u_int8_t	*key		/* [I2KEYLEN] */
 	);
 
+typedef u_int64_t	I2numT;
+
+/*
+ * These two functions are destructive to the passed in string.
+ * StrToNum interprets k/m/g as base 10 numbers,
+ * StrToBytes interprets k == 1024 etc...
+ */
+extern int
+I2StrToNum(
+	I2numT		*numret,
+	char		*str
+	  );
+
+extern int
+I2StrToByte(
+	I2numT		*numret,
+	char		*str
+	  );
+
 #endif	/* _i2_conf_h_ */

@@ -689,6 +689,9 @@ I2ErrLogVT(
 	char			buf[MSG_BUF_SIZE];
 	struct I2ErrLogEvent	event;
 
+        if(level == I2LOG_NONE)
+            return;
+
 	event.mask = 0;
 
 	if(!code)
