@@ -33,6 +33,9 @@ AM_INIT_AUTOMAKE(I2util, 1.0, [no-define])
 AC_CONFIG_SRCDIR(I2util/ErrLog.c)
 AM_CONFIG_HEADER(I2util/config.h)
 
+# Check for kernel support
+I2_RANDOMDEV
+
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_RANLIB

@@ -79,7 +79,7 @@ typedef	struct	ErrTable_ {
  * locked by I2ErrLocation_() and unlocked by I2ErrLogFunction_(). All of
  * this is necessary because the only way to automatically generate the
  * line number and file name information automatically is via and macro
- * call (as opposed to a function call) and macros don't except variable
+ * call (as opposed to a function call) and macros don't accept variable
  * number of arguments
  */
 static const char	*errorFile = "";

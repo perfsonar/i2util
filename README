@@ -2,6 +2,7 @@
  			I2 Utility library. Currently contains:
  				* error logging
  				* command-line parsing
+				* threading
 
 The error logging and command-line parsing are taken from a utility library
 that is distributed with the "volsh" code from UCAR.
@@ -12,3 +13,7 @@ I have used this in the past - and it seemed silly not to use it since it
 is freely distributed.
 
 	jeff
+
+We have locally added:
+	* random number support
+	* hash table support
