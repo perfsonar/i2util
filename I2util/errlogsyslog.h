@@ -56,7 +56,7 @@ extern void	I2ErrLogSyslog(
 	void			**data
 );
 
-extern void	I2ErrLogSyslogReset(
+extern I2Boolean	I2ErrLogSyslogReset(
 	void		*arg,
 	void		**data
 	);

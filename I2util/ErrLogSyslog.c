@@ -425,14 +425,14 @@ void	I2ErrLogSyslog(
  * Returns:	
  * Side Effect:	
  */
-void	I2ErrLogSyslogReset(
-		void	*arg,
+I2Boolean	I2ErrLogSyslogReset(
+		void	*arg __attribute__((unused)),
 		void	**data
 		)
 {
 	closelog();
 	*data = NULL;
 
-	return;
+	return True;
 }
 
