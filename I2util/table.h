@@ -22,94 +22,112 @@
 
 #include <I2util/util.h>
 
-typedef struct I2table *I2table;
-typedef unsigned long	I2_dsize_t;
+typedef struct I2Table *I2Table;
 
+typedef u_int32_t	I2TableDataSizeT;
 /*
 ** This type is used to represent keys and values in a hash.
 */
 typedef struct {
              void		*dptr;
-             I2_dsize_t		dsize;
-} I2datum;
+             I2TableDataSizeT	dsize;
+} I2Datum;
 
-/*
-** This structure represents a single chain of key/value pairs.
-*/
-struct I2binding {
-	struct I2binding	*link;
-	const I2datum		*key;
-	I2datum			*value;
-};
-
-/*
-** This type is used to allow customized print-out procedure
-** for keys/values having a specific internal structure.
-*/
-typedef void (*I2hash_print_func)(
-	const struct I2binding	*p,
-	FILE			*fp
+typedef int (*I2HashCmpFunc)(
+	I2Datum	x,
+	I2Datum	y
 	);
 
-typedef int (*I2hash_cmp_func)(
-	const I2datum	*x,
-	const I2datum	*y
-	);
-
-typedef unsigned long (*I2hash_func)(
-	const I2datum	*key
+typedef u_int32_t (*I2HashFunc)(
+	I2Datum	key
 	);
 
 /*
-** These are basic hash-manipulation functions.
-*/
-extern I2table I2hash_init(
+ * These are basic hash-manipulation functions.
+ */
+
+/*
+ * The I2HashInit function is the initialization function for a new hash.
+ * hint indicates a good guess as to the size of the hash.
+ */
+extern I2Table I2HashInit(
 	I2ErrHandle		eh,
-	int			hint,
-	I2hash_cmp_func		cmp,
-	I2hash_func		hash,
-	I2hash_print_func	print_I2binding
+	int			hint,	/* guess on number of elements */
+	I2HashCmpFunc		cmp,
+	I2HashFunc		hash
 	);
 
-extern I2datum*
-I2hash_fetch(
-	I2table		hash,
-	const I2datum	*key
+extern I2Boolean
+I2HashFetch(
+	I2Table	hash,
+	I2Datum	key,
+	I2Datum	*ret
 	);
 
-extern int I2hash_store(
-	I2table		table, 
-	const I2datum	*key, 
-	I2datum		*value
+extern int I2HashStore(
+	I2Table	table, 
+	I2Datum	key, 
+	I2Datum	value
 	);
 
 extern int
-I2hash_delete(
-	I2table		table,
-	const I2datum	*key
+I2HashDelete(
+	I2Table	table,
+	I2Datum	key
 	);
 
-extern void I2hash_print(I2table table, FILE* fp);
-extern void I2hash_close(I2table table);
+extern void
+I2HashClose(
+	I2Table		table
+	);
 
 /*
- * This function will be called on every key/value pair in the hash, as
- * long as it returns true, when it is passed in to the I2hash_iterate
- * function. The iteration terminates when this function returns false.
+ * This function will be called on every key/value pair in the hash as
+ * long as the function returns true. The iteration terminates when this
+ * function returns false.
  * The app_data passed into this function is the same one that is passed
- * into the I2hash_iterate function.
+ * into I2HashIterate.
+ *
+ * The hash_iterate_func currently has some limitations:
+ * 	The only modification operation that may be done on the hash during
+ * 	the iteration is delete. All others will produce errors.
+ * 		(store/close)
  */
-typedef I2Boolean (*I2hash_iterate_func)(
-		const I2datum	*key,
-		I2datum		*value,
-		void		*app_data
+typedef I2Boolean (*I2HashIterateFunc)(
+		I2Datum	key,
+		I2Datum	value,
+		void	*app_data
 		);
 
 extern void
-I2hash_iterate(
-	I2table			table,
-	I2hash_iterate_func	ifunc,
+I2HashIterate(
+	I2Table			table,
+	I2HashIterateFunc	ifunc,
 	void			*app_data
 	      );
+
+/*
+ * This example shows how a hash comprised completely of string key/value
+ * pairs can be printed using the I2HashIterate functionality:
+ *
+ * First define the fuction:
+ *
+ * I2Boolean hash_print(
+ * 	const I2Datum	*key,
+ * 	I2Datum		*value,
+ * 	void		*app_data
+ * 	)
+ * {
+ * 	FILE	*fp = (FILE*)app_data;
+ *
+ * 	fprintf(fp,"key=%s\tvalue=%s\n",key->dptr,value->dptr);
+ *
+ * 	return True;
+ * }
+ *
+ * Then later in the code after storing hash values, to print the hash:
+ *
+ * I2HashIterate(table,hash_print,(void*)stdout);
+ */
 
 #endif

@@ -26,59 +26,135 @@
 #include <string.h>
 #include "table.h"
 
+/*
+ * this type is used to hold a single key/value pair.
+ */
+typedef struct I2BindingRec I2BindingRec, *I2Binding;
+struct I2BindingRec{
+	I2Datum		key;
+	I2Datum		value;
+	I2Boolean	delete;
+	I2Binding	next;
+};
+
 /* Types used to define a hash table. */
-struct I2table {
+struct I2Table {
 	I2ErrHandle		eh;
-	int			size;
-	I2hash_cmp_func		cmp;
-	I2hash_func		hash;
+	I2TableDataSizeT	size;
+	int			hint;
+	I2HashCmpFunc		cmp;
+	I2HashFunc		hash;
 	int			length;
-	struct I2binding	**buckets;
-	I2hash_print_func	print_binding;
+	I2Binding		*buckets;
+	I2Binding		freelist;
+	I2Binding		*alist;
+	int			num_alist;
+	int			size_alist;
 	I2Boolean		in_iterate;
+	I2TableDataSizeT	delete_nodes;
 };
 
 /* Static functions (used by default unless specified). */
 static int 
-cmpatom(const I2datum *x, const I2datum *y)
+cmpatom(
+	I2Datum	x,
+	I2Datum y
+	)
 {
 	/* return x != y; */
-	assert(x);
-	assert(y);
-	return (!(x->dsize == y->dsize) ||
-			memcmp(x->dptr, y->dptr, x->dsize));
+	return (!(x.dsize == y.dsize) ||
+			memcmp(x.dptr, y.dptr, x.dsize));
 }
 
-static unsigned long
-hashatom(const I2datum *key)
+static u_int32_t
+hashatom(
+	I2Datum	key
+	)
 {
 	unsigned long i;
-	unsigned char *ptr = (unsigned char *)(key->dptr);
+	unsigned char *ptr = (unsigned char *)(key.dptr);
 	unsigned long ret = 0;
-	for (i = 0; i < key->dsize; i++, ptr++)
+	for (i = 0; i < key.dsize; i++, ptr++)
 		ret += *ptr;
 	return ret;
 }
 
-static void
-simple_print_binding(const struct I2binding *p, FILE* fp)
+static int
+alloc_freelist(
+		I2Table	table
+		)
 {
-	fprintf(fp, "the value for key %s is %s\n", 
-		(char*)p->key->dptr, (char*)p->value->dptr);
+	I2Binding	t;
+	int		i;
+
+	if(table->num_alist <= table->size_alist){
+		I2Binding	*alist;
+		if(!(alist = realloc(table->alist,sizeof(I2Binding)*
+					(table->size_alist+table->hint) ))){
+			I2ErrLogP(table->eh,errno,"WARNING: realloc(): %M");
+			return -1;
+		}
+		table->size_alist += table->hint;
+		table->alist = alist;
+	}
+
+	if(!(t = calloc(sizeof(I2BindingRec),table->hint))){
+		I2ErrLogP(table->eh,errno,"WARNING: calloc(): %M");
+		return -1;
+	}
+
+	table->alist[table->num_alist++] = t;
+
+	for(i=0;i<table->hint;i++){
+		t[i].next = table->freelist;
+		table->freelist = &t[i];
+	}
+
+	return 0;
 }
 
-I2table 
-I2hash_init(
-	    I2ErrHandle eh,
-	    int hint,
-	    int cmp(const I2datum *x, const I2datum *y),
-	    unsigned long hash(const I2datum *key),
-	    void print_binding(const struct I2binding *p, FILE* fp)
-)
+static I2Binding
+alloc_binding(
+		I2Table	table
+		)
 {
-	I2table table;
+	I2Binding	node;
+
+	if(!table->freelist && (alloc_freelist(table) != 0)){
+		return NULL;
+	}
+
+	node = table->freelist;
+	table->freelist = node->next;
+	node->next = 0;
+
+	return node;
+}
+
+static void
+free_binding(
+		I2Table		table,
+		I2Binding	node
+		)
+{
+	node->next = table->freelist;
+	table->freelist = node;
+
+	return;
+}
+
+I2Table 
+I2HashInit(
+	I2ErrHandle	eh,
+	int		hint,
+	int		cmp(I2Datum x, I2Datum y),
+	u_int32_t	hash(I2Datum key)
+	)
+{
+	I2Table table;
 	int i;
-	int primes[] = {509, 1021, 2053, 4093, 8191, 16381, 32771, 65521};
+	int primes[] = {31, 67, 127, 251, 509, 1021, 2053, 4093, 8191,
+							16381, 32771, 65521};
 	
 	for(i=I2Number(primes)-1;
 			(i>0) && (primes[i] > hint);i--);
@@ -91,108 +167,149 @@ I2hash_init(
 	table->buckets = malloc(primes[i]*sizeof(table->buckets[0]));
 	if(!table->buckets){
 		I2ErrLogP(eh, ENOMEM, "FATAL: malloc for hash buckets");
-		return NULL;
+		goto error;
 	}
 	memset(table->buckets,0,primes[i]*sizeof(table->buckets[0]));
 
 	table->eh = eh;
 	table->size = primes[i];
-	table->cmp = cmp? cmp : cmpatom;
+	table->hint = (hint) ? hint : primes[i];
+	table->cmp = cmp ? cmp : cmpatom;
 	table->hash = hash ? hash : hashatom;
-	table->print_binding = print_binding ? 
-		print_binding : simple_print_binding;
 	table->length = 0;
 
+	table->freelist = NULL;
+	table->alist = NULL;
+	table->num_alist = table->size_alist = 0;
+
 	table->in_iterate=False;
+	table->delete_nodes=0;
+
+	if(alloc_freelist(table) != 0){
+		goto error;
+	}
 
 	return table;
+
+error:
+	if(table->buckets){
+		free(table->buckets);
+	}
+
+	if(table->size_alist){
+		for(i=0;i<table->num_alist;i++){
+			free(table->alist[i]);
+		}
+		free(table->alist);
+	}
+	free(table);
+
+	return NULL;
 }
 
 void
-I2hash_close(I2table table)
+I2HashClose(
+	I2Table	table
+	)
 {
+	int	i;
 	assert(table);
 	assert(!table->in_iterate);
 
-	if (table->length > 0){
-		int i;
-		struct I2binding *p, *q;
-		for (i = 0; i < table->size; i++)
-			for (p = table->buckets[i]; p; p = q){
-				q = p->link;
-				free(p);
-			}
-	}
 	free(table->buckets);
+
+	if(table->size_alist){
+		for(i=0;i<table->num_alist;i++){
+			free(table->alist[i]);
+		}
+		free(table->alist);
+	}
+
 	free(table);
+
+	return;
+}
+
+int 
+I2HashDelete(
+	I2Table	table,
+	I2Datum	key
+	)
+{
+	int		i;
+	I2Binding	*p;
+	I2Binding	q;
+
+	assert(table);
+
+	/* Search table for key. */
+	i = (*table->hash)(key)%table->size;
+	for (p = &table->buckets[i]; *p; p = &(*p)->next){
+		if (!(*p)->delete && ((*table->cmp)(key, (*p)->key) == 0)){
+			break;
+		}
+	}
+
+	if (!*p) /* not found */
+		return -1;
+
+	if(table->in_iterate){
+		(*p)->delete = True;
+		table->delete_nodes++;
+		return 0;
+	}
+
+	q = *p;
+	*p = q->next;
+	free_binding(table,q);
+	table->length--;
+
+	return 0;
 }
 
 /*
 ** Save a key/value in the hash. Return 0 on success, and -1 on failure.
 */
 int 
-I2hash_store(I2table table, const I2datum *key, I2datum *value)
-{
-	int i;
-	struct I2binding *p;
-
-	assert(table);
-	assert(key);
-
-	assert(!table->in_iterate);
-
-	/* Search table for key. */
-	i = (*table->hash)(key)%table->size;
-	for (p = table->buckets[i]; p; p = p->link){
-		if ((*table->cmp)(key, p->key) == 0)
-			break;
-	}
-
-	if (p == NULL){ /* not found */
-		p = (void *)malloc(sizeof(*p));
-		if (p == NULL){
-			I2ErrLogP(table->eh,ENOMEM,
-					"FATAL: malloc for hash table");
-			return -1;
-		}
-		p->key = key;
-		p->link = table->buckets[i];
-		table->buckets[i] = p;
-		table->length++;
-	}
-	p->value = value;
-	return 0;
-}
-
-int 
-I2hash_delete(
-	I2table		table,
-	const I2datum	*key
+I2HashStore(
+	I2Table	table,
+	I2Datum	key,
+	I2Datum	value
 	)
 {
-	int i;
-	struct I2binding	**p;
-	struct I2binding	*q;
+	I2TableDataSizeT	i;
+	I2Binding		q;
 
 	assert(table);
-	assert(key);
+
 	assert(!table->in_iterate);
+
+	i=0;
+	i=~i;
+	if(table->size == i){
+		I2ErrLogP(table->eh,0,"FATAL: hash table full");
+		return -1;
+	}
 
 	/* Search table for key. */
 	i = (*table->hash)(key)%table->size;
-	for (p = &table->buckets[i]; *p; p = &(*p)->link){
-		if ((*table->cmp)(key, (*p)->key) == 0)
+	for (q = table->buckets[i]; q; q = q->next){
+		if ((*table->cmp)(key, q->key) == 0)
 			break;
 	}
 
-	if (!*p) /* not found */
-		return -1;
-
-	q = *p;
-	*p = q->link;
-	free(q);
-	table->length--;
-
+	if (q == NULL){ /* not found */
+		q = alloc_binding(table);
+		if (q == NULL){
+			return -1;
+		}
+		q->key = key;
+		q->delete = False;
+		q->next = table->buckets[i];
+		table->buckets[i] = q;
+		table->length++;
+	}
+	q->value = value;
 	return 0;
 }
 
@@ -200,56 +317,79 @@ I2hash_delete(
 ** Look up the value corresponding to a given key. Returns
 ** the value datum on success, or NULL on failure.
 */
-I2datum *
-I2hash_fetch(I2table table, const I2datum *key){
-	int i;
-	struct I2binding *p;
+I2Boolean
+I2HashFetch(
+	I2Table	table,
+	I2Datum	key,
+	I2Datum	*ret
+	)
+{
+	int		i;
+	I2Binding	p;
 
 	assert(table);
-	assert(key);
+	assert(ret);
 
 	/* Search table for key. */
 	i = (*table->hash)(key)%table->size;
 
-	for (p = table->buckets[i]; p; p = p->link){
-		if ((*table->cmp)(key, p->key) == 0)
+	for (p = table->buckets[i]; p; p = p->next){
+		if (!p->delete && ((*table->cmp)(key, p->key) == 0)){
 			break;
+		}
 	}
-	
-	return p ? (p->value) : NULL;
+
+	if(!p)
+		return False;
+
+	*ret = p->value;
+	return True;
 }
 
 void
-I2hash_print(I2table table, FILE* fp)
-{
-	int i;
-	struct I2binding *p;
-	
-	assert(table);
-
-	for (i = 0; i < table->size; i++)
-		for (p = table->buckets[i]; p; p = p->link) 
-			table->print_binding(p, fp);
-}
-
-void
-I2hash_iterate(
-	I2table			table,
-	I2hash_iterate_func	ifunc,
+I2HashIterate(
+	I2Table			table,
+	I2HashIterateFunc	ifunc,
 	void			*app_data
 	      )
 {
-	int i;
-	struct I2binding *p;
+	I2TableDataSizeT	i;
+	I2Binding		*p;
+	I2Binding		q;
 	
 	assert(table);
+	assert(!table->in_iterate);
 	assert(ifunc);
 
 	table->in_iterate = True;
-	for (i = 0; i < table->size; i++)
-		for (p = table->buckets[i]; p; p = p->link){
-			if(!((*ifunc)(p->key,p->value,app_data)))
+	table->delete_nodes = 0;
+	for (i = 0; i < table->size; i++){
+		for (q = table->buckets[i]; q; q = q->next){
+			if(q->delete){
+				continue;
+			}
+			if(!((*ifunc)(q->key,q->value,app_data)))
 				return;
 		}
+	}
+
+	/*
+	 * Now delete any nodes that were removed during the iterate.
+	 */
+	for (i = 0;((i < table->size)&&(table->delete_nodes > 0)); i++){
+		p = &table->buckets[i];
+		while(*p && (table->delete_nodes > 0)){
+			if((*p)->delete){
+				q = *p;
+				*p = q->next;
+				free_binding(table,q);
+				table->delete_nodes--;
+				table->length--;
+			}
+			else{
+				p = &(*p)->next;
+			}
+		}
+	}
 	table->in_iterate = False;
 }
