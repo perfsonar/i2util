@@ -12,6 +12,7 @@
  *	File:		random.c
  *
  *	Author:		Anatoly Karp
+ *	                Jeff W. Boote
  *			Internet2
  *
  *	Date:		Sun Jun 02 11:50:52 MDT 2002

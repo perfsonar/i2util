@@ -12,6 +12,7 @@
  *	File:		random.h
  *
  *	Author:		Anatoly Karp
+ *	                Jeff W. Boote
  *			Internet2
  *
  *	Date:		Sun Jun  2 12:19:22 MDT 2002

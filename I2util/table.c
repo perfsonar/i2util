@@ -12,6 +12,7 @@
 **	File:		table.c
 **
 **	Author:		Anatoly Karp
+**                      Jeff W. Boote
 **
 **	Date:		Thu Apr 19 13:47:17  EDT 2002
 **
