@@ -52,7 +52,6 @@ struct I2Table {
 	int			size_alist;
 	I2Boolean		in_iterate;
 	I2TableDataSizeT	delete_nodes;
-	I2TableDataSizeT	num_elements;
 };
 
 /* Static functions (used by default unless specified). */
@@ -129,8 +128,6 @@ alloc_binding(
 	table->freelist = node->next;
 	node->next = NULL;
 
-	table->num_elements++;
-
 	return node;
 }
 
@@ -143,8 +140,6 @@ free_binding(
 	node->next = table->freelist;
 	table->freelist = node;
 
-	table->num_elements--;
-
 	return;
 }
 
@@ -153,13 +148,13 @@ I2HashNumEntries(
 		I2Table	table
 		)
 {
-	if(table->delete_nodes > table->num_elements){
+	if(table->delete_nodes > table->length){
 		I2ErrLogP(table->eh,0,
 				"WARNING: I2HashNumEntries - table invalid!");
 		return 0;
 	}
 
-	return table->num_elements - table->delete_nodes;
+	return table->length - table->delete_nodes;
 }
 
 I2Table 
