@@ -20,7 +20,7 @@
  */
 #include <stdlib.h>
 #include <sys/types.h>
-#include <stdio.h>
+#include <unistd.h>
 #include <errno.h>
 #include <assert.h>
 #include <I2util/util.h>
@@ -28,7 +28,7 @@
 struct I2RandomSourceRec{
 	I2ErrHandle	eh;
 	int		type;
-	FILE		*fp;	/* used for I2RAND_DEV */
+	int		fd;	/* used for I2RAND_DEV */
 };
 
 /*
@@ -60,8 +60,8 @@ I2RandomSourceInit(I2ErrHandle eh, int type, void* data)
 	
 			if(!data)
 				data = I2_RANDOMDEV_PATH;
-			if( !(rand_src->fp = fopen((char *)data, "rb"))){
-				I2ErrLog(eh, "I2randomBytes:fopen():%M");
+			if( (rand_src->fd = open((char *)data, O_RDONLY))<0){
+				I2ErrLog(eh, "I2randomBytes:open():%M");
 				return NULL;
 			}
 			break;
@@ -95,9 +95,9 @@ I2RandomBytes(
 
 	switch (src->type) {
 		case I2RAND_DEV:
-			if (fread(ptr, 1, count, src->fp) != (size_t)count) {
+			if (I2Readn(src->fd, ptr, count) != count) {
 				I2ErrLog(src->eh,
-					"I2randomBytes: fread() failed: %M");
+					"I2randomBytes: I2Readn() failed: %M");
 				return -1;
 			}
 			break;
@@ -122,7 +122,7 @@ I2RandomSourceClose(
 
 	switch (src->type) {
 		case I2RAND_DEV:
-			fclose(src->fp);
+			close(src->fd);
 			break;
 		case I2RAND_EGD:
 		default:

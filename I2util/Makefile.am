@@ -23,4 +23,4 @@ include $(top_srcdir)/config/Make-rules
 lib_LIBRARIES		= libI2util.a
 libI2util_a_SOURCES	= ErrLog.c ErrLogImmediate.c ErrLogSyslog.c Options.c \
 			Pthread.c mach_dep.c mach_dep.h optionsP.h table.c \
-			random.c	
+			random.c io.c

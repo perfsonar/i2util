@@ -610,8 +610,8 @@ void	I2ErrLocation_(
  *
  * Side Effects:
  */
-static void
-ErrLogRealFunction_(
+void
+I2ErrLogVT(
 	I2ErrHandle	dpeh,
 	int		level,
 	int		code, 
@@ -664,18 +664,6 @@ ErrLogRealFunction_(
 }
 
 void
-I2ErrLogVT(
-	I2ErrHandle	dpeh,
-	int		level,
-	int		code,
-	const char	*format,
-	va_list		ap
-	)
-{
-	ErrLogRealFunction_(dpeh,level,code,format,ap);
-}
-
-void
 I2ErrLogTFunction_(
 	I2ErrHandle	dpeh,
 	int		level,
@@ -687,7 +675,7 @@ I2ErrLogTFunction_(
 	va_list		ap;
 
         va_start(ap, format);
-	ErrLogRealFunction_(dpeh,level,code,format,ap);
+	I2ErrLogVT(dpeh,level,code,format,ap);
         va_end(ap);
 
 	return;
@@ -733,7 +721,7 @@ void	I2ErrLogPFunction_(
 	va_list		ap;
 
         va_start(ap, format);
-	ErrLogRealFunction_(dpeh,-1,code,format,ap);
+	I2ErrLogVT(dpeh,-1,code,format,ap);
         va_end(ap);
 
 	return;
@@ -785,7 +773,7 @@ void	I2ErrLogFunction_(
 	va_list		ap;
 
         va_start(ap, format);
-	ErrLogRealFunction_(dpeh,-1,0,format,ap);
+	I2ErrLogVT(dpeh,-1,0,format,ap);
         va_end(ap);
 
 	return;
