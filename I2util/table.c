@@ -52,7 +52,12 @@ cmpatom(const I2datum *x, const I2datum *y)
 static unsigned long
 hashatom(const I2datum *key)
 {
-	return (unsigned long)key->dptr>>2;
+	int i;
+	unsigned char *ptr = (unsigned char *)(key->dptr);
+	unsigned long ret = 0;
+	for (i = 0; i < key->dsize; i++, ptr++)
+		ret += *ptr;
+	return ret;
 }
 
 static void
@@ -192,15 +197,18 @@ I2datum *
 I2hash_fetch(I2table table, const I2datum *key){
 	int i;
 	struct I2binding *p;
-	I2datum ret;
-	ret.dsize = 0;
-	ret.dptr = NULL;
 
 	assert(table);
 	assert(key);
 
 	/* Search table for key. */
 	i = (*table->hash)(key)%table->size;
+
+#ifdef OWP_PRINT_DEBUG
+	printf("DEBUG: searching for key = `%s' with hash = %d...\n",
+	       key->dptr, i);
+#endif
+
 	for (p = table->buckets[i]; p; p = p->link){
 		if ((*table->cmp)(key, p->key) == 0)
 			break;
@@ -209,17 +217,24 @@ I2hash_fetch(I2table table, const I2datum *key){
 	return p ? (p->value) : NULL;
 }
 
+
 void
 I2hash_print(I2table table, FILE* fp)
 {
-	int i;
+	int i, j;
 	struct I2binding *p;
 	
 	assert(table);
 
 	for (i = 0; i < table->size; i++)
-		for (p = table->buckets[i]; p; p = p->link)
+		for (p = table->buckets[i]; p; p = p->link) {
 			table->print_binding(p, fp);
+#ifdef OWP_PRINT_DEBUG
+			j = (*table->hash)(p->key)%table->size;
+			printf("DEBUG: the key `%s' has hash value %d\n",
+			       p->key->dptr, j);
+#endif
+		}
 }
 
 void
