@@ -49,6 +49,7 @@
 /*
  * May support threading in future.
  */
+/*NOTUSED*/
 static I2ThreadMutex_T	MyMutex = I2PTHREAD_MUTEX_INITIALIZER;
 
 #define	TABLE_SIZE	10
@@ -108,12 +109,19 @@ typedef	struct	ErrHandle_ {
  */
 static	const char	*get_error(ErrHandle *eh, int error)
 {
-	int	i;
-	int	index;
+	int		i;
+	unsigned int	index;
+	unsigned int	errnum;
+
+	if(error < 0)
+		return("");
+	errnum = (unsigned int)error;
 
 	for (i=0; i<eh->err_tab_num; i++) {
-		index = error - eh->err_tab[i].start;
-		if (error >= eh->err_tab[i].start && 
+		if(eh->err_tab[i].start > errnum)
+			continue;
+		index = errnum - eh->err_tab[i].start;
+		if ((unsigned)errnum >= eh->err_tab[i].start && 
 					index < eh->err_tab[i].num) {
 
 			return(eh->err_tab[i].err_list[index]);

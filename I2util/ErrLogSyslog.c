@@ -41,6 +41,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <syslog.h>
 #include <string.h>
 #include <time.h>
 #include <I2util/util.h>
@@ -183,7 +184,7 @@ void	I2ErrLogSyslog(
 	}
 
 	if (sa->line_info & I2MSG) {
-		rc = DPSprintf(bufptr, "%s", msg);
+		rc = sprintf(bufptr, "%s", msg);
 		bufptr += rc;
 	}
 

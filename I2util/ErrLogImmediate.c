@@ -115,6 +115,7 @@
  *
  * Side Effects:
  */
+/* ARGSUSED6 */
 void	I2ErrLogImmediate(
 	const char	*program_name,
 	const char	*file, 	
@@ -122,7 +123,7 @@ void	I2ErrLogImmediate(
 	const char	*date,
 	const char	*msg,
 	void		*arg,
-	void		**data	/* not used	*/
+	void		**data	__attribute__((unused))	/* not used	*/
 ) {
 	I2LogImmediateAttr	*la = (I2LogImmediateAttr *) arg;
 	FILE			*fp = la->fp;

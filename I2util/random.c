@@ -28,7 +28,7 @@
 ** sufficient space.
 */
 void
-I2RandomBytes(char *ptr, int count)
+I2RandomBytes(unsigned char *ptr, int count)
 {
 	int i;
 	long scale = (RAND_MAX / 1<<8);

@@ -32,8 +32,8 @@ BEGIN_C_DECLS
 
 extern void
 I2RandomBytes(
-	char	*ptr,
-	int	count
+	unsigned char	*ptr,
+	int		count
 	);
 
 END_C_DECLS

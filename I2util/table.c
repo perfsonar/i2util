@@ -17,6 +17,7 @@
 **
 **	Description:	Simple hash table - implementation.
 */
+#include <stdlib.h>
 #include <limits.h>
 #include <stddef.h>
 #include <assert.h>
@@ -127,7 +128,6 @@ I2hash_store(T table, const I2datum *key, I2datum *value)
 {
 	int i;
 	struct I2binding *p;
-	I2datum *prev;
 
 	assert(table);
 	assert(key);

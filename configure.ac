@@ -29,7 +29,7 @@
 # Process this file with autoconf to produce a configure script.
 AC_INIT(I2util, 1.0, owamp-bugs@internet2.edu)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(I2util, 1.0)
+AM_INIT_AUTOMAKE(I2util, 1.0, [no-define])
 AC_CONFIG_SRCDIR(I2util/ErrLog.c)
 AM_CONFIG_HEADER(I2util/config.h)
 
@@ -41,9 +41,10 @@ AC_PROG_RANLIB
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([errno.h stdlib.h string.h])
+AC_CHECK_HEADERS([errno.h stdlib.h string.h limits.h stddef.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
+I2_C___ATTRIBUTE__
 AC_C_CONST
 AC_TYPE_SIZE_T
 AC_STRUCT_TM
@@ -51,7 +52,7 @@ AC_STRUCT_TM
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_STRFTIME
-AC_CHECK_FUNCS([memset strdup])
+AC_CHECK_FUNCS([memset strdup strerror strtol strtoul])
 
 # AC_CONFIG_FILES([Makefile I2util/Makefile])
 

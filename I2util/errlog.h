@@ -123,7 +123,7 @@ extern void	I2ErrLogPFunction_(
 );
 
 
-extern int	I2ErrorList(
+extern int	I2ErrList(
 	I2ErrHandle 	dpeh, 
 	unsigned 	start, 
 	unsigned 	num, 

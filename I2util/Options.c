@@ -315,7 +315,7 @@ int	I2CvtToBoolean(
  *
  */
 int	I2CvtToString(
-	I2ErrHandle	eh,
+	I2ErrHandle	__attribute__((unused)) eh,
 	const char	*from,	/* the string	*/
 	void		*to
 ) {
@@ -418,9 +418,9 @@ int	I2OpenOptionTbl(I2ErrHandle eh)
  * on exit
  *	return		: -1 => error, else ok
  */
+int
 I2CloseOptionTbl(int od)
 {
-	int	i;
 	I2ErrHandle	eh;
 
 	if (! odTable[od]) return(-1);	/* invalid option descriptor	*/
@@ -489,6 +489,7 @@ I2CloseOptionTbl(int od)
  * on exit
  *	return		: -1 => failure, else OK
  */
+int
 I2GetOptions(
 	int 		od,
 	const I2Option	*options
@@ -583,6 +584,7 @@ I2GetOptions(
  * on exit
  *	return		: -1 => failure, else OK.
  */
+int
 I2LoadOptionTable(
 	int			od,
 	const I2OptDescRec	*optd
@@ -1029,7 +1031,7 @@ void	I2PrintOptionHelp(
 			(void) strcat(buf, sbf);
 		}
 		(void) fprintf(fp, buf);
-		for(j=strlen(buf); j<sizeof(buf); j++) {
+		for(j=strlen(buf); j<(int)sizeof(buf); j++) {
 			putc(' ', fp);
 		}
 		if (opt_rec[i].help) {
