@@ -251,8 +251,8 @@ getkeyfileline(
 	int	c;
 	size_t	i;
 	char	*line = *lbuf;
-	size_t	nc=0; // number of "significant" chars in the line
-	size_t	ns=0; // number of leading spaces
+	size_t	nc=0; /* number of "significant" chars in the line */
+	size_t	ns=0; /* number of leading spaces */
 
 	while((c = fgetc(fp)) != EOF){
 

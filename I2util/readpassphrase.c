@@ -61,6 +61,10 @@
 #include <unistd.h>
 #include <I2util/readpassphrase.h>
 
+#ifndef	TCSASOFT
+#define	TCSASOFT	0
+#endif
+
 static volatile sig_atomic_t signo;
 
 static void handler(int);
@@ -116,8 +120,10 @@ restart:
 		memcpy(&term, &oterm, sizeof(term));
 		if (!(flags & I2RPP_ECHO_ON))
 			term.c_lflag &= ~(ECHO | ECHONL);
+#ifdef	VSTATUS
 		if (term.c_cc[VSTATUS] != _POSIX_VDISABLE)
 			term.c_cc[VSTATUS] = _POSIX_VDISABLE;
+#endif
 		(void)tcsetattr(input, TCSAFLUSH|TCSASOFT, &term);
 	} else {
 		memset(&term, 0, sizeof(term));
