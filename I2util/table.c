@@ -178,9 +178,9 @@ I2HashInit(
 	for(i=I2Number(primes)-1;
 			(i>0) && (primes[i] > hint);i--);
 
-	table = (void *)malloc(sizeof(*table));
+	table = (void *)calloc(1,sizeof(*table));
 	if(!table){
-		I2ErrLogP(eh, ENOMEM, "FATAL: malloc for hash table");
+		I2ErrLogP(eh, ENOMEM, "FATAL: calloc for hash table");
 		return NULL;
 	}
 	table->buckets = malloc(primes[i]*sizeof(table->buckets[0]));
