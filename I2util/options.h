@@ -99,6 +99,12 @@ extern	int	I2CvtToInt(
 	void		*to
 );
 
+extern	int	I2CvtToUInt(
+	I2ErrHandle	eh,
+	const char	*from,
+	void		*to
+);
+
 extern	int	I2CvtToFloat(
 	I2ErrHandle	eh,
 	const char	*from,

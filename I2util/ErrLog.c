@@ -654,7 +654,7 @@ void	I2ErrLogFunction_(
 /*
  * Function:	I2ErrLogPFunction_()
  *
- * Description:	The I2ErrLogFunction() is identical to the I2ErrLogFunction()
+ * Description:	The I2ErrLogPFunction() is identical to the I2ErrLogFunction()
  *		except that it is invoked by the I2LogPErr() macro which
  *		takes an additional error code argument that is passed
  *		on to I2ErrLogPFunction_(), `err_code'

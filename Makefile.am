@@ -24,4 +24,4 @@ include $(top_srcdir)/config/Make-rules
 SUBDIRS = I2util
 include_HEADERS = I2util/util.h I2util/Pthread.h I2util/config.h \
 		I2util/errlog.h I2util/errlogimmediate.h I2util/errlogsyslog.h \
-		I2util/options.h
+		I2util/options.h I2util/table.h

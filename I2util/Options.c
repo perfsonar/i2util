@@ -187,11 +187,49 @@ int	I2CvtToInt(
 	void		*to
 ) {
 	int	*iptr	= (int *) to;
+	long	tlng,t2lng;
+	char	*tval;
 
 	if (! from) {
 		*iptr = 0;
+		return 1;
 	}
-	else if (sscanf(from, "%d", iptr) != 1) {
+
+	errno = 0;
+	tlng = strtol(from,&tval,10);
+	*iptr = (int)tlng;
+	t2lng = *iptr;
+	if((tlng == 0 && from == tval) || (errno == ERANGE) || (tlng != t2lng)){
+		I2ErrLog(eh, "Convert(%s) to int failed", from);
+		return(-1);
+	}
+	return(1);
+}
+
+/*
+ *	I2CvtToUInt()
+ *
+ *	convert a ascii string to its integer value
+ */
+int	I2CvtToUInt(
+	I2ErrHandle	eh,
+	const char	*from,	/* the string	*/
+	void		*to
+) {
+	unsigned int	*iptr	= (unsigned int *) to;
+	unsigned long	tlng,t2lng;
+	char	*tval;
+
+	if (! from) {
+		*iptr = 0;
+		return 1;
+	}
+
+	errno = 0;
+	tlng = strtoul(from,&tval,10);
+	*iptr = (unsigned int)tlng;
+	t2lng = *iptr;
+	if((tlng == 0 && from == tval) || (errno == ERANGE) || (tlng != t2lng)){
 		I2ErrLog(eh, "Convert(%s) to int failed", from);
 		return(-1);
 	}
@@ -600,10 +638,14 @@ I2LoadOptionTable(
 	 * as necessary.
 	 */
 	for (i = 0, n = optTbls[od].num; i < num; i++, optTbls[od].num++, n++) {
+		int	arg_count;
 		char	*value;
 		char	*s;
 
-		if (optd[i].arg_count == 0) {
+		arg_count = optd[i].arg_count;
+		arg_count = (arg_count < 0)?(-arg_count):arg_count;
+
+		if (arg_count == 0) {
 			s = "false";
 		}
 		else {
@@ -628,7 +670,7 @@ I2LoadOptionTable(
 		}
 
 		if (value) {
-			value = fmt_opt_string(eh, value, optd[i].arg_count);
+			value = fmt_opt_string(eh, value, arg_count);
 			if (! value) {
 				return(-1);
 			}
@@ -950,10 +992,25 @@ void	I2PrintOptionHelp(
 	opt_rec = optTbls[od].opt_rec;
 
 	for(i=0; i<optTbls[od].num; i++) {
+		int	arg_count;
+		int	varg;
+
+		arg_count = opt_rec[i].arg_count;
+		varg = 0;
+		if(arg_count < 0){
+			arg_count = -arg_count;
+			varg = 1;
+		}
+
 		sprintf(buf, "    -%-8.8s", opt_rec[i].option);
+
 		if (opt_rec[i].arg_count < 4) {
-			for(j=0; j<opt_rec[i].arg_count; j++) {
-				sprintf(sbf, " arg%d", j);
+			strcat(buf, " arg0");
+			for(j=1; j<arg_count; j++) {
+				if(varg)
+					sprintf(sbf, " [arg%d]", j);
+				else
+					sprintf(sbf, " arg%d", j);
 				if (strlen(sbf) + strlen(buf) < sizeof(buf)) {
 					(void) strcat(buf, sbf);
 				}
@@ -963,7 +1020,12 @@ void	I2PrintOptionHelp(
 			}
 		}
 		else {
-			sprintf(sbf," arg0 .. arg%d",opt_rec[i].arg_count-1);
+			if(varg){
+				sprintf(sbf," arg0 [.. arg%d]",arg_count-1);
+			}
+			else{
+				sprintf(sbf," arg0 .. arg%d",arg_count-1);
+			}
 			(void) strcat(buf, sbf);
 		}
 		(void) fprintf(fp, buf);

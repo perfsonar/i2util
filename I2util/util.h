@@ -45,5 +45,6 @@ typedef unsigned int    I2Boolean;
 #include <I2util/Pthread.h>
 #include <I2util/errlog.h>
 #include <I2util/options.h>
+#include <I2util/table.h>
 
 #endif	/*	_I2_util_h_	*/
