@@ -38,6 +38,10 @@ struct T {
 	I2print_binding_func print_binding;
 };
 
+#ifndef	MIN
+#define MIN(x,y)	((x<y)?x:y)
+#endif
+
 /* Static functions (used by default unless specified). */
 static int 
 cmpatom(const I2datum *x, const I2datum *y)
@@ -45,7 +49,8 @@ cmpatom(const I2datum *x, const I2datum *y)
 	/* return x != y; */
 	assert(x);
 	assert(y);
-	return (!(x->dsize == y->dsize) || bcmp(x->dptr, y->dptr, x->dsize));
+	return (!(x->dsize == y->dsize) ||
+			bcmp(x->dptr, y->dptr, MIN(x->dsize,y->dsize)));
 }
 
 static unsigned long
