@@ -94,7 +94,7 @@ static int		errorLine = 0;
 typedef	struct	ErrHandle_ {
 	ErrTable	err_tab[TABLE_SIZE];	/* all the error tables	*/
 	int		err_tab_num;		/* num error tables	*/
-	int		err_code;		/* error code of last error */
+	int		code;		/* error code of last error */
 	const char	*program_name;		/* name of calling prog	*/
 	void		*data;			/* client data		*/
 	I2ErrLogFuncPtr	log_func;		/* client loggin func	*/
@@ -133,8 +133,8 @@ static	const char	*get_error(ErrHandle *eh, int error)
 
 /*
  * format an error message converting any `%M' tokens to the error 
- * string associated with error message number `err_code, and any 
- * `%N' tokens to the ascii representation of the value of `err_code
+ * string associated with error message number `code, and any 
+ * `%N' tokens to the ascii representation of the value of `code
  *
  * `buf' must have enough space to hold the new string
  */
@@ -143,7 +143,7 @@ static int	esnprintf(
 	char		*buf, 
 	size_t		size_buf,
 	const char	*format,
-	int		err_code
+	int		code
 ) {
 	const char	*p1;
 	char		*p2;
@@ -158,12 +158,12 @@ static int	esnprintf(
 		}
 		p1++;
 		if (*p1 == 'M') {
-			len =snprintf(p2,size_p2,"%s",get_error(eh,err_code))-1;
+			len =snprintf(p2,size_p2,"%s",get_error(eh,code))-1;
 			p2 += len;
 			size_p2 -= len;
 		}
 		else if (*p1 == 'N') {
-			len = snprintf(p2,size_p2,"%d", err_code) - 1;
+			len = snprintf(p2,size_p2,"%d", code) - 1;
 			p2 += len;
 			size_p2 -= len;
 		}
@@ -328,7 +328,7 @@ I2ErrHandle	I2ErrOpen(
 		return(NULL);
 	}
 
-	eh->err_code = 0;
+	eh->code = 0;
 	eh->program_name = program_name;
 	eh->log_func = log_func;
 	eh->log_func_arg = log_func_arg;
@@ -485,7 +485,7 @@ int	I2ErrGetCode(
 ) {
 	ErrHandle	*eh = (ErrHandle *) dpeh;
 
-	return(eh->err_code);
+	return(eh->code);
 }
 
 
@@ -498,7 +498,7 @@ int	I2ErrGetCode(
  *	valid error number for this table. The values 0 - 1000 are reserved.
  *	The index into 'err_list' is calculated by subtracting 'start'
  *	from the error number. Thus if you add a list with 'start' equal
- *	to 1001 and later invoke ESprintf with 'err_code' equal to 1001 the 
+ *	to 1001 and later invoke ESprintf with 'code' equal to 1001 the 
  *	error message referenced will be 'err_list[0]'
  *
  * on entry
@@ -581,6 +581,190 @@ void	I2ErrLocation_(
 }
 
 /*
+ * Function:	I2ErrLogPFunction_()
+ *
+ * Description:	The I2ErrLogPFunction() is identical to the I2ErrLogFunction()
+ *		except that it is invoked by the I2LogPErr() macro which
+ *		takes an additional error code argument that is passed
+ *		on to I2ErrLogPFunction_(), `code'
+ *
+ *		`code' may be any valid value of the system global
+ *		variable, `errno', or it may be an error code made valid
+ *		by a call to I2ErrList().
+ *
+ *		
+ *
+ * In Args:
+ *
+ *	dpeh		An error handle returned via a call to I2ErrOpen().
+ *
+ *	code	An integer indicating the error number.
+ *
+ *	*format		A pointer to a character string containing formating
+ *			information.
+ *
+ *	...		variable arguments as indicated in `format'
+ *
+ * Out Args:
+ *
+ * Return Values:
+ *
+ * Side Effects:
+ */
+static void
+ErrLogRealFunction_(
+	I2ErrHandle	dpeh,
+	int		level,
+	int		code, 
+	const char	*format,
+	va_list		ap
+)
+{
+	ErrHandle		*eh = (ErrHandle *) dpeh;
+	char			new_format[MSG_BUF_SIZE];
+	char			buf[MSG_BUF_SIZE];
+	struct I2ErrLogEvent	event;
+
+	if(!eh){
+		I2ThreadMutexUnlock(&MyMutex);
+		return;
+	}
+
+	event.mask = 0;
+
+	if(!code)
+		code = errno;
+	else{
+		event.code = code;	event.mask |= I2CODE;
+	}
+
+	(void)esnprintf(eh,new_format,sizeof(new_format),format,code);
+	eh->code = code;
+
+	/*
+	 * deal with variable args
+	 */
+        (void) vsnprintf(buf,sizeof(buf),new_format,ap);
+
+	event.name = eh->program_name;	event.mask |= I2NAME;
+	event.file = errorFile;		event.mask |= I2FILE;
+	event.line = errorLine;		event.mask |= I2LINE;
+	event.date = errorDate;		event.mask |= I2DATE;
+	event.msg = buf;		event.mask |= I2MSG;
+
+	if(level > -1 && level < 8){
+		event.level = level;	event.mask |= I2LEVEL;
+	}
+
+	eh->log_func(
+		&event, eh->log_func_arg, &(eh->data)
+	);
+	I2ThreadMutexUnlock(&MyMutex);
+
+	return;
+}
+
+static void
+I2ErrLogTFunction_(
+	I2ErrHandle	dpeh,
+	int		level,
+	int		code, 
+	const char	*format,
+	...
+)
+{
+	va_list		ap;
+
+        va_start(ap, format);
+	ErrLogRealFunction_(dpeh,level,code,format,ap);
+        va_end(ap);
+
+	return;
+}
+
+/*
+ * Function:	I2ErrLogPFunction_()
+ *
+ * Description:	The I2ErrLogPFunction() is identical to the I2ErrLogFunction()
+ *		except that it is invoked by the I2LogPErr() macro which
+ *		takes an additional error code argument that is passed
+ *		on to I2ErrLogPFunction_(), `code'
+ *
+ *		`code' may be any valid value of the system global
+ *		variable, `errno', or it may be an error code made valid
+ *		by a call to I2ErrList().
+ *
+ *		
+ *
+ * In Args:
+ *
+ *	dpeh		An error handle returned via a call to I2ErrOpen().
+ *
+ *	code	An integer indicating the error number.
+ *
+ *	*format		A pointer to a character string containing formating
+ *			information.
+ *
+ *	...		variable arguments as indicated in `format'
+ *
+ * Out Args:
+ *
+ * Return Values:
+ *
+ * Side Effects:
+ */
+void	I2ErrLogPFunction_(
+	I2ErrHandle	dpeh,
+	int		code, 
+	const char	*format, ...
+)
+{
+	va_list		ap;
+
+        va_start(ap, format);
+	ErrLogRealFunction_(dpeh,-1,code,format,ap);
+        va_end(ap);
+
+	return;
+}
+
+#ifdef	NOT
+{
+	va_list		ap;
+
+	ErrHandle	*eh = (ErrHandle *) dpeh;
+	char		new_format[MSG_BUF_SIZE];
+	char		buf[MSG_BUF_SIZE];
+
+	if (! eh) {
+	I2ThreadMutexUnlock(&MyMutex);
+
+		return;
+	}
+
+	(void)esnprintf(eh,new_format,sizeof(new_format),format,code);
+
+	eh->code = code;
+
+	/*
+	 * deal with variable args
+	 */
+        va_start(ap, format);
+        (void) vsnprintf(buf,sizeof(buf),new_format,ap);
+        va_end(ap);
+
+	eh->log_func(
+		eh->program_name, errorFile, errorLine, 
+		errorDate, buf, eh->log_func_arg, &(eh->data)
+	);
+	I2ThreadMutexUnlock(&MyMutex);
+
+
+	return;
+}
+#endif
+
+/*
  * Function:	I2ErrLogFunction_()
  *
  * Description:	The I2ErrLogFunction() converts and formats its arguments 
@@ -621,7 +805,18 @@ void	I2ErrLocation_(
 void	I2ErrLogFunction_(
 	I2ErrHandle	dpeh,
 	const char	*format, ...
-) {
+)
+{
+	va_list		ap;
+
+        va_start(ap, format);
+	ErrLogRealFunction_(dpeh,-1,0,format,ap);
+        va_end(ap);
+
+	return;
+}
+#ifdef	NOT
+{
 	va_list		ap;
 
 	ErrHandle *eh = (ErrHandle *) dpeh;
@@ -639,7 +834,7 @@ void	I2ErrLogFunction_(
 	 */
 	(void) esnprintf(eh,new_format,sizeof(new_format),format,errno);
 
-	eh->err_code = errno;
+	eh->code = errno;
 
 	/*
 	 * deal with variable args
@@ -658,72 +853,4 @@ void	I2ErrLogFunction_(
 
 	return;
 }
-
-/*
- * Function:	I2ErrLogPFunction_()
- *
- * Description:	The I2ErrLogPFunction() is identical to the I2ErrLogFunction()
- *		except that it is invoked by the I2LogPErr() macro which
- *		takes an additional error code argument that is passed
- *		on to I2ErrLogPFunction_(), `err_code'
- *
- *		`err_code' may be any valid value of the system global
- *		variable, `errno', or it may be an error code made valid
- *		by a call to I2ErrList().
- *
- *		
- *
- * In Args:
- *
- *	dpeh		An error handle returned via a call to I2ErrOpen().
- *
- *	err_code	An integer indicating the error number.
- *
- *	*format		A pointer to a character string containing formating
- *			information.
- *
- *	...		variable arguments as indicated in `format'
- *
- * Out Args:
- *
- * Return Values:
- *
- * Side Effects:
- */
-void	I2ErrLogPFunction_(
-	I2ErrHandle	dpeh,
-	int		err_code, 
-	const char	*format, ...
-) {
-	va_list		ap;
-
-	ErrHandle	*eh = (ErrHandle *) dpeh;
-	char		new_format[MSG_BUF_SIZE];
-	char		buf[MSG_BUF_SIZE];
-
-	if (! eh) {
-	I2ThreadMutexUnlock(&MyMutex);
-
-		return;
-	}
-
-	(void)esnprintf(eh,new_format,sizeof(new_format),format,err_code);
-
-	eh->err_code = err_code;
-
-	/*
-	 * deal with variable args
-	 */
-        va_start(ap, format);
-        (void) vsnprintf(buf,sizeof(buf),new_format,ap);
-        va_end(ap);
-
-	eh->log_func(
-		eh->program_name, errorFile, errorLine, 
-		errorDate, buf, eh->log_func_arg, &(eh->data)
-	);
-	I2ThreadMutexUnlock(&MyMutex);
-
-
-	return;
-}
+#endif

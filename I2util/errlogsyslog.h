@@ -53,13 +53,9 @@ typedef struct  I2ErrLogSyslogAttr_ {
 	} I2ErrLogSyslogAttr;
 
 extern void	I2ErrLogSyslog(
-	const char	*program_name,
-	const char	*file, 	
-	int 		line,
-	const char	*date, 	
-	const char	*msg,
-	void		*arg,
-	void		**data	/* not used	*/
+	struct I2ErrLogEvent	*ev,
+	void			*arg,
+	void			**data
 );
 
 END_C_DECLS

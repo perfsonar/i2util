@@ -42,8 +42,6 @@
 
 #include <stdio.h>
 #include <I2util/util.h>
-#include <I2util/errlogimmediate.h>
-#include <I2util/errlogsyslog.h>
 
 
 BEGIN_C_DECLS
@@ -55,9 +53,33 @@ BEGIN_C_DECLS
 #define	I2DATE		(1L << 3)
 #define	I2RTIME		(1L << 4)
 #define	I2MSG		(1L << 5)
+#define	I2CODE		(1L << 6)
+#define	I2LEVEL		(1L << 7)
+
+/*
+ * mask is bitwise OR of above bitmasks indicating which of the
+ * remaining fields are valid.
+ */
+struct I2ErrLogEvent{
+	int		mask;
+	const char	*name;	/* I2NAME */
+	const char	*file;	/* I2FILE */
+	int		line;	/* I2LINE */
+	const char	*date;	/* I2DATE */
+	int		code;	/* I2CODE */
+	int		level;	/* I2LEVEL - matches Syslog priority */
+	const char	*msg;	/* I2MSG */
+};
 
 typedef	void	*I2ErrHandle;
 
+typedef void	(*I2ErrLogFuncPtr) (	/* client logging function	*/
+		struct I2ErrLogEvent	*err_event,
+		void			*arg,
+		void			**data
+		);
+
+#ifdef	NOT
 typedef void	(*I2ErrLogFuncPtr) (	/* client logging function	*/
 	const char	*program_name,
 	const char      *file,  
@@ -67,17 +89,29 @@ typedef void	(*I2ErrLogFuncPtr) (	/* client logging function	*/
 	void            *arg,
 	void		**data
 	);
+#endif
 
 typedef	char	*(*I2ErrRetrieveFuncPtr)(      /* client fetch func    	*/
 	void	*arg,
 	void	**data
 	);
 
+/*
+ * extern void I2ErrLog(eh,fmt,...);
+ */
 #define	I2ErrLog	I2ErrLocation_(__FILE__, __DATE__, __LINE__); \
 				I2ErrLogFunction_
+/*
+ * extern void I2ErrLogP(eh,err_code,fmt,...);
+ */
 #define	I2ErrLogP	I2ErrLocation_(__FILE__, __DATE__, __LINE__); \
 				I2ErrLogPFunction_
 
+/*
+ * extern void I2ErrLogT(eh,err_level,err_code,fmt,...);
+ */
+#define I2ErrLogT	I2ErrLocation_(__FILE__,__DATE__,__LINE__); \
+				I2ErrLogTFunction_
 
 
 
@@ -103,7 +137,6 @@ extern char    *I2ErrGetMsg(
 extern int    I2ErrGetCode(
 	I2ErrHandle	dpeh
 );
-
 
 extern void	I2ErrLocation_(
 	const char	*file,
@@ -131,5 +164,8 @@ extern int	I2ErrList(
 );
 
 END_C_DECLS
+
+#include <I2util/errlogimmediate.h>
+#include <I2util/errlogsyslog.h>
 
 #endif	/*	_i2_errlog_h_	*/

@@ -80,19 +80,19 @@
  *			I2RTIME
  *			I2MSG
  *
- *		If I2NAME is set `program_name', followed by a ":" is 
+ *		If I2NAME is set `ev->name', followed by a ":" is 
  *		copied to `arg->fp'.
  *
  *		If I2FILE is set the string "FILE=", followed by 
- *		`file', followed by ",", followed by a space is copied 
+ *		`ev->file', followed by ",", followed by a space is copied 
  *		to `arg->fp'.
  *
  *		If I2LINE is set the string "LINE=", followed by the ascii
- *		representation of `line', followed by ",", followed by 
+ *		representation of `ev->line', followed by ",", followed by 
  *		a space is copied to `arg->fp'.
  *
  *		If I2DATE is set the string "DATE=", followed by 
- *		`date', followed by ",", followed by a space is copied 
+ *		`ev->date', followed by ",", followed by a space is copied 
  *		to `arg->fp'.
  *
  *		If I2RTIME is set the string "RTIME=", followed by 
@@ -100,7 +100,7 @@
  *		to `arg->fp', where `time' is string formatted by
  *		arg->tformat.
  *	
- *		If I2MSG is set `msg' is copied to `arg->fp.
+ *		If I2MSG is set `ev->msg' is copied to `arg->fp.
  *
  *		Finally, a trailing newline is copied to `arg->fp'
  *
@@ -115,30 +115,26 @@
  *
  * Side Effects:
  */
-/* ARGSUSED6 */
 void	I2ErrLogImmediate(
-	const char	*program_name,
-	const char	*file, 	
-	int 		line,
-	const char	*date,
-	const char	*msg,
-	void		*arg,
-	void		**data	__attribute__((unused))	/* not used	*/
+	struct I2ErrLogEvent	*ev,
+	void			*arg,
+	void			**data	__attribute__((unused))
 ) {
 	I2LogImmediateAttr	*la = (I2LogImmediateAttr *) arg;
 	FILE			*fp = la->fp;
 
-	if (! fp) return;
+	if(! fp) return;
 
-	if (la->line_info & I2NAME) fprintf(fp, "%s: ", program_name);
+	if(ev->mask & la->line_info & I2NAME)
+		fprintf(fp, "%s: ", ev->name);
+	if(ev->mask & la->line_info & I2FILE)
+		fprintf(fp, "FILE=%s, ", ev->file);
+	if(ev->mask & la->line_info & I2LINE)
+		fprintf(fp, "LINE=%d, ", ev->line);
+	if(ev->mask & la->line_info & I2DATE)
+		fprintf(fp, "DATE=%s, ", ev->date);
 
-	if (la->line_info & I2FILE) fprintf(fp, "FILE=%s, ", file);
-
-	if (la->line_info & I2LINE) fprintf(fp, "LINE=%d, ", line);
-
-	if (la->line_info & I2DATE) fprintf(fp, "DATE=%s, ", date);
-
-	if (la->line_info & I2RTIME) {
+	if(la->line_info & I2RTIME){
 		time_t		clock;
 		struct tm	*tm;
 		char		ftime[64];
@@ -149,7 +145,9 @@ void	I2ErrLogImmediate(
 			fprintf(fp, "RTIME=%s, ", ftime);
 	}
 
-	if (la->line_info & I2MSG) fprintf(fp, "%s", msg);
+	if(ev->mask & la->line_info & I2MSG)
+		fprintf(fp, "%s", ev->msg);
 
-	if (la->line_info) fprintf(fp, "\n");
+	if(la->line_info)
+		fprintf(fp, "\n");
 }

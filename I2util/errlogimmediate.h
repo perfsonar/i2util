@@ -54,13 +54,9 @@ typedef struct  I2LogImmediateAttr_ {
 	} I2LogImmediateAttr;
 
 extern void	I2ErrLogImmediate(
-	const char	*program_name,
-	const char	*file, 	
-	int 		line,
-	const char	*date, 	
-	const char	*msg,
-	void		*arg,
-	void		**data	/* not used	*/
+	struct I2ErrLogEvent	*ev,
+	void			*arg,
+	void			**data	/* not used	*/
 );
 
 END_C_DECLS

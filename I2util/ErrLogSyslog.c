@@ -125,14 +125,11 @@
  * Side Effects:
  */
 void	I2ErrLogSyslog(
-	const char	*program_name,
-	const char	*file, 	
-	int 		line,
-	const char	*date,
-	const char	*msg,
-	void		*arg,
-	void		**data	/* not used	*/
-) {
+	struct I2ErrLogEvent	*ev,
+	void			*arg,
+	void			**data
+)
+{
 	I2ErrLogSyslogAttr	*sa = (I2ErrLogSyslogAttr *) arg;
 	char			buf[4096], *bufptr;
 	size_t			size=sizeof(buf);
@@ -140,36 +137,36 @@ void	I2ErrLogSyslog(
 	
 	bufptr = buf;
 
-	if (*data == NULL && sa->ident) {
+	if(*data == NULL && sa->ident){
 		openlog((char *) sa->ident, sa->logopt, sa->facility);
 		*data = (void *) 1;
 	}
 
-	if (sa->line_info & I2NAME) {
-		rc = snprintf(bufptr,size,"%s: ", program_name);
+	if(ev->mask & sa->line_info & I2NAME) {
+		rc = snprintf(bufptr,size,"%s: ", ev->name);
 		bufptr += rc;
 		size -= rc;
 	}
 
-	if (sa->line_info & I2FILE) {
-		rc = snprintf(bufptr,size,"FILE=%s, ", file);
+	if(ev->mask & sa->line_info & I2FILE){
+		rc = snprintf(bufptr,size,"FILE=%s, ", ev->file);
 		bufptr += rc;
 		size -= rc;
 	}
 
-	if (sa->line_info & I2LINE) {
-		rc = snprintf(bufptr,size,"LINE=%d, ", line);
+	if(ev->mask & sa->line_info & I2LINE){
+		rc = snprintf(bufptr,size,"LINE=%d, ", ev->line);
 		bufptr += rc;
 		size -= rc;
 	}
 
-	if (sa->line_info & I2DATE) {
-		rc = snprintf(bufptr,size,"DATE=%s, ", date);
+	if(ev->mask & sa->line_info & I2DATE){
+		rc = snprintf(bufptr,size,"DATE=%s, ", ev->date);
 		bufptr += rc;
 		size -= rc;
 	}
 
-	if (sa->line_info & I2RTIME) {
+	if(sa->line_info & I2RTIME){
 		time_t		clock;
 		struct tm	*tm;
 		char		ftime[64];
@@ -183,12 +180,16 @@ void	I2ErrLogSyslog(
 		}
 	}
 
-	if (sa->line_info & I2MSG) {
-		rc = sprintf(bufptr, "%s", msg);
+	if(ev->mask & sa->line_info & I2MSG){
+		rc = sprintf(bufptr, "%s", ev->msg);
 		bufptr += rc;
 	}
 
-	if (bufptr != buf) {
+	if(bufptr == buf)
+		return;
+
+	if(ev->mask & I2LEVEL)
+		syslog(ev->level, "%s", buf);
+	else
 		syslog(sa->priority, "%s", buf);
-	}
 }
