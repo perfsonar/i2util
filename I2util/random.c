@@ -66,6 +66,11 @@ I2RandomSourceInit(I2ErrHandle eh, int type, void* data)
 			}
 			break;
 		case I2RAND_EGD:
+			I2ErrLog(eh,
+			"I2randomBytes: I2RAND_EGD not yet implemented");
+			free(rand_src);
+			return NULL;
+			/* UNREACHED */
 		default:
 			I2ErrLog(eh,
 			"I2randomBytes:unknown/unsupported random source type");

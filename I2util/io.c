@@ -25,18 +25,39 @@
 #include <I2util/util.h>
 
 /*
-** Robust low-level IO functions - out of Stevens. Read or write
-** the given number of bytes. Returns -1 on error. No short
-** count is possible.
-*/
-
-/*
- * TODO: Add timeout values for read's and write's. We don't want to wait
- * as long as kernel defaults - timeout is specified in the context.
+ * Function:	I2Readni
+ *
+ * Description:	
+ * 	Read n bytes from the given fd. If !*retn_on_intr - then the function
+ * 	will continue to read even through interupts. (This is set to a
+ * 	pointer value so it can be modified via a signal handler. So, you
+ * 	can make this function return based on signals you care about.)
+ *
+ * 	If this function returns due to an interrupt - *retn_on_intr will
+ * 	be non-zero (although this function won't modify the value). And,
+ * 	this function will return -1. errno will also be set to EINTR.
+ *
+ * 	This function will return -1 for all other error conditions
+ * 	as well. (and errno will be set)
+ *
+ * 	Short reads returned indicate the fd has reached EOF. (i.e. the
+ * 	socket is closed if fd is attached to a socket)
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
  */
-
-ssize_t				       /* Read "n" bytes from a descriptor. */
-I2Readn(int fd, void *vptr, size_t n)
+ssize_t
+I2Readni(
+	int	fd,
+	void	*vptr,
+	size_t	n,
+	int	*retn_on_intr	/* pointer so it can be modified via signals */
+	)
 {
 	size_t	nleft;
 	ssize_t	nread;
@@ -44,24 +65,88 @@ I2Readn(int fd, void *vptr, size_t n)
 
 	ptr = vptr;
 	nleft = n;
-	while (nleft > 0) {
-		if ( (nread = read(fd, ptr, nleft)) < 0) {
-			if (errno == EINTR)
-				nread = 0;	   /* and call read() again */
-			else
+	while(nleft > 0){
+		if((nread = read(fd, ptr, nleft)) < 0){
+			if((errno == EINTR) && !*retn_on_intr){
+				/* call read again */
+				nread = 0;
+			}
+			else{
 				return(-1);
-		} else if (nread == 0)
-			break;				/* EOF */
+			}
+		} else if(nread == 0){
+			/* EOF */
+			break;
+		}
 
 		nleft -= nread;
 		ptr   += nread;
 	}
 	return(n - nleft);		/* return >= 0 */
 }
-/* end I2Readn */
 
-ssize_t					/* Write "n" bytes to a descriptor. */
-I2Writen(int fd, const void *vptr, size_t n)
+/*
+ * Function:	I2Readn
+ *
+ * Description:	
+ * 	Wrapper function for I2Readni if you really don't ever want to
+ * 	return early from read due to an interrupt.
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
+ */
+ssize_t
+I2Readn(
+	int	fd,
+	void	*vptr,
+	size_t	n
+	)
+{
+	int	intr=0;
+
+	return I2Readni(fd,vptr,n,&intr);
+}
+
+/*
+ * Function:	I2Writeni
+ *
+ * Description:	
+ * 	Write n bytes to the given fd. If !*retn_on_intr - then the function
+ * 	will continue to write even through interupts. (This is set to a
+ * 	pointer value so it can be modified via a signal handler. So, you
+ * 	can make this function return based on signals you care about.)
+ *
+ * 	If this function returns due to an interrupt - *retn_on_intr will
+ * 	be non-zero (although this function won't modify the value). And,
+ * 	this function will return -1. errno will also be set to EINTR.
+ *
+ * 	This function will return -1 for all other error conditions
+ * 	as well. (and errno will be set)
+ *
+ * 	Short reads returned indicate the fd has reached EOF. (i.e. the
+ * 	socket is closed if fd is attached to a socket)
+ *
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
+ */
+ssize_t
+I2Writeni(
+	int		fd,
+	const void	*vptr,
+	size_t		n,
+	int		*retn_on_intr
+	)
 {
 	size_t		nleft;
 	ssize_t		nwritten;
@@ -69,17 +154,47 @@ I2Writen(int fd, const void *vptr, size_t n)
 
 	ptr = vptr;
 	nleft = n;
-	while (nleft > 0) {
-		if ( (nwritten = write(fd, ptr, nleft)) <= 0) {
-			if (errno == EINTR)
-				nwritten = 0;	  /* and call write() again */
-			else
-				return(-1);			/* error */
+	while(nleft > 0){
+		if((nwritten = write(fd, ptr, nleft)) <= 0){
+			if((errno == EINTR) && !*retn_on_intr){
+				/* call write again */
+				nwritten = 0;
+			}
+			else{
+				return(-1);
+			}
 		}
 
 		nleft -= nwritten;
 		ptr   += nwritten;
 	}
+
 	return(n);
 }
-/* end I2Writen */
+
+/*
+ * Function:	I2Writen
+ *
+ * Description:	
+ * 	Wrapper function for I2Writeni if you really don't ever want to
+ * 	return early from write due to an interrupt.
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
+ */
+ssize_t
+I2Writen(
+	int		fd,
+	const void	*vptr,
+	size_t		n
+	)
+{
+	int	intr=0;
+
+	return I2Writeni(fd,vptr,n,&intr);
+}
