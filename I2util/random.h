@@ -48,13 +48,25 @@
 
 BEGIN_C_DECLS
 
-extern int
-I2RandomSourceInit(I2ErrHandle eh, int type, void* data);
+typedef struct I2RandomSourceRec	*I2RandomSource;
+
+extern I2RandomSource
+I2RandomSourceInit(
+	I2ErrHandle	eh,
+	int		type,
+	void*		data
+	);
 
 extern int
 I2RandomBytes(
+	I2RandomSource	src,
 	unsigned char	*ptr,
 	int		count
+	);
+
+extern void
+I2RandomSourceClose(
+	I2RandomSource	src
 	);
 
 END_C_DECLS

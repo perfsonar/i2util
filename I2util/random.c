@@ -25,9 +25,11 @@
 #include <assert.h>
 #include <I2util/util.h>
 
-static I2ErrHandle rand_eh;
-static FILE*       fp = NULL;
-static int         rand_type = I2RAND_UNINITIALIZED;
+struct I2RandomSourceRec{
+	I2ErrHandle	eh;
+	int		type;
+	FILE		*fp;	/* used for I2RAND_DEV */
+};
 
 /*
 ** Initialize the source of random bytes. Possible types are:
@@ -38,39 +40,41 @@ static int         rand_type = I2RAND_UNINITIALIZED;
 ** is listening on.
 ** Returns 0 on success, or -1 on failure.
 */
-int
+I2RandomSource
 I2RandomSourceInit(I2ErrHandle eh, int type, void* data)
 {
-	if(rand_type != I2RAND_UNINITIALIZED){
-		I2ErrLog(rand_eh,
-				"the random source has already been opened.");
-		return -1;
-	}
+	I2RandomSource	rand_src;
+
 	if(!eh)
-		return -1;
-	
+		return NULL;
+
+	if( !(rand_src = malloc(sizeof(struct I2RandomSourceRec)))){
+		I2ErrLog(eh,"malloc():%M");
+		return NULL;
+	}
+	rand_src->eh = eh;
+	rand_src->type = type;
 
 	switch (type) {
-	case I2RAND_DEV:
-
-		if(!data)
-			data = I2_RANDOMDEV_PATH;
-		if ((fp = fopen((char *)data, "rb")) == NULL) {
-			I2ErrLog(eh, "I2randomBytes: fopen() failed");
-			return -1;
-		}
-		break;
-	case I2RAND_EGD:
-	default:
-		I2ErrLog(eh, "I2randomBytes: unknown/unsupported random source type");
-		return -1;
-		/* UNREACHED */
+		case I2RAND_DEV:
+	
+			if(!data)
+				data = I2_RANDOMDEV_PATH;
+			if( !(rand_src->fp = fopen((char *)data, "rb"))){
+				I2ErrLog(eh, "I2randomBytes:fopen():%M");
+				return NULL;
+			}
+			break;
+		case I2RAND_EGD:
+		default:
+			I2ErrLog(eh,
+			"I2randomBytes:unknown/unsupported random source type");
+			free(rand_src);
+			return NULL;
+			/* UNREACHED */
 	}
 
-	rand_type = type;
-	rand_eh = eh;
-
-	return 0;
+	return rand_src;
 }
 
 /*
@@ -80,21 +84,55 @@ I2RandomSourceInit(I2ErrHandle eh, int type, void* data)
 ** sufficient space. Returns 0 on success, and -1 on failure.
 */
 int
-I2RandomBytes(unsigned char *ptr, int count)
+I2RandomBytes(
+	I2RandomSource	src,
+	unsigned char 	*ptr,
+	int		count
+	)
 {
-	switch (rand_type) {
-	case I2RAND_DEV:
-		if (fread(ptr, 1, count, fp) != (size_t)count) {
-			I2ErrLog(rand_eh, "I2randomBytes: fread() failed: %M");
-			return -1;
-		}
-		break;
-	case I2RAND_EGD:
-	default:
-		I2ErrLog(rand_eh, "I2randomBytes: unknown/unsupported random source type");
+	if(!src)
 		return -1;
-		/* UNREACHED */
+
+	switch (src->type) {
+		case I2RAND_DEV:
+			if (fread(ptr, 1, count, src->fp) != (size_t)count) {
+				I2ErrLog(src->eh,
+					"I2randomBytes: fread() failed: %M");
+				return -1;
+			}
+			break;
+		case I2RAND_EGD:
+		default:
+			/* UNREACHED */
+			I2ErrLog(src->eh,
+		"I2randomBytes: unknown/unsupported random source type");
+			return -1;
 	}
 
 	return 0;
 }
+
+void
+I2RandomSourceClose(
+	I2RandomSource	src
+	)
+{
+	if(!src)
+		return;
+
+	switch (src->type) {
+		case I2RAND_DEV:
+			fclose(src->fp);
+			break;
+		case I2RAND_EGD:
+		default:
+			/* UNREACHED */
+			I2ErrLog(src->eh,
+		"I2randomBytes: unknown/unsupported random source type");
+	}
+
+	free(src);
+
+	return;
+}
+

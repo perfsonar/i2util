@@ -663,7 +663,7 @@ ErrLogRealFunction_(
 	return;
 }
 
-static void
+void
 I2ErrLogTFunction_(
 	I2ErrHandle	dpeh,
 	int		level,

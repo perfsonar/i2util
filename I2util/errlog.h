@@ -143,6 +143,14 @@ extern void	I2ErrLogPFunction_(
 	const char	*format, ...
 );
 
+extern void	I2ErrLogTFunction_(
+	I2ErrHandle	dpeh,
+	int		priority,
+	int		err_code,
+	const char	*format,
+	...
+	);
+
 
 extern int	I2ErrList(
 	I2ErrHandle 	dpeh, 
