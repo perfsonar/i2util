@@ -1,4 +1,4 @@
-.TH htpasswd 1 "2004 Feb 8"
+.TH aespasswd 1 "2004 Feb 8"
 ." The first line of this file must contain the '"[e][r][t][v] line
 ." to tell man to run the appropriate filter "t" for table.
 ."
