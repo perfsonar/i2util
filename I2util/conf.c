@@ -434,7 +434,10 @@ I2ParseKeyFile(
 			line++;
 		}
 
-		if(i != I2KEYLEN){
+		/*
+		 * If i is not equal to the hex-encoded length of a key...
+		 */
+		if(i != (I2KEYLEN*2)){
 			I2ErrLogP(eh,EINVAL,"Invalid key length");
 			return -rc;
 		}

@@ -79,7 +79,7 @@ main(
 	FILE		*tofp;
 	u_int8_t	aeskey[I2KEYLEN];
 	char		*lbuf=NULL;
-	size_t		lbuf_max;
+	size_t		lbuf_max=0;
 	int		rc;
 
 	if((progname = strrchr(argv[0],'/'))){
@@ -250,7 +250,7 @@ main(
 	/*
 	 * All records that don't match idname will be copied to idname.
 	 */
-	rc = I2ParseKeyFile(NULL,fromfp,rc,&lbuf,&lbuf_max,tofp,idname,
+	rc = I2ParseKeyFile(NULL,fromfp,0,&lbuf,&lbuf_max,tofp,idname,
 			NULL,NULL);
 	if(rc < 0){
 		fprintf(stderr,"%s:I2ParseKeyFile('%s'): error line %d\n",
