@@ -53,6 +53,9 @@ the new one.
 .LP
 test	54b0c58c7ce9f2a8b551351102ee0938
 .PP
+An \fIidentity\fR followed by whitespace, followed by a hex encoded 128\-bit
+number that is suitable to be used as a symmetric AES key.
+.PP
 No other text is allowed on these lines, however comment lines may be
 added. Comment lines are any line where the first non-white space character
 is '\fB#\fR'.
@@ -75,10 +78,10 @@ If the file does not exist, an error message will be printed.
 .LP
 .SH SECURITY CONSIDERATIONS
 The keys in the \fIkeyfile\fR are not encrypted in any way. The security
-of these keys is completely up to the security of the system and the
+of these keys is completely dependent upon the security of the system and the
 discretion of the system administrator.
 .SH RESTRICTIONS
-Currently \fIidentity\fR names are restricted to 16 characters, and passphrases
+\fIidentity\fR names are restricted to 16 characters, and passphrases
 are limited to 1024 characters.
 .SH SEE ALSO
 .B owping(1)
