@@ -193,7 +193,6 @@ I2hash_delete(
 	return 0;
 }
 
-#define OWP_PRINT_DEBUG
 /*
 ** Look up the value corresponding to a given key. Returns
 ** the value datum on success, or NULL on failure.
@@ -209,11 +208,6 @@ I2hash_fetch(I2table table, const I2datum *key){
 	/* Search table for key. */
 	i = (*table->hash)(key)%table->size;
 
-#ifdef OWP_PRINT_DEBUG
-	printf("DEBUG: searching for key = `%s' with hash = %d...\n",
-	       (char *)(key->dptr), i);
-#endif
-
 	for (p = table->buckets[i]; p; p = p->link){
 		if ((*table->cmp)(key, p->key) == 0)
 			break;
@@ -222,24 +216,17 @@ I2hash_fetch(I2table table, const I2datum *key){
 	return p ? (p->value) : NULL;
 }
 
-
 void
 I2hash_print(I2table table, FILE* fp)
 {
-	int i, j;
+	int i;
 	struct I2binding *p;
 	
 	assert(table);
 
 	for (i = 0; i < table->size; i++)
-		for (p = table->buckets[i]; p; p = p->link) {
+		for (p = table->buckets[i]; p; p = p->link) 
 			table->print_binding(p, fp);
-#ifdef OWP_PRINT_DEBUG
-			j = (*table->hash)(p->key)%table->size;
-			printf("DEBUG: the key `%s' has hash value %d\n",
-			       (char *)(p->key->dptr), j);
-#endif
-		}
 }
 
 void
