@@ -24,7 +24,7 @@
  *	as determined by the command line.
  *
  *
- *	Modified from code writen by John Clyne at UCAR...
+ *	Modified from code written by John Clyne at UCAR...
  *
  *
  *	Based on code from UCAR DCS tools. Copyright information
@@ -282,7 +282,7 @@ int	I2CvtToChar(
 
 
 /*
- *	I2ConvetToBoolean()
+ *	I2ConvertToBoolean()
  *
  *	convert a ascii string containing either "true" or "false" to
  *	to True or False

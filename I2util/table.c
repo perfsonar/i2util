@@ -127,6 +127,9 @@ I2hash_close(I2table table)
 	free(table);
 }
 
+/*
+** Save a key/value in the hash. Return 0 on success, and -1 on failure.
+*/
 int 
 I2hash_store(I2table table, const I2datum *key, I2datum *value)
 {
