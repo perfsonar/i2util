@@ -32,6 +32,9 @@ use CGI::Carp 'fatalsToBrowser';
 $CGI::POST_MAX=1024 * 100;  # max 100K posts
 $CGI::DISABLE_UPLOADS = 1;  # no uploads
 
+# Add the directory this script lives in to the INC list.
+unshift(@INC,substr($0,$[,rindex($0,'/',length($0)))."/.");
+
 # Turn off buffered I/O.
 $|=0;
 
@@ -42,7 +45,7 @@ use constant InstallAsAction => 1;	# True or False
 
 # man program (must take a filename as an arg.)
 my $ManExe	=	'/usr/bin/man';
-my $ManConv	=	'/home/boote/public_html/cgi/man2html';
+my $ManConv	=	'man2html';
 
 # args to man2html
 my @m2hargs	=	("-compress",
