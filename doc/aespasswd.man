@@ -53,10 +53,10 @@ the new one.
 .LP
 test	54b0c58c7ce9f2a8b551351102ee0938
 .PP
-An \fIidentity\fR followed by whitespace, followed by a hex encoded 128\-bit
-number that is suitable to be used as a symmetric AES key.
+An \fIidentity\fR, followed by whitespace, followed by a hex encoded 128\-bit
+number, that is suitable to be used as a symmetric AES key.
 .PP
-No other text is allowed on these lines, however comment lines may be
+No other text is allowed on these lines; however, comment lines may be
 added. Comment lines are any line where the first non-white space character
 is '\fB#\fR'.
 .SH EXAMPLES
@@ -74,7 +74,7 @@ exists, an error message will be printed and no action will be taken.
 \fBaespasswd -f /usr/local/etc/bwctld.keys -d testuser\fP
 .IP
 Deletes the identity \fItestuser\fR from the keyfile.
-If the file does not exist, an error message will be printed.
+If the file does not exist, an error message will be printed and no action will be taken.
 .LP
 .SH SECURITY CONSIDERATIONS
 The keys in the \fIkeyfile\fR are not encrypted in any way. The security
