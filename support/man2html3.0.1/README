@@ -1,0 +1,99 @@
+README for man2html 3.0.1
+
+	A Unix manpage-to-HTML converter.
+
+---------------------------------------------------------------------------
+    Copyright (C) 1995-1997	Earl Hood, ehood@medusa.acs.uci.edu
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+    02111-1307, USA
+
+---------------------------------------------------------------------------
+FILE LIST
+
+CHANGES		  History of changes
+MANIFEST	  List of files to install (used by install.me)
+README		  The file you are reading
+doc/		  Documentation
+install.me	  Installation program
+man2html*	  Perl program
+man.cgi*	  A CGI program for viewing man pages.  See source for
+		  usage and configuration information.
+
+---------------------------------------------------------------------------
+RELEASE NOTES
+
+    This is the v3 release.  The reason for the increment of the
+    major version number (from v2) is that man2html will run only
+    under Perl 5.  man2html is no longer compatible with Perl 4.
+    Along with the change to Perl 5, several enhancments have been
+    made.  See the CHANGES file for a summary.
+
+---------------------------------------------------------------------------
+INSTALLATION
+
+    To install man2html, type the following command:
+
+	% perl install.me
+
+    The installation process will ask you a series of questions on
+    where the Perl executable is and where to put man2html.  Just hit
+    <CR> to accept the default values listed in ()'s.
+
+    Notes on installation process:
+
+	o  The '#!' line in the installed man2html program is set
+	   to point to the Perl executable specified in the
+	   installation process.
+
+	o  If you specify paths that do not exist, the install.me
+	   program will create the path.
+
+	o  man.cgi must be installed manually into you HTTP server's
+	   cgi-bin directory.  Read the start of man.cgi for any
+	   site specific changes that may be required for proper
+	   execution.
+
+---------------------------------------------------------------------------
+DOCUMENTATION
+
+    A manpage for man2html gets installed as part of the installation
+    process.  The HTML, test, and PostScript versions of the
+    documentation (dervied from the manpage) are also provided in the
+    doc directory, but are not automatically installed by "install.me".
+
+---------------------------------------------------------------------------
+BUGS/COMMENTS/SUGGESTIONS?
+
+    If you have any bugs/comments/suggestions about man2html, feel
+    free to drop me an e-mail message at ehood@medusa.acs.uci.edu.
+
+    If it is a bug you are reporting, please include the following
+    in your message:
+
+        o  Version of Perl (can be retrievied by "perl -v").
+        o  Version of the program in question.
+        o  The exact command-line used to invoke the program.
+        o  Error/diagnostic message from the program.
+        o  Any other information that might prove useful.
+
+
+    If you have questions on what man2html can, or cannot do, please
+    read the documentation first.  If the docs do not answer your
+    question(s), feel free to e-mail me.
+
+---------------------------------------------------------------------------
+Earl Hood, ehood@medusa.acs.uci.edu
+97/08/12 13:18:15
