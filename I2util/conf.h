@@ -84,4 +84,12 @@ I2ParseKeyFile(
 	u_int8_t	*key_ret	/* [I2KEYLEN] or null */
 	);
 
+extern int
+I2WriteKeyLine(
+	I2ErrHandle	eh,
+	FILE		*fp,
+	const char	*id,		/* no more than [I2MAXIDENTITYLEN+1] */
+	const u_int8_t	*key		/* [I2KEYLEN] */
+	);
+
 #endif	/* _i2_conf_h_ */

@@ -487,3 +487,44 @@ I2ParseKeyFile(
 
 	return rc;
 }
+
+/*
+ * Function:	I2WriteKeyLine
+ *
+ * Description:	
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
+ */
+int
+I2WriteKeyLine(
+	I2ErrHandle	eh,
+	FILE		*fp,
+	const char	*id,
+	const u_int8_t	*key
+	)
+{
+	int	ret;
+	char	hbuf[(I2KEYLEN*2)+1]; /* size for hex version */
+
+	if(!id || (id[0] == '\0') || (strlen(id) > I2MAXIDENTITYLEN)){
+		I2ErrLogP(eh,EINVAL,"I2WriteKeyLine(): Invalid identity name");
+		return -1;
+	}
+
+	I2HexEncode(hbuf,key,I2KEYLEN);
+
+	/*
+	 * if fprintf has an error, set ret < 0 for a failure return.
+	 */
+	ret = fprintf(fp,"%s\t%s\n",id,hbuf);
+
+	if(ret > 0) ret = 0;
+
+	return ret;
+}
