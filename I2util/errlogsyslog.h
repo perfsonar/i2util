@@ -39,8 +39,6 @@
 #ifndef	_i2_errlogsyslog_h_
 #define	_i2_errlogsyslog_h_
 
-#include <stdio.h>
-
 BEGIN_C_DECLS
 
 typedef struct  I2ErrLogSyslogAttr_ {
@@ -57,6 +55,14 @@ extern void	I2ErrLogSyslog(
 	void			*arg,
 	void			**data
 );
+
+extern int	I2ErrLogSyslogFacility(
+	const char	*name
+	);
+
+extern int	I2ErrLogSyslogPriority(
+	const char	*name
+	);
 
 END_C_DECLS
 

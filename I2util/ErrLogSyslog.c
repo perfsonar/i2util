@@ -41,10 +41,171 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <syslog.h>
 #include <string.h>
 #include <time.h>
 #include <I2util/util.h>
+
+
+/*
+ * I prefer to get these arrays from syslog.h... But, they doesn't exist on
+ * all systems. I do what I can.
+ *
+ * If it isn't in the system's syslog.h - I have taken the portion I need
+ * from freebsd.
+ */
+
+#ifdef	HAVE_SYSLOG_NAMES
+#define	SYSLOG_NAMES
+#else
+/*
+ * Copyright (c) 1982, 1986, 1988, 1993
+ *	The Regents of the University of California.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. All advertising materials mentioning features or use of this software
+ *    must display the following acknowledgement:
+ *	This product includes software developed by the University of
+ *	California, Berkeley and its contributors.
+ * 4. Neither the name of the University nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ *
+ *	@(#)syslog.h	8.1 (Berkeley) 6/2/93
+ */
+typedef struct _code {
+	const char	*c_name;
+	int		c_val;
+} CODE;
+
+static CODE prioritynames[] = {
+	{ "alert",	LOG_ALERT,	},
+	{ "crit",	LOG_CRIT,	},
+	{ "debug",	LOG_DEBUG,	},
+	{ "emerg",	LOG_EMERG,	},
+	{ "err",	LOG_ERR,	},
+	{ "error",	LOG_ERR,	},	/* DEPRECATED */
+	{ "info",	LOG_INFO,	},
+	{ "notice",	LOG_NOTICE,	},
+	{ "panic", 	LOG_EMERG,	},	/* DEPRECATED */
+	{ "warn",	LOG_WARNING,	},	/* DEPRECATED */
+	{ "warning",	LOG_WARNING,	},
+	{ NULL,		-1,		}
+};
+static CODE facilitynames[] = {
+	{ "auth",	LOG_AUTH,	},
+	{ "authpriv",	LOG_AUTHPRIV,	},
+	{ "console", 	LOG_CONSOLE,	},
+	{ "cron", 	LOG_CRON,	},
+	{ "daemon",	LOG_DAEMON,	},
+	{ "ftp",	LOG_FTP,	},
+	{ "kern",	LOG_KERN,	},
+	{ "lpr",	LOG_LPR,	},
+	{ "mail",	LOG_MAIL,	},
+	{ "mark", 	INTERNAL_MARK,	},	/* INTERNAL */
+	{ "news",	LOG_NEWS,	},
+	{ "ntp",	LOG_NTP,	},
+	{ "security",	LOG_SECURITY,	},
+	{ "syslog",	LOG_SYSLOG,	},
+	{ "user",	LOG_USER,	},
+	{ "uucp",	LOG_UUCP,	},
+	{ "local0",	LOG_LOCAL0,	},
+	{ "local1",	LOG_LOCAL1,	},
+	{ "local2",	LOG_LOCAL2,	},
+	{ "local3",	LOG_LOCAL3,	},
+	{ "local4",	LOG_LOCAL4,	},
+	{ "local5",	LOG_LOCAL5,	},
+	{ "local6",	LOG_LOCAL6,	},
+	{ "local7",	LOG_LOCAL7,	},
+	{ NULL,		-1,		}
+};
+#endif
+/*
+ * This has to be after the previous ifdef...
+ */
+#include <syslog.h>
+
+/*
+ * Function:	I2ErrLogSyslogFacility
+ *
+ * Description:	Given a string name, looks for the integer id that matches.
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	integer id : -1 on error.
+ * Side Effect:	
+ */
+int
+I2ErrLogSyslogFacility(
+	const char	*name
+	)
+{
+	CODE	*ptr = facilitynames;
+	int	val=-1;
+
+	while(ptr->c_name){
+		if(strncasecmp(ptr->c_name,name,strlen(ptr->c_name)) == 0){
+			val = ptr->c_val;
+			break;
+		}
+		ptr++;
+	}
+
+	return val;
+}
+
+/*
+ * Function:	I2ErrLogSyslogPriority
+ *
+ * Description:	Given a string name, looks for the integer id that matches.
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	integer id : -1 on error.
+ * Side Effect:	
+ */
+int
+I2ErrLogSyslogPriority(
+	const char	*name
+	)
+{
+	CODE	*ptr = prioritynames;
+	int	val=-1;
+
+	while(ptr->c_name){
+		if(strncasecmp(ptr->c_name,name,strlen(ptr->c_name)) == 0){
+			val = ptr->c_val;
+			break;
+		}
+		ptr++;
+	}
+
+	return val;
+}
 
 /*
  * Function:	I2ErrLogSyslog()

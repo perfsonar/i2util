@@ -51,6 +51,7 @@ I2_C___ATTRIBUTE__
 AC_C_CONST
 AC_TYPE_SIZE_T
 AC_STRUCT_TM
+I2_C_SYSLOG_NAMES
 
 # Checks for library functions.
 AC_FUNC_MALLOC
