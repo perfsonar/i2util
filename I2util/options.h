@@ -54,6 +54,12 @@ BEGIN_C_DECLS
  */
 typedef	struct	_I2OptDescRec {
 	const char	*option;/* name of option without preceeding '-' */
+				/*
+				 * args with var-args.
+				 * negative value of arg_count means
+				 * parse will eat from 1 up to (-arg_count)
+				 * args up to the next '-' arg.
+				 */
 	int	arg_count;	/* num args expected by option		*/
 	char	*value;		/* default value for the argument	*/
 	const char	*help;	/* help string for option		*/
@@ -69,10 +75,12 @@ typedef	struct	_I2Option {
 			 * option type converter	
 			 */
 	int		(*type_conv)(
-			I2ErrHandle eh, const char *from, void *to
+				I2ErrHandle	eh,
+				const char	*from,
+				void		*to
 			);
 
-	void		*offset;		/* offset of return address	*/ 
+	void		*offset;	/* offset of return address	*/ 
 	int		size;		/* size of option in bytes	*/
 	} I2Option;
 

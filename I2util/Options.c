@@ -115,11 +115,11 @@ static	char	*copy_create_arg_string(
 ) {
 	char	*s,*t;
 	int	i,
-		len;	/* lenght of new arg string	*/
+		len;	/* length of new arg string	*/
 
 	for(len=0,i=0; i<argc; i++) {
 		len += strlen(argv[i]);
-		len++;	/* one for the space	*/
+		len++;	/* one for the nul after each arg	*/
 	}
 
 	if ((s = (char *) malloc(len +1)) == NULL) {
@@ -127,11 +127,19 @@ static	char	*copy_create_arg_string(
 		return(NULL);
 	}
 	s = strcpy(s, argv[0]);
-	for(i=1, t=s; i<argc; i++) {
+	t=s;
+	t += strlen(t);
+	*t++ = '\0';
+	for(i=1; i<argc; i++) {
+		(void) strcpy(t, argv[i]);
 		t += strlen(t);
 		*t++ = '\0';
-		(void) strcpy(t, argv[i]);
 	}
+	/*
+	 * extra terminating nul - used to terminate vararg args
+	 */
+	*t = '\0';
+
 	return(s);
 }
 
@@ -481,9 +489,12 @@ I2GetOptions(
 		 * zero arg_count options really do have a single argument
 		 */
 		arg_count = orptr->arg_count ? orptr->arg_count : 1;
+		arg_count = (arg_count < 0) ? -arg_count : arg_count;
 
 		offset = options[i].offset;
-		for(j=0,s=orptr->value; j<arg_count; j++){
+		s=orptr->value;
+		j=0;
+		while(j<arg_count){
 			if (options[i].type_conv(eh, s, offset) < 0) {
 				I2ErrLog(
 					eh, 
@@ -495,6 +506,13 @@ I2GetOptions(
 			}
 			if (s) s += strlen(s) + 1;
 			offset = (char *) offset + options[i].size;
+			j++;
+			/*
+			 * Terminate varargs if '\0' *s
+			 */
+			if((orptr->arg_count < 0) &&
+				(j < arg_count) && (s) && *s == '\0')
+				break;
 		}
 	}
 	return(1);
@@ -739,6 +757,7 @@ int	I2ParseOptionTable(
 	 * look for matches between elements in argv and in the option table
 	 */
 	for (i = 1; i < *argc; i++) {
+		int	arg_count;
 
 		if (*argv[i] == '-') {	/* is it an option specifier?	*/
 			orptr = get_option(opt_rec, (char *) (argv[i] + 1));
@@ -770,17 +789,6 @@ int	I2ParseOptionTable(
 		}
 
 		/*
-		 * make sure enough args for option
-		 */
-		if ((i + orptr->arg_count) >= *argc) {
-			I2ErrLog(eh, 
-				"Option -%s expects %d args",
-				orptr->option, orptr->arg_count
-				);
-			return(-1);
-		}
-
-		/*
 		 * Options with no args are a special case. Assign them
 		 * a value of true. They are false by default
 		 */
@@ -789,18 +797,45 @@ int	I2ParseOptionTable(
 			continue;
 		}
 
+		/*
+		 * Handle vararg args.
+		 */
+		if(orptr->arg_count < 0){
+			arg_count=0;
+			while((i+1+arg_count < *argc) &&
+				(arg_count < -(orptr->arg_count)) &&
+				(*argv[i+1+arg_count] != '-')) arg_count++;
+			if(arg_count < 1){
+				I2ErrLog(eh,
+					"Option -%s expects 1-%d args",
+					orptr->option,-orptr->arg_count);
+				return(-1);
+			}
+		}else{
+			arg_count = orptr->arg_count;
+
+			/*
+			 * make sure enough args for option
+			 */
+			if (arg_count >= (*argc - i)) {
+				I2ErrLog(eh, 
+					"Option -%s expects %d args",
+					orptr->option, orptr->arg_count);
+				return(-1);
+			}
+		}
+
 
 		/*
 		 * convert the arg list to a single string and stash it
 		 * in the option table
 		 */
 		orptr->value = copy_create_arg_string(
-			eh,&argv[i+1],orptr->arg_count
-		);
+			eh,&argv[i+1],arg_count);
 		if (! orptr->value) {
 			return(-1);
 		}
-		i += orptr->arg_count;
+		i += arg_count;
 				
 	}
 	*argc = new_argc;
