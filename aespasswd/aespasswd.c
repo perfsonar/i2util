@@ -181,8 +181,8 @@ main(
 	 * Concatinate lockfile name on.
 	 */
 	len = sizeof(lockfname) - strlen(lockfname) - 1;
-	strncat(lockfname,"/",len);
-	len--; /* for dir separator */
+	strncat(lockfname,"/.",len);
+	len -= 2; /* strlen("/.") */
 	strncat(lockfname,progname,len);
 	len -= strlen(progname);
 	strncat(lockfname,".lock",len);
