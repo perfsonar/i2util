@@ -54,5 +54,6 @@ typedef unsigned int    I2Boolean;
 #include <I2util/table.h>
 #include <I2util/random.h>
 #include <I2util/io.h>
+#include <I2util/saddr.h>
 
 #endif	/*	_I2_util_h_	*/
