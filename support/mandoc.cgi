@@ -35,6 +35,11 @@ $CGI::DISABLE_UPLOADS = 1;  # no uploads
 # Turn off buffered I/O.
 $|=0;
 
+############################################################
+# CONFIGURE HERE
+#
+use constant InstallAsAction => 1;	# True or False
+
 # man program (must take a filename as an arg.)
 my $ManExe	=	'/usr/bin/man';
 my $ManConv	=	'/home/boote/public_html/cgi/man2html';
@@ -45,6 +50,9 @@ my @m2hargs	=	("-compress",
 			-botm	=>	0,
 			-topm	=>	0,
 			);
+# End configure
+############################################################
+
 $q = new CGI;
 
 #
@@ -55,6 +63,34 @@ $q = new CGI;
 print $q->header(	-type=>'text/html',
 			-expires=>'+1d');
 
+if(InstallAsAction && !defined($ENV{'REDIRECT_URL'})){
+	print $q->start_html(	-title=>'Invalid use of mandoc.cgi',
+				-author=>'boote@internet2.edu');
+	print $q->h1("Invalid use of mandoc.cgi!");
+	print $q->p("mandoc.cgi is intended to be used as the target of ",
+		"an Apache \"Action\" directive. It is invalid in other",
+		"context.");
+	print $q->p("Please report problems to",
+		$q->a({href=>'mailto:'.$ENV{'SERVER_ADMIN'}},
+					$ENV{'SERVER_ADMIN'}),
+		".");
+	print $q->end_html;
+	exit(1);
+}
+
+if(!-r $q->path_translated){
+	print $q->start_html(	-title=>'Error',
+				-author=>'boote@internet2.edu');
+	print $q->h1("Unable to read: ",$q->path_info);
+	print $q->p("Unable to read: ",$q->path_info);
+	print $q->p("Please report problems to",
+		$q->a({href=>'mailto:'.$ENV{'SERVER_ADMIN'}},
+					$ENV{'SERVER_ADMIN'}),
+		".");
+	print $q->end_html;
+	exit(1);
+}
+	
 # use open to fork and exec man(1)
 open(MAN,"-|") or exec($ManExe, $q->path_translated);
 
