@@ -127,10 +127,11 @@ main(
 	}
 
 #define STR(val)	#val
+#define STREXP(val)     STR(val)
 	len = strlen(argv[0]);
 	if(len > I2MAXIDENTITYLEN){
 		usage(progname,"identity can't be more than "
-				STR(I2MAXIDENTITYLEN)
+				STREXP(I2MAXIDENTITYLEN)
 				" characters");
 		exit(1);
 	}
