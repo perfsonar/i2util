@@ -49,7 +49,6 @@
 #ifndef _i2_readpassphrase_h_
 #define _i2_readpassphrase_h_
 
-#include <sys/cdefs.h>
 #include <I2util/util.h>
 
 #define I2RPP_ECHO_OFF    0x00		/* Turn off echo (default). */
