@@ -25,7 +25,7 @@
 
 typedef struct I2Table *I2Table;
 
-typedef u_int32_t	I2TableDataSizeT;
+typedef uint32_t	I2TableDataSizeT;
 /*
 ** This type is used to represent keys and values in a hash.
 */
@@ -39,7 +39,7 @@ typedef int (*I2HashCmpFunc)(
 	I2Datum	y
 	);
 
-typedef u_int32_t (*I2HashFunc)(
+typedef uint32_t (*I2HashFunc)(
 	I2Datum	key
 	);
 

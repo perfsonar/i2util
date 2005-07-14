@@ -81,7 +81,7 @@ I2ParseKeyFile(
 	FILE		*tofp,		/* copy 'to' file, or null */
 	const char	*id_query,
 	char		*id_ret,	/* [I2MAXIDENTITYLEN+1] or null */
-	u_int8_t	*key_ret	/* [I2KEYLEN] or null */
+	uint8_t	*key_ret	/* [I2KEYLEN] or null */
 	);
 
 extern int
@@ -89,10 +89,10 @@ I2WriteKeyLine(
 	I2ErrHandle	eh,
 	FILE		*fp,
 	const char	*id,		/* no more than [I2MAXIDENTITYLEN+1] */
-	const u_int8_t	*key		/* [I2KEYLEN] */
+	const uint8_t	*key		/* [I2KEYLEN] */
 	);
 
-typedef u_int64_t	I2numT;
+typedef uint64_t	I2numT;
 
 /*
  * These two functions are destructive to the passed in string.

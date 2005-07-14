@@ -67,7 +67,7 @@ cmpatom(
 			memcmp(x.dptr, y.dptr, x.dsize));
 }
 
-static u_int32_t
+static uint32_t
 hashatom(
 	I2Datum	key
 	)
@@ -163,7 +163,7 @@ I2HashInit(
 	I2ErrHandle	eh,
 	int		hint,
 	int		cmp(I2Datum x, I2Datum y),
-	u_int32_t	hash(I2Datum key)
+	uint32_t	hash(I2Datum key)
 	)
 {
 	I2Table table;

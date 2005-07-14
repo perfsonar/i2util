@@ -77,7 +77,7 @@ main(
 	struct flock	flk;
 	FILE		*fromfp;
 	FILE		*tofp;
-	u_int8_t	aeskey[I2KEYLEN];
+	uint8_t	aeskey[I2KEYLEN];
 	char		*lbuf=NULL;
 	size_t		lbuf_max=0;
 	int		rc;

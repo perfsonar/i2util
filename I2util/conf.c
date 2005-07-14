@@ -371,14 +371,14 @@ I2ParseKeyFile(
 	FILE		*tofp,
 	const char	*id_query,
 	char		*id_ret, /* [I2MAXIDENTITYLEN+1] or null */
-	u_int8_t	*key_ret /* [I2KEYLEN] or null */
+	uint8_t	*key_ret /* [I2KEYLEN] or null */
 	)
 {
 	char		*line;
 	int		i;
 	char		rbuf[I2MAXIDENTITYLEN+1]; /* add one extra byte */
 	char		*keystart;
-	u_int8_t	kbuf[I2KEYLEN];
+	uint8_t	kbuf[I2KEYLEN];
 
 	/*
 	 * If there is no keyfile, parsing is very, very fast.
@@ -510,7 +510,7 @@ I2WriteKeyLine(
 	I2ErrHandle	eh,
 	FILE		*fp,
 	const char	*id,
-	const u_int8_t	*key
+	const uint8_t	*key
 	)
 {
 	int	ret;

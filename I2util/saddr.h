@@ -51,7 +51,7 @@ I2SockAddrEqual(
 	socklen_t		sa1_len,
 	const struct sockaddr	*sa2,
 	socklen_t		sa2_len,
-	u_int32_t		chk_what
+	uint32_t		chk_what
 	);
 
 /*
