@@ -26,7 +26,6 @@ documentation and/or software.
 
 #ifndef _I2_md5_h_
 #define _I2_md5_h_
-#include <sys/cdefs.h>
 #include <I2util/util.h>
 
 /* MD5 context. */
