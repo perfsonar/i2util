@@ -26,6 +26,7 @@
 typedef struct I2Table *I2Table;
 
 typedef uint32_t	I2TableDataSizeT;
+
 /*
 ** This type is used to represent keys and values in a hash.
 */
