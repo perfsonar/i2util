@@ -87,7 +87,7 @@ I2GetConfLine(
 		/*
 		 * swallow leading whitespace
 		 */
-		if(!i && isspace(c)){
+		if(!i && isspace((int)c)){
 			continue;
 		}
 
@@ -297,7 +297,7 @@ getkeyfileline(
 		 * (These will be preserved for comment lines - and removed
 		 * for all other lines.)
 		 */
-		if(!nc && isspace(c)){
+		if(!nc && isspace((int)c)){
 			ns++;
 			continue;
 		}
@@ -406,7 +406,7 @@ I2ParseKeyFile(
 		 * detect this error condition.
 		 */
 		while(i <= I2MAXIDENTITYLEN){
-			if(isspace(*line) || (*line == '\0')){
+			if(isspace((int)*line) || (*line == '\0')){
 				break;
 			}
 			rbuf[i++] = *line++;
@@ -421,14 +421,14 @@ I2ParseKeyFile(
 		/*
 		 * Get the hexkey
 		 */
-		while(isspace(*line)){
+		while(isspace((int)*line)){
 			line++;
 		}
 
 		keystart = line;
 		i=0;
 		while(*line != '\0'){
-			if(isspace(*line)){
+			if(isspace((int)*line)){
 				break;
 			}
 			i++;
@@ -451,7 +451,7 @@ I2ParseKeyFile(
 			if(*line == '#'){
 				break;
 			}
-			if(!isspace(*line)){
+			if(!isspace((int)*line)){
 				I2ErrLogP(eh,EINVAL,"Invalid chars after key");
 				return -rc;
 			}
@@ -557,7 +557,7 @@ I2StrToNum(
 	char		*endptr;
 	I2numT		ret, mult=1;
 
-	while(isdigit(limstr[silen])){
+	while(isdigit((int)limstr[silen])){
 		silen++;
 	}
 	len = strlen(limstr);
@@ -630,7 +630,7 @@ I2Str2Byte(
 	char		*endptr;
 	I2numT		ret, mult=1;
 
-	while(isdigit(limstr[silen])){
+	while(isdigit((int)limstr[silen])){
 		silen++;
 	}
 	len = strlen(limstr);

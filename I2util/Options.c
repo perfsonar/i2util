@@ -155,7 +155,7 @@ static	char	*fmt_opt_string(
 	char	*s;
 
 	for (i=1, s = arg; i<n; i++) {
-		while(*s && ! isspace(*s)) s++;
+		while(*s && ! isspace((int)*s)) s++;
 
 		if (! *s) {
 			I2ErrLog(eh, "Arg string invalid: %s", arg);
@@ -163,7 +163,7 @@ static	char	*fmt_opt_string(
 		}
 		*s++ = '\0';
 
-		while(*s && isspace(*s)) s++;
+		while(*s && isspace((int)*s)) s++;
 	}
 	return(arg);
 }

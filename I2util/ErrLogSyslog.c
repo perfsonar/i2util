@@ -111,6 +111,14 @@ static CODE prioritynames[] = {
 	{ "warning",	LOG_WARNING,	},
 	{ NULL,		-1,		}
 };
+
+#ifndef LOG_AUTHPRIV
+#define LOG_AUTHPRIV LOG_AUTH
+#endif
+#ifndef LOG_FTP
+#define LOG_FTP LOG_DAEMON
+#endif
+
 static CODE facilitynames[] = {
 	{ "auth",	LOG_AUTH,	},
 	{ "authpriv",	LOG_AUTHPRIV,	},

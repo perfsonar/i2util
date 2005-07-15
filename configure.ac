@@ -55,7 +55,7 @@ AC_PROG_RANLIB
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([errno.h stdlib.h string.h limits.h stddef.h])
+AC_CHECK_HEADERS([errno.h stdlib.h string.h limits.h stddef.h paths.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 I2_C___ATTRIBUTE__

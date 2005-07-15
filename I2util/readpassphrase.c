@@ -48,18 +48,24 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <sys/cdefs.h>
-
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <paths.h>
 #include <pwd.h>
 #include <signal.h>
 #include <string.h>
 #include <termios.h>
 #include <unistd.h>
 #include <I2util/readpassphrase.h>
+
+#ifdef HAVE_PATHS_H
+#include <paths.h>
+#endif
+
+#ifndef _PATH_TTY
+#define _PATH_TTY	"/dev/tty"
+#endif
+
 
 #ifndef	TCSASOFT
 #define	TCSASOFT	0
@@ -136,7 +142,7 @@ restart:
 		if (p < end) {
 			if ((flags & I2RPP_SEVENBIT))
 				ch &= 0x7f;
-			if (isalpha(ch)) {
+			if (isalpha((int)ch)) {
 				if ((flags & I2RPP_FORCELOWER))
 					ch = tolower(ch);
 				if ((flags & I2RPP_FORCEUPPER))
