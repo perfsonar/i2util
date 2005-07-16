@@ -430,6 +430,12 @@ void	I2ErrLogSyslog(
         if(prio != I2LOG_NONE)
 	    syslog(prio, "%s", buf);
 
+#ifndef HAVE_SYSLOG_PERROR
+        if(sa->logopt | LOG_PERROR){
+            fprintf(stderr,"%s", buf);
+        }
+#endif
+
         return;
 }
 

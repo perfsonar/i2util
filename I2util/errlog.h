@@ -47,6 +47,12 @@
 
 BEGIN_C_DECLS
 
+/*
+ * TODO: Verify that this is a portable constant to use for LOG_PERROR...
+ */
+#ifndef HAVE_SYSLOG_PERROR
+#define LOG_PERROR 0x20
+#endif
 
 #define	I2NAME		(1L << 0)
 #define	I2FILE		(1L << 1)
