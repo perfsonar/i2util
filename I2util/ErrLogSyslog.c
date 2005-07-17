@@ -432,7 +432,7 @@ void	I2ErrLogSyslog(
 
 #ifndef HAVE_SYSLOG_PERROR
         if(sa->logopt | LOG_PERROR){
-            fprintf(stderr,"%s", buf);
+            fprintf(stderr,"%s\n", buf);
         }
 #endif
 
