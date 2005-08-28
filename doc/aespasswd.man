@@ -38,7 +38,10 @@ Delete given identity from keyfile
 Specifies file that holds identity/key pairs
 .SH DESCRIPTION
 .B aespasswd
-is used to create and manage files that hold identity/key pairs.
+is used to create and manage files that hold identity/key pairs. It is
+primarily used to manage the \fIbwctld.keys\fR file for \fBbwctld\fR
+and the \fIowampd.keys\fR file for \fBowampd\fR.
+.PP
 If the \fI\-d\fR option is not specified, then \fBaespasswd\fR prompts
 the caller for a passphrase. The passphrase is hashed using an internal
 MD5 algorithm to generate a key that is then saved in the \fIkeyfile\fR
