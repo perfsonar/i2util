@@ -251,9 +251,9 @@ I2HashDelete(
 	I2Datum	key
 	)
 {
-	int		i;
-	I2Binding	*p;
-	I2Binding	q;
+	I2TableDataSizeT    i;
+	I2Binding	    *p;
+	I2Binding	    q;
 
 	assert(table);
 
@@ -339,8 +339,8 @@ I2HashFetch(
 	I2Datum	*ret
 	)
 {
-	int		i;
-	I2Binding	p;
+	I2TableDataSizeT    i;
+	I2Binding	    p;
 
 	assert(table);
 	assert(ret);

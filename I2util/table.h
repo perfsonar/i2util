@@ -40,7 +40,7 @@ typedef int (*I2HashCmpFunc)(
 	I2Datum	y
 	);
 
-typedef uint32_t (*I2HashFunc)(
+typedef I2TableDataSizeT (*I2HashFunc)(
 	I2Datum	key
 	);
 
