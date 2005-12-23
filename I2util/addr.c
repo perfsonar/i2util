@@ -298,6 +298,7 @@ I2AddrByNode(
      */
     else if( (s1 = strchr(buff,':'))){
         *s1++='\0';
+        /* second ':' indicates a v6 address with no port specified */
         if(strchr(s1,':')) goto NOPORT;
         nptr = buff;
         pptr = s1;
