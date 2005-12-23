@@ -60,5 +60,6 @@ typedef unsigned int    I2Boolean;
 #include <I2util/readpassphrase.h>
 #include <I2util/hex.h>
 #include <I2util/conf.h>
+#include <I2util/addr.h>
 
 #endif	/*	_I2_util_h_	*/

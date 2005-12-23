@@ -43,6 +43,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <syslog.h>
+#include <errno.h>
 #include <I2util/util.h>
 
 BEGIN_C_DECLS
@@ -67,6 +68,8 @@ BEGIN_C_DECLS
 /* set as "priority" to disable *ALL* syslog messages */
 #define I2LOG_NONE  8
 
+/* Used as "no error" code. */
+#define I2EUNKNOWN  0
 /*
  * mask is bitwise OR of above bitmasks indicating which of the
  * remaining fields are valid.

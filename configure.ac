@@ -68,7 +68,7 @@ I2_C_SYSLOG_PERROR
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_STRFTIME
-AC_CHECK_FUNCS([memset strdup strerror strtol strtoul])
+AC_CHECK_FUNCS([memset strdup strerror strtol strtoul socket getaddrinfo])
 
 AC_SUBST(ac_aux_dir)
 AC_OUTPUT([Makefile I2util/Makefile aespasswd/Makefile doc/Makefile],
