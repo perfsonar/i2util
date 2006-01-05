@@ -1257,18 +1257,23 @@ I2htonll(
         uint64_t    h64
       )
 {
-    uint64_t    n64;
-    u_int8_t    *t8;
+    uint64_t    n64=0;
+    uint32_t    l32;
+    uint32_t    h32;
+    uint8_t     *t8;
 
     /* Use t8 to byte address the n64 */
-    t8 = (u_int8_t*)&n64;
+    t8 = (uint8_t *)&n64;
 
     /* set low-order bytes */
-    *(u_int32_t*)&t8[4] = htonl(h64 & 0xFFFFFFFFUL);
+    l32 = htonl(h64 & 0xFFFFFFFFUL);
 
     /* set high-order bytes */
     h64 >>=32;
-    *(u_int32_t*)&t8[0] = htonl(h64 & 0xFFFFFFFFUL);
+    h32 = htonl(h64 & 0xFFFFFFFFUL);
+
+    memcpy(&t8[0],&h32,4);
+    memcpy(&t8[4],&l32,4);
 
     return n64;
 }
@@ -1279,17 +1284,20 @@ I2ntohll(
       )
 {
     uint64_t    h64;
-    u_int8_t    *t8;
+    uint8_t     *t8;
+    uint32_t    t32;
 
     /* Use t8 to byte address the n64 */
-    t8 = (u_int8_t*)&n64;
+    t8 = (uint8_t *)&n64;
 
     /* High order bytes */
-    h64 = ntohl(*(u_int32_t*)&t8[0]);
+    t32 = *(uint32_t*)&t8[0];
+    h64 = ntohl(t32);
     h64 <<= 32;
 
     /* Low order bytes */
-    h64 |= ntohl(*(u_int32_t*)&t8[4]);
+    t32 = *(uint32_t*)&t8[4];
+    h64 |= ntohl(t32);
 
     return h64;
 }
