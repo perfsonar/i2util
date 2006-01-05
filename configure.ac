@@ -64,6 +64,9 @@ AC_TYPE_SIZE_T
 AC_STRUCT_TM
 I2_C_SYSLOG_NAMES
 I2_C_SYSLOG_PERROR
+AC_CHECK_MEMBERS([struct sockaddr.sa_len], , ,
+                 [#include <sys/types.h>
+                  #include <sys/socket.h>])
 
 # Checks for library functions.
 AC_FUNC_MALLOC
