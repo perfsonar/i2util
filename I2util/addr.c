@@ -528,27 +528,20 @@ I2AddrBySAddr(
     return addr;
 }
 
-I2Addr
-I2AddrBySockFD(
-        I2ErrHandle eh,
-        int         fd,
-        I2Boolean   close_on_free
-        )
+static I2Addr
+ByAnySockFD(
+        I2ErrHandle     eh,
+        int             fd,
+        I2Boolean       close_on_free,
+        struct sockaddr *saddr,
+        socklen_t       saddrlen)
 {
-    struct sockaddr_storage sbuff;
-    struct sockaddr         *saddr = (struct sockaddr*)&sbuff;
-    socklen_t               saddrlen = sizeof(sbuff);
     int                     so_type;
     socklen_t               so_typesize = sizeof(so_type);
     I2Addr                  addr;
 
-    if(getpeername(fd,(void*)saddr,&saddrlen) != 0){
-        I2ErrLogT(eh,LOG_ERR,errno,"getpeername(): %M");
-        return NULL;
-    }
-
     /*
-     * *BSD getpeername returns 0 size for AF_UNIX.
+     * *BSD getsockname/getpeername returns 0 size for AF_UNIX.
      * fake a sockaddr to describe this.
      */
     if(!saddrlen){
@@ -560,7 +553,7 @@ I2AddrBySockFD(
         saddrlen = (char*)&saddr->sa_family - (char*)saddr;
         saddrlen += sizeof(saddr->sa_family);
 #ifdef    HAVE_STRUCT_SOCKADDR_SA_LEN
-        if(saddrlen <= ((char*)&saddr->sa_len - (char*)saddr)){
+        if(saddrlen <= (socklen_t)((char*)&saddr->sa_len - (char*)saddr)){
             saddrlen = (char*)&saddr->sa_len - (char*)saddr;
             saddrlen += sizeof(saddr->sa_len);
         }
@@ -582,6 +575,25 @@ I2AddrBySockFD(
     addr->fd = fd;
 
     return addr;
+}
+
+I2Addr
+I2AddrBySockFD(
+        I2ErrHandle eh,
+        int         fd,
+        I2Boolean   close_on_free
+        )
+{
+    struct sockaddr_storage sbuff;
+    struct sockaddr         *saddr = (struct sockaddr*)&sbuff;
+    socklen_t               saddrlen = sizeof(sbuff);
+
+    if(getpeername(fd,(void*)saddr,&saddrlen) != 0){
+        I2ErrLogT(eh,LOG_ERR,errno,"getpeername(): %M");
+        return NULL;
+    }
+
+    return ByAnySockFD(eh,fd,close_on_free,saddr,saddrlen);
 }
 
 I2Addr
@@ -594,51 +606,15 @@ I2AddrByLocalSockFD(
     struct sockaddr_storage sbuff;
     struct sockaddr         *saddr = (struct sockaddr*)&sbuff;
     socklen_t               saddrlen = sizeof(sbuff);
-    int                     so_type;
-    socklen_t               so_typesize = sizeof(so_type);
-    I2Addr                  addr;
 
     if(getsockname(fd,(void*)saddr,&saddrlen) != 0){
         I2ErrLogT(eh,LOG_ERR,errno,"getsockname(): %M");
         return NULL;
     }
 
-    /*
-     * *BSD getsockname returns 0 size for AF_UNIX.
-     * fake a sockaddr to describe this.
-     */
-    if(!saddrlen){
-        saddr->sa_family = AF_UNIX;
-        /*
-         * Set the size of this "fake" sockaddr to include
-         * the sa_family member. (and possibly the sa_len member)
-         */
-        saddrlen = (char*)&saddr->sa_family - (char*)saddr;
-        saddrlen += sizeof(saddr->sa_family);
-#ifdef    HAVE_STRUCT_SOCKADDR_SA_LEN
-        if(saddrlen <= ((char*)&saddr->sa_len - (char*)saddr)){
-            saddrlen = (char*)&saddr->sa_len - (char*)saddr;
-            saddrlen += sizeof(saddr->sa_len);
-        }
-        saddr->sa_len = saddrlen;
-#endif
-    }
-
-    if(getsockopt(fd,SOL_SOCKET,SO_TYPE,
-                (void*)&so_type,&so_typesize) != 0){
-        I2ErrLogT(eh,LOG_ERR,errno,"getsockopt(): %M");
-        return NULL;
-    }
-
-    addr = I2AddrBySAddr(eh,saddr,saddrlen,so_type,0);
-    if(!addr)
-        return NULL;
-
-    addr->fd_user = !close_on_free;
-    addr->fd = fd;
-
-    return addr;
+    return ByAnySockFD(eh,fd,close_on_free,saddr,saddrlen);
 }
+
 
 /*
  * Function:    I2AddrSetSAddr
