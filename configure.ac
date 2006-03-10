@@ -51,7 +51,20 @@ I2_RANDOMDEV
 AC_PROG_CC
 AC_PROG_RANLIB
 
+AC_CANONICAL_HOST
+
+case $host in
+	*-*-solaris*)
+	AC_DEFINE(_GNU_SOURCE, 1, "Use glibc features.")
+	AC_DEFINE(__EXTENSIONS__, 1, "get decl for sockaddr_storage on Solaris")
+	AC_DEFINE(_XOPEN_SOURCE, 500, "get decl for msg_control on Solaris")
+	;;
+esac
+
 # Checks for libraries.
+AC_SEARCH_LIBS(getaddrinfo, [socket nsl])
+AC_SEARCH_LIBS(gethostbyname, nsl)
+AC_SEARCH_LIBS(socket, socket)
 
 # Checks for header files.
 AC_HEADER_STDC
