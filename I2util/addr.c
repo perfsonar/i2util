@@ -27,10 +27,6 @@
 
 #include <I2util/util.h>
 
-#ifndef MIN
-#define MIN(a,b)    ((a<b)?a:b)
-#endif
-
 /*
  * Data structures
  */

@@ -23,6 +23,8 @@
 #include <errno.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
 #include <I2util/util.h>
 
 /*
@@ -198,4 +200,73 @@ I2Writen(
 	int	intr=0;
 
 	return I2Writeni(fd,vptr,n,&intr);
+}
+
+/*
+ * Function:    I2CopyFile
+ *
+ * Description:    
+ *              Copy one file to another using mmap for speed.
+ *
+ * In Args:    
+ *
+ * Out Args:    
+ *
+ * Scope:    
+ * Returns:    
+ *              0 on success
+ * Side Effect:    
+ */
+int
+I2CopyFile(
+        I2ErrHandle eh,
+        int         tofd,
+        int         fromfd,
+        off_t       len
+        )
+{
+    struct stat sbuf;
+    int         rc;
+    void        *fptr,*tptr;
+
+    if((rc = fstat(fromfd,&sbuf)) != 0){
+        I2ErrLog(eh,"I2CopyFile: fstat: %M, status of from file");
+        return rc;
+    }
+
+    if(len == 0){
+        len = sbuf.st_size;
+    }
+    else{
+        len = MIN(len,sbuf.st_size);
+    }
+
+    if((rc = ftruncate(tofd,len)) != 0){
+        I2ErrLog(eh,"I2CopyFile: ftrunctate(%llu): %M, sizing to file",len);
+        return rc;
+    }
+
+    if(!(fptr = mmap(NULL,len,PROT_READ|PROT_WRITE,MAP_SHARED,fromfd,0))){
+        I2ErrLog(eh,"I2CopyFile: mmap(from file): %M");
+        return -1;
+    }
+
+    if(!(tptr = mmap(NULL,len,PROT_READ|PROT_WRITE,MAP_SHARED,tofd,0))){
+        I2ErrLog(eh,"I2CopyFile: mmap(to file): %M");
+        return -1;
+    }
+
+    memcpy(tptr,fptr,len);
+
+    if((rc = munmap(fptr,len)) != 0){
+        I2ErrLog(eh,"I2CopyFile: munmap(from file): %M");
+        return -1;
+    }
+
+    if((rc = munmap(tptr,len)) != 0){
+        I2ErrLog(eh,"I2CopyFile: munmap(to file): %M");
+        return -1;
+    }
+
+    return 0;
 }

@@ -39,6 +39,13 @@ typedef unsigned int    I2Boolean;
 #define	True	!False
 #endif
 
+#ifndef MIN
+#define MIN(a,b)    ((a<b)?a:b)
+#endif
+#ifndef MAX
+#define MAX(a,b)    ((a>b)?a:b)
+#endif
+
 #ifdef	__cplusplus
 #define	BEGIN_C_DECLS	extern "C" {
 #define	END_C_DECLS	}

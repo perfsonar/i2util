@@ -56,5 +56,12 @@ I2Writen(
 	size_t		n
 	);
 
+extern int
+I2CopyFile(
+        I2ErrHandle eh,
+        int         tofd,
+        int         fromfd,
+        off_t       len
+        );
 END_C_DECLS
 #endif	/*	_i2_io_h_	*/
