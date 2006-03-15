@@ -18,8 +18,8 @@
  *
  *	Description:	
  */
-#include <ctype.h>
 #include <I2util/util.h>
+#include <ctype.h>
 
 /*
  * buff must be at least (nbytes*2) +1 long or memory will be over-run.

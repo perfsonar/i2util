@@ -24,7 +24,7 @@
  */
 #ifndef    I2ADDR_H
 #define    I2ADDR_H
-
+#include <I2util/util.h>
 /*
  * Portablility sanity checkes.
  */

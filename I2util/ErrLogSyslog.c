@@ -39,17 +39,17 @@
  *		the subject of any commercial activity.  Parties interested
  *		in commercial licensing should contact the copyright holder.
  */
+#include <I2util/util.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <I2util/config.h>
 #ifdef  HAVE_SYSLOG_NAMES
 #define SYSLOG_NAMES
 #endif
 #include <syslog.h>
 
-#include <I2util/util.h>
 /*
  * I prefer to get these arrays from syslog.h... But, they doesn't exist on
  * all systems. I do what I can.

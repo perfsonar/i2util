@@ -52,10 +52,11 @@ AC_PROG_CC
 AC_PROG_RANLIB
 
 AC_CANONICAL_HOST
+AC_DEFINE(_GNU_SOURCE, 1, "Use glibc features.")
+AC_DEFINE(_LARGEFILE_SOURCE, 1, "Use largefile api.")
 
 case $host in
 	*-*-solaris*)
-	AC_DEFINE(_GNU_SOURCE, 1, "Use glibc features.")
 	AC_DEFINE(__EXTENSIONS__, 1, "get decl for sockaddr_storage on Solaris")
 	AC_DEFINE(_XOPEN_SOURCE, 500, "get decl for msg_control on Solaris")
 	;;

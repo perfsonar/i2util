@@ -21,12 +21,13 @@
 #ifndef	_i2_saddr_h_
 #define	_i2_saddr_h_
 
+#include <I2util/util.h>
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
 
-#include <I2util/util.h>
 
 BEGIN_C_DECLS
 

@@ -23,11 +23,11 @@
 #ifndef	_i2_random_h_
 #define	_i2_random_h_
 
+#include <I2util/util.h>
 #include <stdio.h>
 #include <sys/types.h>
 
 #include <stdarg.h>
-#include <I2util/util.h>
 
 /*
 ** Types of randomness sources.

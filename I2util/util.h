@@ -23,8 +23,8 @@
  */
 #ifndef	_I2_util_h_
 #define	_I2_util_h_
-#include <inttypes.h>
 #include <I2util/config.h>
+#include <inttypes.h>
 
 #ifndef	HAVE___ATTRIBUTE__
 #define	__attribute__(x)

@@ -47,6 +47,7 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+#include <I2util/readpassphrase.h>
 
 #include <ctype.h>
 #include <errno.h>
@@ -56,7 +57,6 @@
 #include <string.h>
 #include <termios.h>
 #include <unistd.h>
-#include <I2util/readpassphrase.h>
 
 #ifdef HAVE_PATHS_H
 #include <paths.h>

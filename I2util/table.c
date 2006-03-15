@@ -18,6 +18,8 @@
 **
 **	Description:	Simple hash table - implementation.
 */
+#include "table.h"
+
 #include <stdlib.h>
 #include <limits.h>
 #include <stddef.h>
@@ -25,7 +27,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
-#include "table.h"
 
 /*
  * this type is used to hold a single key/value pair.

@@ -21,8 +21,8 @@
 #ifndef	_i2_io_h_
 #define	_i2_io_h_
 
-#include <fcntl.h>
 #include <I2util/util.h>
+#include <fcntl.h>
 
 BEGIN_C_DECLS
 

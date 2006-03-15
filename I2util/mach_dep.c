@@ -35,12 +35,13 @@
  *		the subject of any commercial activity.  Parties interested
  *		in commercial licensing should contact the copyright holder.
  */
+#include <I2util/util.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 #include <errno.h>
-#include <I2util/util.h>
 
 static I2ThreadMutex_T MyMutex = I2PTHREAD_MUTEX_INITIALIZER;
 

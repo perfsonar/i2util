@@ -20,12 +20,13 @@
  **                 Address abstraction API. (Everybody needs one, right?)
  */
 
+#include <I2util/util.h>
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
 
-#include <I2util/util.h>
 
 /*
  * Data structures

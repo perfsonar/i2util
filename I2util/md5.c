@@ -52,11 +52,11 @@
  * This code is the same as the code published by RSA Inc.  It has been
  * edited for clarity and style only.
  */
+#include <I2util/md5.h>
 
 #include <sys/types.h>
 #include <string.h>
 
-#include <I2util/md5.h>
 
 #ifdef i386
 #define Encode memcpy

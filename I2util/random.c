@@ -19,12 +19,13 @@
  *
  *	Description:	
  */
+#include <I2util/util.h>
+
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
 #include <assert.h>
-#include <I2util/util.h>
 
 struct I2RandomSourceRec{
 	I2ErrHandle	eh;

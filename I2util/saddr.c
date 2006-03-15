@@ -21,8 +21,9 @@
  *	Generic socket functions used here to abstract away addr family
  *	differences.
  */
-#include <string.h>
 #include <I2util/saddr.h>
+
+#include <string.h>
 
 /*
  * Function:	I2SockAddrEqual

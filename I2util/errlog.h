@@ -40,11 +40,12 @@
 #ifndef	_i2_errlog_h_
 #define _i2_errlog_h_
 
+#include <I2util/util.h>
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <syslog.h>
 #include <errno.h>
-#include <I2util/util.h>
 
 BEGIN_C_DECLS
 

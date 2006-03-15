@@ -21,8 +21,9 @@
 #ifndef	_i2_conf_h_
 #define	_i2_conf_h_
 
-#include <stdio.h>
 #include <I2util/util.h>
+
+#include <stdio.h>
 
 /*
  * Growth increment for linebuffer.

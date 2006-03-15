@@ -40,11 +40,12 @@
 #ifndef	_i2_options_h_
 #define	_i2_options_h_
 
+#include <I2util/util.h>
+
 #include <stdio.h>
 #include <sys/types.h>
 
 #include <stdarg.h>
-#include <I2util/util.h>
 
 BEGIN_C_DECLS
 

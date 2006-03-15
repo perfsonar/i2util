@@ -43,6 +43,8 @@
  *	the subject of any commercial activity.  Parties interested
  *	in commercial licensing should contact the copyright holder.
  */
+#include <I2util/util.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -52,7 +54,6 @@
 
 #include "optionsP.h"
 
-#include <I2util/util.h>
 
 static	OptTable	optTbls[MAX_TBLS];
 

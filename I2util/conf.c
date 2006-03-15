@@ -18,15 +18,14 @@
  *
  *	Description:	
  */
+#include <I2util/util.h>
+
 #include <stdlib.h>
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
-
-#include <I2util/util.h>
-#include <I2util/conf.h>
 
 /*
  * Function:	I2GetConfLine
