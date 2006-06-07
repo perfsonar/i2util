@@ -167,23 +167,28 @@ I2SockAddrIsLoopback(
 	socklen_t		sa_len __attribute__((unused))
 	)
 {
-	switch(sa->sa_family){
+    switch(sa->sa_family){
 #ifdef	AF_INET6
-	case AF_INET6:
-		return IN6_IS_ADDR_LOOPBACK(
-				&((struct sockaddr_in6*)sa)->sin6_addr);
+        case AF_INET6:
+            if (IN6_IS_ADDR_V6MAPPED(&((struct sockaddr_in6*)sa)->sin6_addr)){
+                return (INADDR_LOOPBACK ==
+                        htonl(((struct sockaddr_in*)sa)->sin_addr.s_addr));
+            }
 
-		break;
+            return IN6_IS_ADDR_LOOPBACK(
+                    &((struct sockaddr_in6*)sa)->sin6_addr);
+
+            break;
 #endif
-	case AF_INET:
-		return (INADDR_LOOPBACK ==
-				(((struct sockaddr_in*)sa)->sin_addr.s_addr));
+        case AF_INET:
+            return (INADDR_LOOPBACK ==
+                    htonl(((struct sockaddr_in*)sa)->sin_addr.s_addr));
 
-		break;
+            break;
 
-	default:
-		return -1;
-	}
+        default:
+            return -1;
+    }
 
-	return 0;
+    return 0;
 }
