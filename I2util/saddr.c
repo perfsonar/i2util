@@ -172,7 +172,7 @@ I2SockAddrIsLoopback(
         case AF_INET6:
             if (IN6_IS_ADDR_V4MAPPED(&((struct sockaddr_in6*)sa)->sin6_addr)){
                 return (INADDR_LOOPBACK ==
-                        htonl(((struct sockaddr_in*)sa)->sin_addr.s_addr));
+                        htonl(*((int*)&((struct sockaddr_in6*)sa)->sin6_addr.s6_addr[12])));
             }
 
             return IN6_IS_ADDR_LOOPBACK(
