@@ -1223,6 +1223,34 @@ struct addrinfo
 }
 
 /*
+ * Function:    I2AddrSockLen
+ *
+ * Description:    
+ *              Return socket address length (for use in calling accept etc...)
+ *              or 0 if it doesn't refer to a socket yet.
+ *
+ * In Args:    
+ *
+ * Out Args:    
+ *
+ * Scope:    
+ * Returns:    
+ * Side Effect:    
+ */
+extern socklen_t
+I2AddrSockLen(
+        I2Addr    addr
+        )
+{
+    assert(addr);
+    
+    if (addr->fd > -1){
+        return addr->saddrlen;
+    }
+    return 0;
+}
+
+/*
  * Deal with network ordering of 64 bit int's.
  */
 uint64_t 
