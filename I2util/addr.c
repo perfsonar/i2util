@@ -121,7 +121,7 @@ _I2AddrAlloc(
 
     if(!addr){
         I2ErrLogT(eh,LOG_ERR,I2EUNKNOWN,
-                ":calloc(1,%d):%M",sizeof(struct I2AddrRec));
+                ": calloc(1,%d): %M",sizeof(struct I2AddrRec));
         return NULL;
     }
 
@@ -153,7 +153,7 @@ CopyAddrRec(
 
     if(!dst){
         I2ErrLogT(eh,LOG_ERR,errno,
-                ":calloc(1,sizeof(struct addrinfo))");
+                ": calloc(1,sizeof(struct addrinfo))");
         return NULL;
     }
 
@@ -163,7 +163,7 @@ CopyAddrRec(
         dst->ai_addr = malloc(src->ai_addrlen);
         if(!dst->ai_addr){
             I2ErrLogT(eh,LOG_ERR,errno,
-                    "malloc(%u):%s",src->ai_addrlen,
+                    "malloc(%u): %s",src->ai_addrlen,
                     strerror(errno));
             free(dst);
             return NULL;
@@ -186,7 +186,7 @@ CopyAddrRec(
             dst->ai_canonname = malloc(sizeof(char)*(len+1));
             if(!dst->ai_canonname){
                 I2ErrLogT(eh,LOG_WARNING,
-                        errno,":malloc(sizeof(%d)",len+1);
+                        errno,": malloc(sizeof(%d)",len+1);
                 dst->ai_canonname = NULL;
             }else
                 strcpy(dst->ai_canonname,src->ai_canonname);
@@ -1261,10 +1261,7 @@ I2htonll(
     uint64_t    n64=0;
     uint32_t    l32;
     uint32_t    h32;
-    uint8_t     *t8;
-
-    /* Use t8 to byte address the n64 */
-    t8 = (uint8_t *)&n64;
+    uint8_t     t8[8];
 
     /* set low-order bytes */
     l32 = htonl(h64 & 0xFFFFFFFFUL);
@@ -1275,6 +1272,7 @@ I2htonll(
 
     memcpy(&t8[0],&h32,4);
     memcpy(&t8[4],&l32,4);
+    memcpy(&n64,t8,8);
 
     return n64;
 }
@@ -1285,19 +1283,18 @@ I2ntohll(
       )
 {
     uint64_t    h64;
-    uint8_t     *t8;
+    uint8_t     t8[8];
     uint32_t    t32;
 
-    /* Use t8 to byte address the n64 */
-    t8 = (uint8_t *)&n64;
+    memcpy(t8,&n64,8);
 
     /* High order bytes */
-    t32 = *(uint32_t*)&t8[0];
+    memcpy(&t32,&t8[0],4);
     h64 = ntohl(t32);
     h64 <<= 32;
 
     /* Low order bytes */
-    t32 = *(uint32_t*)&t8[4];
+    memcpy(&t32,&t8[4],4);
     h64 |= ntohl(t32);
 
     return h64;
