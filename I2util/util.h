@@ -30,7 +30,7 @@
 #define	__attribute__(x)
 #endif
 
-typedef unsigned int    I2Boolean;
+typedef intptr_t    I2Boolean;
 
 #ifndef	False
 #define	False	(0)
