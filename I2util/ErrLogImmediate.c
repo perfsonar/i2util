@@ -120,35 +120,38 @@ void	I2ErrLogImmediate(
 	struct I2ErrLogEvent	*ev,
 	void			*arg,
 	void			**data	__attribute__((unused))
-) {
-	I2LogImmediateAttr	*la = (I2LogImmediateAttr *) arg;
-	FILE			*fp = la->fp;
+        )
+{
+    I2LogImmediateAttr	*la = (I2LogImmediateAttr *) arg;
+    FILE			*fp = la->fp;
 
-	if(! fp) return;
+    if(! fp) return;
 
-	if(ev->mask & la->line_info & I2NAME)
-		fprintf(fp, "%s: ", ev->name);
-	if(ev->mask & la->line_info & I2FILE)
-		fprintf(fp, "FILE=%s, ", ev->file);
-	if(ev->mask & la->line_info & I2LINE)
-		fprintf(fp, "LINE=%d, ", ev->line);
-	if(ev->mask & la->line_info & I2DATE)
-		fprintf(fp, "DATE=%s, ", ev->date);
+    if(ev->mask & la->line_info & I2NAME)
+        fprintf(fp, "%s: ", ev->name);
+    if(ev->mask & la->line_info & I2FILE)
+        fprintf(fp, "FILE=%s, ", ev->file);
+    if(ev->mask & la->line_info & I2LINE)
+        fprintf(fp, "LINE=%d, ", ev->line);
+    if(ev->mask & la->line_info & I2DATE)
+        fprintf(fp, "DATE=%s, ", ev->date);
 
-	if(la->line_info & I2RTIME){
-		time_t		clock;
-		struct tm	*tm;
-		char		ftime[64];
+    if(la->line_info & I2RTIME){
+        time_t		clock;
+        struct tm	*tm;
+        char		ftime[64];
 
-		time(&clock);
-		tm = localtime(&clock);
-		if( strftime(ftime,sizeof(ftime),la->tformat,tm))
-			fprintf(fp, "RTIME=%s, ", ftime);
-	}
+        time(&clock);
+        tm = localtime(&clock);
+        if( strftime(ftime,sizeof(ftime),la->tformat,tm))
+            fprintf(fp, "RTIME=%s, ", ftime);
+    }
 
-	if(ev->mask & la->line_info & I2MSG)
-		fprintf(fp, "%s", ev->msg);
+    if(ev->mask & la->line_info & I2MSG)
+        fprintf(fp, "%s", ev->msg);
 
-	if(la->line_info)
-		fprintf(fp, "\n");
+    if(la->line_info && !(la->line_info & I2NONL))
+        fprintf(fp, "\n");
+
+    fflush(fp);
 }

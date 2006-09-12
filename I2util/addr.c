@@ -472,8 +472,8 @@ I2AddrBySAddr(
             saddr = (struct sockaddr*)&v4addr;
             saddrlen = sizeof(v4addr);
         }
-#endif
         break;
+#endif
 
         /* fall through */
         case AF_INET:
@@ -1244,7 +1244,7 @@ I2AddrSockLen(
 {
     assert(addr);
     
-    if (addr->fd > -1){
+    if (addr->saddr) {
         return addr->saddrlen;
     }
     return 0;

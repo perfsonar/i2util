@@ -56,14 +56,15 @@ BEGIN_C_DECLS
 #define LOG_PERROR 0x20
 #endif
 
-#define	I2NAME		(1L << 0)
-#define	I2FILE		(1L << 1)
-#define	I2LINE		(1L << 2)
-#define	I2DATE		(1L << 3)
-#define	I2RTIME		(1L << 4)
-#define	I2MSG		(1L << 5)
-#define	I2CODE		(1L << 6)
-#define	I2LEVEL		(1L << 7)
+#define I2NAME    (1L << 0)
+#define I2FILE    (1L << 1)
+#define I2LINE    (1L << 2)
+#define I2DATE    (1L << 3)
+#define I2RTIME   (1L << 4)
+#define I2MSG     (1L << 5)
+#define I2CODE    (1L << 6)
+#define I2LEVEL   (1L << 7)
+#define I2NONL    (1L << 8)
 
 /* basically used to disable syslog messages, but will work for others.    */
 /* set as "priority" to disable *ALL* syslog messages */
