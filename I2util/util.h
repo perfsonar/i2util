@@ -58,7 +58,9 @@ typedef intptr_t    I2Boolean;
 
 #include <I2util/Pthread.h>
 #include <I2util/errlog.h>
+#if NOT
 #include <I2util/options.h>
+#endif
 #include <I2util/table.h>
 #include <I2util/random.h>
 #include <I2util/io.h>

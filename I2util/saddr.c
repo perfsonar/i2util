@@ -50,6 +50,7 @@ I2SockAddrEqual(
 	uint32_t		chk_what
 	)
 {
+    /* TODO: remove type punning */
 	/*
 	 * If the lengths are not equal - or the families are not the
 	 * same - check if the v6 address is really an encoded v4 address.

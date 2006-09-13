@@ -447,6 +447,10 @@ I2AddrBySAddr(
         return NULL;
     }
 
+    /*
+     * TODO: Correct type-punning?
+     */
+
     switch(saddr->sa_family){
 #ifdef    AF_INET6
         struct sockaddr_in6    *v6addr;
@@ -727,6 +731,9 @@ I2AddrSetPort(
         return False;
     }
 
+    /*
+     * TODO: fix type-punning
+     */
     /*
      * If saddr is already set - than modify the port.
      */
@@ -1244,7 +1251,7 @@ I2AddrSockLen(
 {
     assert(addr);
     
-    if (addr->saddr) {
+    if(addr->saddr){
         return addr->saddrlen;
     }
     return 0;
@@ -1258,23 +1265,17 @@ I2htonll(
         uint64_t    h64
       )
 {
-    uint64_t    n64=0;
-    uint32_t    l32;
-    uint32_t    h32;
-    uint8_t     t8[8];
+    uint64_t    b64;    /* bottom 32 bits */
+    uint64_t    t64;    /* top 32 bits */
 
     /* set low-order bytes */
-    l32 = htonl(h64 & 0xFFFFFFFFUL);
+    b64 = htonl(h64 & 0xFFFFFFFFUL);
 
     /* set high-order bytes */
-    h64 >>=32;
-    h32 = htonl(h64 & 0xFFFFFFFFUL);
+    t64 = htonl(h64 >> 32);
+    t64 <<= 32;
 
-    memcpy(&t8[0],&h32,4);
-    memcpy(&t8[4],&l32,4);
-    memcpy(&n64,t8,8);
-
-    return n64;
+    return (t64 | b64);
 }
 
 uint64_t 
@@ -1283,10 +1284,8 @@ I2ntohll(
       )
 {
     uint64_t    h64;
-    uint8_t     t8[8];
+    char        *t8 = (char *)&n64;
     uint32_t    t32;
-
-    memcpy(t8,&n64,8);
 
     /* High order bytes */
     memcpy(&t32,&t8[0],4);
