@@ -71,5 +71,47 @@ I2SockAddrIsLoopback(
 	socklen_t		sa1_len
 		);
 
+/*
+ * This union is used to remove questionable (struct sockaddr*) type punning.
+ *
+ * If the socket API is ported to the host OS properly - the alignment of
+ * all the elements should match between these at least sa and (sin or sin6)
+ * - but I believe this is more C99 compliant.
+ *
+ * This union needs to contain each sockaddr_XXX type that is used
+ * in the saddr.c and addr.c functions.
+ */
+typedef union _I2SockUnion {
+    struct sockaddr         sa;
+    struct sockaddr_in      sin;
+    struct sockaddr_in6     sin6;
+    struct sockaddr_storage sas;
+} I2SockUnion;
+
+/*
+ * I2SockAddrToSockUnion
+ *  This function is used to allow all other functions to deal with
+ *  sockaddrs through a union therefore removing 'aliasing' issues
+ *  introduced with C99.
+ */
+extern I2SockUnion *
+I2SockAddrToSockUnion(
+        const struct sockaddr   *sa,
+        socklen_t               sa_len,
+        I2SockUnion             *sau_mem
+        );
+
+/*
+ * I2SockUnionToSockAddr
+ *  This function is used to return a sockaddr union as a simple sockaddr
+ *  when returning the content to the user.
+ */
+extern struct sockaddr *
+I2SockUnionToSockAddr(
+        const I2SockUnion   *sau,
+        socklen_t           *sa_len_in_out,
+        struct sockaddr     *sa_mem
+        );
+
 END_C_DECLS
 #endif	/*	_i2_saddr_h_	*/

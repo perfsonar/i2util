@@ -447,15 +447,16 @@ I2AddrBySAddr(
         return NULL;
     }
 
-    /*
-     * TODO: Correct type-punning?
-     */
-
     switch(saddr->sa_family){
 #ifdef    AF_INET6
-        struct sockaddr_in6    *v6addr;
+        struct sockaddr_in6    v6addr;
 
         case AF_INET6:
+        if(saddrlen < sizeof(v6addr)){
+            I2ErrLogT(eh,LOG_ERR,EINVAL,"invalid saddrlen for addr family");
+            return NULL;
+        }
+
         /*
          * If this is a mapped addr - create a sockaddr_in
          * instead of the sockaddr_in6. (This is so addr
@@ -463,16 +464,16 @@ I2AddrBySAddr(
          * users of v4 will not be confused by security limits
          * on v6 addresses causing problems.)
          */
-        v6addr = (struct sockaddr_in6*)saddr;
-        if(IN6_IS_ADDR_V4MAPPED(&v6addr->sin6_addr)){
+        memcpy(&v6addr,saddr,sizeof(v6addr));
+        if(IN6_IS_ADDR_V4MAPPED(&v6addr.sin6_addr)){
             memset(&v4addr,0,sizeof(v4addr));
 #ifdef    HAVE_STRUCT_SOCKADDR_SA_LEN
             v4addr.sin_len = sizeof(v4addr);
 #endif
             v4addr.sin_family = AF_INET;
-            v4addr.sin_port = v6addr->sin6_port;
+            v4addr.sin_port = v6addr.sin6_port;
             memcpy(&v4addr.sin_addr.s_addr,
-                    &v6addr->sin6_addr.s6_addr[12],4);
+                    &v6addr.sin6_addr.s6_addr[12],4);
             saddr = (struct sockaddr*)&v4addr;
             saddrlen = sizeof(v4addr);
         }
@@ -586,15 +587,14 @@ I2AddrBySockFD(
         )
 {
     struct sockaddr_storage sbuff;
-    struct sockaddr         *saddr = (struct sockaddr*)&sbuff;
     socklen_t               saddrlen = sizeof(sbuff);
 
-    if(getpeername(fd,(void*)saddr,&saddrlen) != 0){
+    if(getpeername(fd,(void*)&sbuff,&saddrlen) != 0){
         I2ErrLogT(eh,LOG_ERR,errno,"getpeername(): %M");
         return NULL;
     }
 
-    return ByAnySockFD(eh,fd,close_on_free,saddr,saddrlen);
+    return ByAnySockFD(eh,fd,close_on_free,(struct sockaddr *)&sbuff,saddrlen);
 }
 
 I2Addr
@@ -605,15 +605,14 @@ I2AddrByLocalSockFD(
         )
 {
     struct sockaddr_storage sbuff;
-    struct sockaddr         *saddr = (struct sockaddr*)&sbuff;
     socklen_t               saddrlen = sizeof(sbuff);
 
-    if(getsockname(fd,(void*)saddr,&saddrlen) != 0){
+    if(getsockname(fd,(void*)&sbuff,&saddrlen) != 0){
         I2ErrLogT(eh,LOG_ERR,errno,"getsockname(): %M");
         return NULL;
     }
 
-    return ByAnySockFD(eh,fd,close_on_free,saddr,saddrlen);
+    return ByAnySockFD(eh,fd,close_on_free,(struct sockaddr *)&sbuff,saddrlen);
 }
 
 
@@ -720,8 +719,6 @@ I2AddrSetPort(
         uint16_t   port
         )
 {
-    uint16_t   *pptr;
-
     if(!addr)
         return False;
 
@@ -732,36 +729,41 @@ I2AddrSetPort(
     }
 
     /*
-     * TODO: fix type-punning
-     */
-    /*
      * If saddr is already set - than modify the port.
      */
     if(addr->saddr){
+        I2SockUnion sau_mem;
+        I2SockUnion *sau;
+
+        if( !(sau = I2SockAddrToSockUnion(addr->saddr,
+                        addr->saddrlen,&sau_mem))){
+            I2ErrLogT(addr->eh,LOG_ERR,EINVAL,
+                    "I2AddrSetPort: Unable to decode sockaddr");
+            return False;
+        }
+
         /*
          * decode v4 and v6 sockaddrs.
          */
-        switch(addr->saddr->sa_family){
-            struct sockaddr_in    *saddr4;
+        switch(sau->sa.sa_family){
 #ifdef    AF_INET6
-            struct sockaddr_in6    *saddr6;
 
             case AF_INET6:
-            saddr6 = (struct sockaddr_in6*)addr->saddr;
-            pptr = &saddr6->sin6_port;
+            sau->sin6.sin6_port = htons(port);
             break;
 #endif
             case AF_INET:
-            saddr4 = (struct sockaddr_in*)addr->saddr;
-            pptr = &saddr4->sin_port;
+            sau->sin.sin_port = htons(port);
             break;
             default:
             I2ErrLogT(addr->eh,LOG_ERR,EINVAL,
                     "I2AddrSetPort: Invalid address family");
             return False;
         }
-        *pptr = htons(port);
 
+        if( !I2SockUnionToSockAddr(sau,&addr->saddrlen,addr->saddr)){
+            return False;
+        }
     }
 
     snprintf(addr->port,sizeof(addr->port),"%u",port);
@@ -1024,7 +1026,7 @@ I2AddrFD(
  * Function:    I2AddrSAddr
  *
  * Description:    
- *          This function retrieves the SAddr associated with the given
+ *          This function retrieves the sockaddr associated with the given
  *          I2Addr. (If the saddr has not been set, it returns null.)
  *
  * In Args:    
@@ -1258,6 +1260,16 @@ I2AddrSockLen(
 }
 
 /*
+ * TODO: optimize byte swapping by using BYTE_ORDER macro
+ * i.e.
+ * #if (BYTE_ORDER == BIG_ENDIAN)
+ *  do_nothing
+ * #else
+ *  do_this
+ * #endif
+ */
+
+/*
  * Deal with network ordering of 64 bit int's.
  */
 uint64_t 
@@ -1265,17 +1277,25 @@ I2htonll(
         uint64_t    h64
       )
 {
-    uint64_t    b64;    /* bottom 32 bits */
-    uint64_t    t64;    /* top 32 bits */
+    uint64_t    n64=0;
+    uint32_t    l32;
+    uint32_t    h32;
+    uint8_t     *t8;
+
+    /* Use t8 to byte address the n64 */
+    t8 = (uint8_t *)&n64;
 
     /* set low-order bytes */
-    b64 = htonl(h64 & 0xFFFFFFFFUL);
+    l32 = htonl(h64 & 0xFFFFFFFFUL);
 
     /* set high-order bytes */
-    t64 = htonl(h64 >> 32);
-    t64 <<= 32;
+    h64 >>=32;
+    h32 = htonl(h64 & 0xFFFFFFFFUL);
 
-    return (t64 | b64);
+    memcpy(&t8[0],&h32,4);
+    memcpy(&t8[4],&l32,4);
+
+    return n64;
 }
 
 uint64_t 
