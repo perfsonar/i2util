@@ -21,7 +21,7 @@
 
 #include $(top_srcdir)/config/Make-rules
 
-SUBDIRS = I2util aespasswd doc
+SUBDIRS = I2util aespasswd test doc
 
 # uncomment when automake is unbroken 1.5 doesn't work with this...
 # (then remove these from DIST_EXTRA in subdir)

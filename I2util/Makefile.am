@@ -26,7 +26,7 @@ lib_LIBRARIES		= libI2util.a
 libI2util_a_SOURCES	= ErrLog.c ErrLogImmediate.c ErrLogSyslog.c \
 			Pthread.c mach_dep.c mach_dep.h table.c \
 			random.c io.c saddr.c md5.c readpassphrase.c hex.c \
-			conf.c addr.c
+			conf.c addr.c sha1.c
 EXTRA_DIST	=	Pthread.h errlog.h errlogimmediate.h errlogsyslog.h \
 			io.h random.h saddr.h table.h md5.h \
-			readpassphrase.h conf.h hex.h util.h addr.h
+			readpassphrase.h conf.h hex.h util.h addr.h sha1.h
