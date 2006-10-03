@@ -43,7 +43,8 @@
 
 BEGIN_C_DECLS
 
-#define I2SHA1_DIGEST_SIZE        20
+#define I2SHA1_DIGEST_SIZE      20
+#define I2SHA1_BLOCK_SIZE       64
 
 struct I2Sha1ContextRec;
 typedef struct I2Sha1ContextRec *I2Sha1Context;

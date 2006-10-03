@@ -86,7 +86,7 @@
  */
 static void sha1_transform(
         u_int32_t       state[5],
-        const u_int8_t  buffer[64]
+        const u_int8_t  buffer[I2SHA1_BLOCK_SIZE]
         )
 {
     u_int32_t a, b, c, d, e;
@@ -96,7 +96,7 @@ static void sha1_transform(
     assert(state != 0);
 
     /* Copy buffer into integer array */
-    (void)memcpy(block, buffer, 64);
+    (void)memcpy(block, buffer, I2SHA1_BLOCK_SIZE);
 
     /* Copy sha1->state[] to working vars */
     a = state[0];
@@ -141,7 +141,7 @@ struct I2Sha1ContextRec {
     I2ErrHandle eh;
     u_int32_t   state[5];
     u_int32_t   count[2];
-    u_int8_t    buffer[64];
+    u_int8_t    buffer[I2SHA1_BLOCK_SIZE];
 };
 
 void
@@ -296,7 +296,7 @@ void I2Sha1Finish(
     /*
      * Return digest
      */
-    for (i = 0; i < 20; i++)
+    for (i = 0; i < I2SHA1_DIGEST_SIZE; i++)
             digest_ret[i] = (u_int8_t)
                 ((sha1->state[i>>2] >> ((3-(i & 3)) * 8) ) & 255);
 
