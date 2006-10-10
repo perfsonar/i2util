@@ -38,10 +38,7 @@
  *   34AA973C D4C4DAA4 F61EEB2B DBAD2731 6534016F
  */
 
-/* $Id$ */
-#define SHA1HANDSOFF        /* Copies data before messing with it. */
-
-#include <I2util/sha1.h>
+#include <I2util/sha1P.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -136,13 +133,6 @@ static void sha1_transform(
 
     return;
 }
-
-struct I2Sha1ContextRec {
-    I2ErrHandle eh;
-    u_int32_t   state[5];
-    u_int32_t   count[2];
-    u_int8_t    buffer[I2SHA1_BLOCK_SIZE];
-};
 
 void
 I2Sha1Free(

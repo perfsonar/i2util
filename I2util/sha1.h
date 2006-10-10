@@ -41,15 +41,17 @@
 
 #include <I2util/util.h>
 
-BEGIN_C_DECLS
-
 #define I2SHA1_DIGEST_SIZE      20
 #define I2SHA1_BLOCK_SIZE       64
+
+BEGIN_C_DECLS
 
 struct I2Sha1ContextRec;
 typedef struct I2Sha1ContextRec *I2Sha1Context;
 
-extern I2Sha1Context I2Sha1Alloc();
+extern I2Sha1Context I2Sha1Alloc(
+        I2ErrHandle eh
+        );
 extern void I2Sha1Free(
         I2Sha1Context   sha1
         );
