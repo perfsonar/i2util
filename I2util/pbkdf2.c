@@ -235,30 +235,37 @@ int I2pbkdf2(
 
     /*
      * Step 2
+     *  Let l = number of blocks - rounding up
+     *  Let r = number of bytes in any final incomplete block
      */
-    /* number of complete blocks */
     l = dklen / prf_hlen;
-    /* number of bytes left over */
     r = dklen % prf_hlen;
+    if(r) l++;
+
 
     /*
      * Step 3 and 4
      * 3) iterate over all complete blocks to compute complete prf_hlen blocks
      * 4) increment 'out' to concatenate each resulting T_{i}.
+     *
+     * (Passing pointer directly into dk_ret, to minimize copies.)
      */
-    for(i=0; i<l; i++){
-        out = dk_ret + (i * prf_hlen);
-        F(prf,prf_hlen,pw,pwlen,salt,saltlen,count,i+1,tmpbuff,out);
+    for(i=1; i<l; i++){
+        out = dk_ret + ((i-1) * prf_hlen);
+        F(prf,prf_hlen,pw,pwlen,salt,saltlen,count,i,tmpbuff,out);
     }
 
     /*
-     * do the last incomplete block
+     * do any last incomplete block
      * - outbuff used to hold complete prf_hlen bytes, but only
      * - truncated result is used in dk_ret
+     *
+     * (Have to copy result because algorithm works on complete prf_hlen
+     * blocks - and dk_ret is not long enough to hold.)
      */
     if(r){
         F(prf,prf_hlen,pw,pwlen,salt,saltlen,count,l,tmpbuff,outbuff);
-        out = dk_ret + (l * prf_hlen);
+        out = dk_ret + ((l-1) * prf_hlen);
         memcpy(out,outbuff,r);
     }
 
