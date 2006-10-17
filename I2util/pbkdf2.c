@@ -240,7 +240,6 @@ int I2pbkdf2(
      */
     l = dklen / prf_hlen;
     r = dklen % prf_hlen;
-    if(r) l++;
 
 
     /*
@@ -250,9 +249,9 @@ int I2pbkdf2(
      *
      * (Passing pointer directly into dk_ret, to minimize copies.)
      */
-    for(i=1; i<l; i++){
-        out = dk_ret + ((i-1) * prf_hlen);
-        F(prf,prf_hlen,pw,pwlen,salt,saltlen,count,i,tmpbuff,out);
+    for(i=0; i<l; i++){
+        out = dk_ret + (i * prf_hlen);
+        F(prf,prf_hlen,pw,pwlen,salt,saltlen,count,i+1,tmpbuff,out);
     }
 
     /*
@@ -264,8 +263,8 @@ int I2pbkdf2(
      * blocks - and dk_ret is not long enough to hold.)
      */
     if(r){
-        F(prf,prf_hlen,pw,pwlen,salt,saltlen,count,l,tmpbuff,outbuff);
-        out = dk_ret + ((l-1) * prf_hlen);
+        F(prf,prf_hlen,pw,pwlen,salt,saltlen,count,l+1,tmpbuff,outbuff);
+        out = dk_ret + (l * prf_hlen);
         memcpy(out,outbuff,r);
     }
 
