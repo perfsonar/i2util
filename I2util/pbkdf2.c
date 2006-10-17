@@ -235,7 +235,7 @@ int I2pbkdf2(
 
     /*
      * Step 2
-     *  Let l = number of blocks - rounding up
+     *  Let l = number of complete blocks
      *  Let r = number of bytes in any final incomplete block
      */
     l = dklen / prf_hlen;
