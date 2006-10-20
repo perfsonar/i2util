@@ -62,6 +62,12 @@
 BEGIN_C_DECLS
 
 char * I2ReadPassPhrase(const char *, char *, size_t, int);
+char * I2ReadPassPhraseAlloc(
+        const char  *prompt,
+        int         flags,
+        char        **lbuf,     /* memory pointer - realloc'd if needed */
+        size_t      *lbuf_max   /* current len of lbuf */
+        );
 
 END_C_DECLS
 

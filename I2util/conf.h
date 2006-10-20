@@ -93,6 +93,43 @@ I2WriteKeyLine(
 	const uint8_t	*key		/* [I2KEYLEN] */
 	);
 
+/*
+ * lbuf will NOT contain an undisturbed copy of the last line to be parsed in
+ * the file. lbuf is just a memory buffer to be used by the function, and
+ * realloc'd as needed.
+ *
+ * It is the callers responsibility to free the memory pointed
+ * to by lbuf after calling this function.
+ *
+ */
+extern int
+I2ParsePFFile(
+	I2ErrHandle	eh,
+	FILE		*fp,
+	FILE		*tofp,
+	int		rc,
+        const char      *id_query,
+        char            **id_ret,   /* nul terminated, points in lbuf */
+        uint8_t         **pf_ret,   /* points in lbuf */
+        size_t          *pf_len,
+	char		**lbuf,
+	size_t		*lbuf_max
+	);
+
+/*
+ * lbuf has same semantics as above, caller must free memory eventually.
+ */
+extern int
+I2WritePFLine(
+	I2ErrHandle	eh,
+	FILE		*fp,
+	const char	*id,
+        const uint8_t   *bytes,
+        size_t          nbytes,
+        char            **lbuf,
+        size_t          *lbuf_max
+	);
+
 typedef uint64_t	I2numT;
 
 /*

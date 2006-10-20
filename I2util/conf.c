@@ -105,23 +105,20 @@ I2GetConfLine(
 		/*
 		 * make sure lbuf is large enough for this content
 		 */
-		if(i+2 > *lbuf_max){
-			*lbuf_max += I2LINEBUFINC;
-			*lbuf = realloc(line,sizeof(char) * *lbuf_max);
-			if(!*lbuf){
-				if(line){
-					free(line);
-				}
-				/*
-				 * BWLError can't handle %M in the
-				 * null context case - so use strerror
-				 * directly.
-				 */
-				I2ErrLog(eh,"realloc(%u): %M",*lbuf_max);
-				return -rc;
-			}
-			line = *lbuf;
-		}
+                if(i+2 > *lbuf_max){
+                    while(i+2 > *lbuf_max){
+                        *lbuf_max += I2LINEBUFINC;
+                    }
+                    *lbuf = realloc(line,sizeof(char) * *lbuf_max);
+                    if(!*lbuf){
+                        if(line){
+                            free(line);
+                        }
+                        I2ErrLog(eh,"realloc(%u): %M",*lbuf_max);
+                        return -rc;
+                    }
+                    line = *lbuf;
+                }
 
 		/*
 		 * copy char
@@ -239,7 +236,7 @@ DONE:
  * continuation - and copies comment/blank lines to tofp.
  */
 static int
-getkeyfileline(
+parsefileline(
 	I2ErrHandle	eh,
 	FILE		*fp,
 	int		rc,
@@ -301,21 +298,31 @@ getkeyfileline(
 			continue;
 		}
 
+                /*
+                 * Leading spaces are only allowed in comment lines
+                 */
+                if(ns){
+		    I2ErrLog(eh,"Leading spaces not allowed: line %d",rc);
+                    return -rc;
+                }
+
 		/*
 		 * make sure lbuf is large enough for this content
 		 */
-		if(nc+2 > *lbuf_max){
-			*lbuf_max += I2LINEBUFINC;
-			*lbuf = realloc(line,sizeof(char) * *lbuf_max);
-			if(!*lbuf){
-				if(line){
-					free(line);
-				}
-				I2ErrLog(eh,"realloc(%u): %M",*lbuf_max);
-				return -rc;
-			}
-			line = *lbuf;
-		}
+                if(nc+2 > *lbuf_max){
+                    while(nc+2 > *lbuf_max){
+                        *lbuf_max += I2LINEBUFINC;
+                    }
+                    *lbuf = realloc(line,sizeof(char) * *lbuf_max);
+                    if(!*lbuf){
+                        if(line){
+                            free(line);
+                        }
+                        I2ErrLog(eh,"realloc(%u): %M",*lbuf_max);
+                        return -rc;
+                    }
+                    line = *lbuf;
+                }
 
 		/*
 		 * copy char
@@ -394,7 +401,7 @@ I2ParseKeyFile(
 	 * help find errors as quickly as possible instead of letting them
 	 * hide until they actually bite someone.)
 	 */
-	while((rc = getkeyfileline(eh,fp,rc,lbuf,lbuf_max,tofp)) > 0){
+	while((rc = parsefileline(eh,fp,rc,lbuf,lbuf_max,tofp)) > 0){
 
 		line = *lbuf;
 
@@ -526,6 +533,252 @@ I2WriteKeyLine(
 	 * if fprintf has an error, set ret < 0 for a failure return.
 	 */
 	ret = fprintf(fp,"%s\t%s\n",id,hbuf);
+
+	if(ret > 0) ret = 0;
+
+	return ret;
+}
+
+/*
+ * Function:	I2ParsePFFile
+ *
+ * Description:	
+ * 		Read a single line from a file fp. remove leading whitespace,
+ * 		skip blank lines and comment lines. Put the result in the
+ * 		char buffer pointed at by lbuf, growing it as necessary.
+ *
+ * 		Read a single identity/pass-phrase from the pffile. If tofp
+ * 		is set, then copy all "unmatched" lines from fp to tofp while
+ * 		parsing the file. If id_query is set, only return the entry that
+ * 		matches (if any does) skipping all others - and copying them
+ * 		to tofp if needed. A quick way to simply copy all remaining
+ * 		records to the tofp is to specify an id_query to a 0 length
+ * 		string (i.e. id_query[0] == '\0').
+ *
+ * 		The entry that is returned currently breaks the line, so
+ * 		*lbuf can not just be written back to the file directly.
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
+ */
+int
+I2ParsePFFile(
+	I2ErrHandle eh,
+	FILE	    *fp,
+	FILE	    *tofp,
+	int	    rc,
+	const char  *id_query,
+	char	    **id_ret,   /* points in lbuf */
+	uint8_t	    **pf_ret,   /* points in lbuf */
+        size_t      *pf_len,
+	char	    **lbuf,
+	size_t	    *lbuf_max
+	)
+{
+    char    *line;
+    char    *ts;
+    char    *hex;
+    char    *pf;
+    size_t  id_len;
+    size_t  hex_len;
+    size_t  idq_len;
+    size_t  hex_oset;
+
+    /*
+     * If there is no pffile, parsing is very, very fast.
+     */
+    if(!fp){
+        return 0;
+    }
+
+    if(id_query){
+        idq_len = strlen(id_query);
+    }
+
+    /*
+     * Fetch each non-blank, non-comment line from the pffile.
+     *
+     * Completely validate each line and then determine at the
+     * end of the loop if the caller is interested in this line or not.
+     * (This strict interpretation of the syntax of the pffile should
+     * help find errors as quickly as possible instead of letting them
+     * hide until they actually bite someone.)
+     *
+     * Valid syntax is:
+     * 
+     */
+    while((rc = parsefileline(eh,fp,rc,lbuf,lbuf_max,tofp)) > 0){
+
+        size_t  used,needed;
+
+        /*
+         * line starts with id
+         */
+        line = *lbuf;
+
+        /*
+         * Find beginning of hex-pf
+         */
+        id_len = strcspn(line,I2WSPACESET);
+        hex = line + id_len;
+
+        /*
+         * Must be at least one space separator
+         */
+        if(!isspace((int)*hex)){
+            return -rc;
+        }
+
+        /*
+         * If a specific "identity" is being searched for: skip/copy
+         * lines that don't match and continue parsing the file.
+         */
+        if(id_query && strncmp(line,id_query,MIN(id_len,idq_len))){
+            /*
+             * Write line to tofp, then 'continue'
+             */
+            if(tofp) fprintf(tofp,"%s\n",*lbuf);
+            continue;
+        }
+
+        /* Terminate id, then eat trailing white-space */
+        *hex = '\0';
+        hex++;
+        while(isspace((int)*hex)){
+            hex++;
+        }
+        hex_oset = hex - line;
+
+        /* how long is the hex-pf */
+        hex_len = strcspn(hex,I2WSPACESET);
+
+        /*
+         * eat trailing white-space - and terminate hex-pf
+         */
+        ts = hex + hex_len;
+        while(isspace((int)*ts)){
+            *ts = '\0';
+            ts++;
+        }
+
+        /*
+         * hex can not be nul, must be multiple of 2,
+         * and must be the last thing on the line.
+         */
+        if(!hex_len || (hex_len % 2) || (*ts != '\0')){
+            return -rc;
+        }
+
+        /*
+         * Make sure there is enough room after full line in lbuf to hold
+         * return pf. (ts currently points at the terminating nul
+         * byte for the full line.)
+         */
+        used = (ts - *lbuf) + 1;
+        needed = (hex_len / 2);
+
+        /*
+         * make sure lbuf is large enough for this content
+         */
+        if((used + needed) > *lbuf_max){
+            while((used + needed) > *lbuf_max){
+                *lbuf_max += I2LINEBUFINC;
+            }
+            *lbuf = realloc(line,sizeof(char) * *lbuf_max);
+            if(!*lbuf){
+                if(line){
+                    free(line);
+                }
+                I2ErrLog(eh,"realloc(%u): %M",*lbuf_max);
+                return -rc;
+            }
+            line = *lbuf;
+        }
+
+        /*
+         * Terminate id, and point pf to beginning of binary pf
+         * to be returned.
+         */
+        hex = line + hex_oset;
+        pf = line + used;
+
+        if(!I2HexDecode(hex,(uint8_t *)pf,hex_len/2)){
+            I2ErrLogP(eh,EINVAL,"Invalid key: not hex?");
+            return -rc;
+        }
+
+        *id_ret = line;
+        *pf_ret = (uint8_t *)pf;
+        *pf_len = hex_len/2;
+
+        break;
+    }
+
+    return rc;
+}
+
+/*
+ * Function:	I2WritePFLine
+ *
+ * Description:	
+ *
+ * In Args:	
+ *
+ * Out Args:	
+ *
+ * Scope:	
+ * Returns:	
+ * Side Effect:	
+ */
+int
+I2WritePFLine(
+	I2ErrHandle	eh,
+	FILE		*fp,
+	const char	*id,        /* nul terminated */
+	const uint8_t	*bytes,
+        size_t          nbytes,
+	char	        **lbuf,     /* memory for hex string */
+	size_t	        *lbuf_max
+	)
+{
+	int	ret;
+        char    *line = *lbuf;
+
+	if(!id || (id[0] == '\0')){
+		I2ErrLogP(eh,EINVAL,"I2WriteKeyLine(): Invalid identity name");
+		return -1;
+	}
+
+        /*
+         * make sure lbuf is large enough for this content
+         */
+        if((nbytes*2 + 1) > *lbuf_max){
+            while((nbytes*2 + 1) > *lbuf_max){
+                *lbuf_max += I2LINEBUFINC;
+            }
+            *lbuf = realloc(line,sizeof(char) * *lbuf_max);
+            if(!*lbuf){
+                if(line){
+                    free(line);
+                }
+                I2ErrLog(eh,"realloc(%u): %M",*lbuf_max);
+                return -1;
+            }
+            line = *lbuf;
+        }
+
+
+	I2HexEncode(line,bytes,nbytes);
+
+	/*
+	 * if fprintf has an error, set ret < 0 for a failure return.
+	 */
+	ret = fprintf(fp,"%s\t%s\n",id,line);
 
 	if(ret > 0) ret = 0;
 

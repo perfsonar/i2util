@@ -33,7 +33,7 @@
  */
 extern void
 I2HexEncode(
-	char		*buff,
+	char		*hexstr,
 	const uint8_t	*bytes,
 	unsigned int	nbytes
 	);
@@ -45,8 +45,8 @@ I2HexEncode(
  */
 extern I2Boolean
 I2HexDecode(
-	const char	*buff,
-	uint8_t	*bytes,
+	const char	*hexstr,
+	uint8_t	        *bytes,
 	unsigned int	nbytes
 	);
 

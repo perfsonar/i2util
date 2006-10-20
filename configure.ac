@@ -88,5 +88,5 @@ AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([memset strdup strerror strtol strtoul socket getaddrinfo])
 
 AC_SUBST(ac_aux_dir)
-AC_OUTPUT([Makefile I2util/Makefile aespasswd/Makefile doc/Makefile test/Makefile],
+AC_OUTPUT([Makefile I2util/Makefile aespasswd/Makefile pfstore/Makefile doc/Makefile test/Makefile],
 	[test -z "$CONFIG_HEADERS" || echo timestamp > I2util/stamp-h.in])

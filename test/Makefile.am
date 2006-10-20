@@ -20,7 +20,8 @@
 
 INCLUDES	= $(I2UTILINCS)
 
-bin_PROGRAMS		= sha1test hmac-sha1test pbkdf2test
+TESTS			= sha1test hmac-sha1test pbkdf2test
+check_PROGRAMS		= $(TESTS)
 sha1test_SOURCES	= sha1test.c
 sha1test_LDADD		= $(I2UTILLIBS) $(MALLOCDEBUGLIBS)
 sha1test_DEPENDENCIES	= $(I2UTILLIBDEPS)
