@@ -46,15 +46,15 @@ typedef void (*I2prf)(
  *  EINVAL (dklen too long)
  */
 extern int I2pbkdf2(
-        I2prf       prf,
-        uint32_t    prf_hlen,
-        uint8_t     *pw,
-        uint32_t    pwlen,
-        uint8_t     *salt,
-        uint32_t    saltlen,
-        uint32_t    count,
-        uint32_t    dklen,
-        uint8_t     *dk_ret
+        I2prf           prf,
+        uint32_t        prf_hlen,
+        const uint8_t   *pw,
+        uint32_t        pwlen,
+        const uint8_t   *salt,
+        uint32_t        saltlen,
+        uint32_t        count,
+        uint32_t        dklen,
+        uint8_t         *dk_ret
         );
 
 END_C_DECLS

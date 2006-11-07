@@ -26,19 +26,19 @@
  */
 void
 I2HexEncode(
-	char		*buff,
-	const uint8_t	*bytes,
-	unsigned int	nbytes
+	char            *buff,
+	const uint8_t   *bytes,
+	size_t          nbytes
 	)
 {
-	char		hex[]="0123456789abcdef";
-	unsigned int	i;
+    char    hex[]="0123456789abcdef";
+    size_t  i;
 
-	for(i=0;i<nbytes;i++){
-		*buff++ = hex[*bytes >> 4];
-		*buff++ = hex[*bytes++ & 0x0f];
-	}
-	*buff = '\0';
+    for(i=0;i<nbytes;i++){
+        *buff++ = hex[*bytes >> 4];
+        *buff++ = hex[*bytes++ & 0x0f];
+    }
+    *buff = '\0';
 }
 
 /*
@@ -61,14 +61,14 @@ I2HexEncode(
  */
 I2Boolean
 I2HexDecode(
-        const char      *buff,
-        uint8_t	        *bytes,
-        unsigned int	nbytes
+        const char  *buff,
+        uint8_t     *bytes,
+        size_t	    nbytes
         )
 {
-    char	    hex[]="0123456789abcdef";
+    char            hex[]="0123456789abcdef";
     unsigned int    i,j,offset;
-    char	    a;
+    char            a;
     uint8_t         byte;
 
     for(i=0;i<nbytes;i++,bytes++){

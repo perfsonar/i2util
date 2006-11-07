@@ -21,8 +21,8 @@
  *    Description:    
  *      Current test vectors are bogus. I created them - but they will
  *      at least let me test on multiple hosts architectures to make
- *      sure things are consistent. I have not been able to find
- *      pbkdf2-hmac-sha1 test vectors!
+ *      sure things are consistent.
+ *      Test vectors from RFC 3962.
  */
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,6 +35,18 @@
 
 int status = 0;
 
+#ifndef tvalsub
+#define tvalsub(a, b)                   \
+    do {                                \
+        (a)->tv_sec -= (b)->tv_sec;     \
+        (a)->tv_usec -= (b)->tv_usec;   \
+        if((a)->tv_usec < 0){           \
+            (a)->tv_sec--;              \
+            (a)->tv_usec += 1000000;    \
+        }                               \
+    } while(0)
+#endif
+
 static void DoTestCase(
         int         test_case,
         char        *pw,
@@ -43,7 +55,8 @@ static void DoTestCase(
         uint32_t    saltlen,
         uint32_t    count,
         char        *dk,
-        uint32_t    dklen
+        uint32_t    dklen,
+        char        *pwbuff  /* "nice" printable pw */
         )
 {
     /*
@@ -53,33 +66,50 @@ static void DoTestCase(
     uint8_t         result[32];
     char            hd[(2*32)+1];
     char            *ststr;
+    struct timeval  start;
+    struct timeval  end;
+    double          exectime;
 
     assert(dklen <= 32);
+
+    memset(&start,0,sizeof(start));
+    memset(&end,0,sizeof(end));
 
     /*
      * First test vector
      */
+    gettimeofday(&start,NULL);
     if( (I2pbkdf2(I2HMACSha1,(uint32_t)I2SHA1_DIGEST_SIZE,(uint8_t *)pw,pwlen,
                     (uint8_t *)salt,saltlen,count,dklen,result))){
         perror("I2pbkdf2: ");
         exit(1);
     }
+    gettimeofday(&end,NULL);
+    tvalsub(&end,&start);
+    exectime = end.tv_usec / 1000000.0;
+    exectime += end.tv_sec;
 
-    I2HexDecode(dk,verify,dklen);
-    if(memcmp(verify,result,dklen)){
-        status = 1;
-        ststr = "FAILED";
+    if(dk){
+        I2HexDecode(dk,verify,dklen);
+        if(memcmp(verify,result,dklen)){
+            status = 1;
+            ststr = "FAILED";
+        }
+        else{
+            ststr = "SUCCESS";
+        }
+
+        hd[2*dklen] = '\0';
+        I2HexEncode(hd,result,dklen);
     }
     else{
-        ststr = "SUCCESS";
+        ststr = "UNCHECKED";
+        strcpy(hd,"\'N/A\'");
     }
 
-    hd[2*dklen] = '\0';
-    I2HexEncode(hd,result,dklen);
-
     fprintf(stdout,
-            "%d: %s: pbkdf2(pw=\"%s\",s=\"%s\",c=%d,dklen=%d) = %s\n",
-            test_case,ststr,pw,salt,count,dklen,hd);
+            "%d: %s: pbkdf2(pw=\"%s\",s=\"%s\",c=%d,dklen=%d) = %s (%g sec)\n",
+            test_case,ststr,pwbuff?pwbuff:pw,salt,count,dklen,hd,exectime);
 
     return;
 }
@@ -113,10 +143,10 @@ main(
      *      bb 52 28 09 90 a2 fa 27 88 39 98 d7 2a f3 01 61
      */
     DoTestCase(i++,"password",8,"ATHENA.MIT.EDUraeburn",21,1,
-            "cdedb5281bb2f801565a1122b2563515",16);
+            "cdedb5281bb2f801565a1122b2563515",16,NULL);
     DoTestCase(i++,"password",8,"ATHENA.MIT.EDUraeburn",21,1,
             "cdedb5281bb2f801565a1122b25635150ad1f7a04bb9f3a333ecc0e2e1f70837",
-            32);
+            32,NULL);
 
     /*
      *
@@ -135,10 +165,10 @@ main(
      *      02 68 56 18 b9 59 14 b4 67 c6 76 22 22 58 24 ff
      */
     DoTestCase(i++,"password",8,"ATHENA.MIT.EDUraeburn",21,2,
-            "01dbee7f4a9e243e988b62c73cda935d",16);
+            "01dbee7f4a9e243e988b62c73cda935d",16,NULL);
     DoTestCase(i++,"password",8,"ATHENA.MIT.EDUraeburn",21,2,
             "01dbee7f4a9e243e988b62c73cda935da05378b93244ec8f48a99e61ad799d86",
-            32);
+            32,NULL);
 
     /*
      *  Iteration count = 1200
@@ -157,10 +187,10 @@ main(
      */
     DoTestCase(i++,"password",8,"ATHENA.MIT.EDUraeburn",21,1200,
             "5c08eb61fdf71e4e4ec3cf6ba1f5512b",
-            16);
+            16,NULL);
     DoTestCase(i++,"password",8,"ATHENA.MIT.EDUraeburn",21,1200,
             "5c08eb61fdf71e4e4ec3cf6ba1f5512ba7e52ddbc5e5142f708a31e2e62b1e13",
-            32);
+            32,NULL);
 
     /*
      *  Iteration count = 5
@@ -181,10 +211,10 @@ main(
     I2HexDecode("1234567878563412",(uint8_t *)saltbuff,8);
     DoTestCase(i++,"password",8,saltbuff,8,5,
             "d1daa78615f287e6a1c8b120d7062a49",
-            16);
+            16,NULL);
     DoTestCase(i++,"password",8,saltbuff,8,5,
             "d1daa78615f287e6a1c8b120d7062a493f98d203e6be49a6adf4fa574b6e64ee",
-            32);
+            32,NULL);
 
     /*
      *  Iteration count = 1200
@@ -205,10 +235,10 @@ main(
     memset(passbuff,'X',64);
     DoTestCase(i++,passbuff,64,"pass phrase equals block size",29,1200,
             "139c30c0966bc32ba55fdbf212530ac9",
-            16);
+            16,"\'X\' (64 times)");
     DoTestCase(i++,passbuff,64,"pass phrase equals block size",29,1200,
             "139c30c0966bc32ba55fdbf212530ac9c5ec59f1a452f5cc9ad940fea0598ed1",
-            32);
+            32,"\'X\' (64 times)");
 
     /*   
      *  Iteration count = 1200
@@ -229,10 +259,10 @@ main(
     memset(passbuff,'X',65);
     DoTestCase(i++,passbuff,65,"pass phrase exceeds block size",30,1200,
             "9ccad6d468770cd51b10e6a68721be61",
-            16);
+            16,"\'X\' (65 times)");
     DoTestCase(i++,passbuff,65,"pass phrase exceeds block size",30,1200,
             "9ccad6d468770cd51b10e6a68721be611a8b4d282601db3b36be9246915ec82a",
-            32);
+            32,"\'X\' (65 times)");
 
     /*
      *  Iteration count = 50
@@ -253,10 +283,26 @@ main(
     passbuff[4]='\0';
     DoTestCase(i++,passbuff,4,"EXAMPLE.COMpianist",18,50,
             "6b9cf26d45455a43a5b8bb276a403b39",
-            16);
+            16,"g-clef (0xf09d849e)");
     DoTestCase(i++,passbuff,4,"EXAMPLE.COMpianist",18,50,
             "6b9cf26d45455a43a5b8bb276a403b39e7fe37a0c41e02c281ff3069e1e94f52",
-            32);
+            32,"g-clef (0xf09d849e)");
+
+    /*
+     * Remaining test cases are not part of RFC 3962. They were put in place
+     * simply to test how long it would take for some larger values
+     * of count.
+     */
+
+    /*
+     *  Iteration count = 2048
+     *  Pass phrase = "how long?"
+     *  Salt = "garlic"
+     */
+    memset(passbuff,'X',64);
+    DoTestCase(i++,passbuff,64,"pass phrase equals block size",29,2048,
+            NULL,
+            16,"\'X\' (64 times)");
 
     exit(status);
 }

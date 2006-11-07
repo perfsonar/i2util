@@ -11,7 +11,7 @@
 *                                                                       *
 ************************************************************************/
 /*
- *    File:         sha1test.c
+ *    File:         hmac-sha1test.c
  *
  *    Author:       Jeff W. Boote
  *                  Internet2

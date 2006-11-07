@@ -369,22 +369,22 @@ parsefileline(
  */
 int
 I2ParseKeyFile(
-	I2ErrHandle	eh,
-	FILE		*fp,
-	int		rc,
-	char		**lbuf,
-	size_t		*lbuf_max,
-	FILE		*tofp,
-	const char	*id_query,
-	char		*id_ret, /* [I2MAXIDENTITYLEN+1] or null */
-	uint8_t	*key_ret /* [I2KEYLEN] or null */
+	I2ErrHandle eh,
+	FILE	    *fp,
+	int	    rc,
+	char	    **lbuf,
+	size_t	    *lbuf_max,
+	FILE	    *tofp,
+	const char  *id_query,
+	char	    *id_ret, /* [I2MAXIDENTITYLEN+1] or null */
+	uint8_t	    *key_ret /* [I2KEYLEN] or null */
 	)
 {
-	char		*line;
-	int		i;
-	char		rbuf[I2MAXIDENTITYLEN+1]; /* add one extra byte */
-	char		*keystart;
-	uint8_t	kbuf[I2KEYLEN];
+	char	    *line;
+	int	    i;
+	char	    rbuf[I2MAXIDENTITYLEN+1]; /* add one extra byte */
+	char	    *keystart;
+	uint8_t     kbuf[I2KEYLEN];
 
 	/*
 	 * If there is no keyfile, parsing is very, very fast.
@@ -569,12 +569,12 @@ I2WriteKeyLine(
 int
 I2ParsePFFile(
 	I2ErrHandle eh,
-	FILE	    *fp,
-	FILE	    *tofp,
+	FILE	    *filep,
+	FILE	    *tofilep,
 	int	    rc,
 	const char  *id_query,
 	char	    **id_ret,   /* points in lbuf */
-	uint8_t	    **pf_ret,   /* points in lbuf */
+	char	    **pf_ret,   /* points in lbuf */
         size_t      *pf_len,
 	char	    **lbuf,
 	size_t	    *lbuf_max
@@ -592,7 +592,7 @@ I2ParsePFFile(
     /*
      * If there is no pffile, parsing is very, very fast.
      */
-    if(!fp){
+    if(!filep){
         return 0;
     }
 
@@ -612,7 +612,7 @@ I2ParsePFFile(
      * Valid syntax is:
      * 
      */
-    while((rc = parsefileline(eh,fp,rc,lbuf,lbuf_max,tofp)) > 0){
+    while((rc = parsefileline(eh,filep,rc,lbuf,lbuf_max,tofilep)) > 0){
 
         size_t  used,needed;
 
@@ -638,11 +638,12 @@ I2ParsePFFile(
          * If a specific "identity" is being searched for: skip/copy
          * lines that don't match and continue parsing the file.
          */
-        if(id_query && strncmp(line,id_query,MIN(id_len,idq_len))){
+        if(id_query && 
+                ((idq_len == 0) || strncmp(line,id_query,MIN(id_len,idq_len)))){
             /*
-             * Write line to tofp, then 'continue'
+             * Write line to tofilep, then 'continue'
              */
-            if(tofp) fprintf(tofp,"%s\n",*lbuf);
+            if(tofilep) fprintf(tofilep,"%s\n",*lbuf);
             continue;
         }
 
@@ -712,9 +713,15 @@ I2ParsePFFile(
             return -rc;
         }
 
-        *id_ret = line;
-        *pf_ret = (uint8_t *)pf;
-        *pf_len = hex_len/2;
+        if(id_ret){
+            *id_ret = line;
+        }
+        if(pf_ret){
+            *pf_ret = pf;
+        }
+        if(pf_len){
+            *pf_len = hex_len/2;
+        }
 
         break;
     }

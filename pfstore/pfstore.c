@@ -58,12 +58,12 @@ usage(
 	return;
 }
 
-static int	do_create = 0;
-static int	do_delete = 0;
-static char	*pffname;
-static char	*idquery = NULL;
+static int      do_create = 0;
+static int      do_delete = 0;
+static char     *pffname;
+static char     *idquery = NULL;
 static char     *idname = NULL;
-static uint8_t  *pf_bytes = NULL;
+static char     *pf_bytes = NULL;
 static size_t   pf_len = 0;
 
 int
@@ -82,7 +82,7 @@ main(
 	struct flock	flk;
 	FILE		*fromfp;
 	FILE		*tofp;
-        char            *passphrase = NULL;
+    char        *passphrase = NULL;
 	char		*pbuf=NULL;
 	size_t		pbuf_max=0;
 	char		*lbuf=NULL;
@@ -262,8 +262,9 @@ main(
 		/*
 		 * Not deleting, add the new/changed pf line.
 		 */
-		if(I2WritePFLine(NULL,tofp,idquery,(uint8_t *)passphrase,
-                            strlen(passphrase),&lbuf,&lbuf_max) < 0){
+		if(I2WritePFLine(NULL,tofp,idquery,
+                    (uint8_t *)passphrase,strlen(passphrase),
+                    &lbuf,&lbuf_max) < 0){
 			fprintf(stderr,"%s:I2WritePFLine('%s'): %s\n",
 					progname,pffname,strerror(errno));
 			exit(1);

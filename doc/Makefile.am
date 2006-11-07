@@ -18,7 +18,7 @@
 #
 #	Description:
 
-dist_man1_MANS = aespasswd.man
+dist_man1_MANS = aespasswd.man pfstore.man
 
 # TODO
 # Build html versions of man pages and include them in dist?

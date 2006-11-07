@@ -123,16 +123,16 @@
  * Side Effect:    
  */
 static void F(
-        I2prf       prf,
-        uint32_t    prf_hlen,
-        uint8_t     *pw,
-        uint32_t    pwlen,
-        uint8_t     *salt,
-        uint32_t    saltlen,
-        uint32_t    count,
-        uint32_t    i,
-        uint8_t     *buffer,
-        uint8_t     *u
+        I2prf           prf,
+        uint32_t        prf_hlen,
+        const uint8_t   *pw,
+        uint32_t        pwlen,
+        const uint8_t   *salt,
+        uint32_t        saltlen,
+        uint32_t        count,
+        uint32_t        i,
+        uint8_t         *buffer,
+        uint8_t         *u
         )
 {
     uint8_t     ival[4];
@@ -191,15 +191,15 @@ static void F(
  * Side Effect:    
  */
 int I2pbkdf2(
-        I2prf       prf,
-        uint32_t    prf_hlen,
-        uint8_t     *pw,
-        uint32_t    pwlen,
-        uint8_t     *salt,
-        uint32_t    saltlen,
-        uint32_t    count,
-        uint32_t    dklen,
-        uint8_t     *dk_ret
+        I2prf           prf,
+        uint32_t        prf_hlen,
+        const uint8_t   *pw,
+        uint32_t        pwlen,
+        const uint8_t   *salt,
+        uint32_t        saltlen,
+        uint32_t        count,
+        uint32_t        dklen,
+        uint8_t         *dk_ret
         )
 {
     int         rc = 0;

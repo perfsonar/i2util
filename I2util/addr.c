@@ -359,6 +359,7 @@ I2AddrByWildcard(
     }
 
     addr->ai = ai;
+    addr->passive = True;
 
     return addr;
 }

@@ -74,23 +74,23 @@ I2ReadConfVar(
  */
 extern int
 I2ParseKeyFile(
-	I2ErrHandle	eh,
-	FILE		*fp,
-	int		rc,
-	char		**lbuf,
-	size_t		*lbuf_max,
-	FILE		*tofp,		/* copy 'to' file, or null */
-	const char	*id_query,
-	char		*id_ret,	/* [I2MAXIDENTITYLEN+1] or null */
-	uint8_t	*key_ret	/* [I2KEYLEN] or null */
+	I2ErrHandle eh,
+	FILE	    *fp,
+	int	    rc,
+	char	    **lbuf,
+	size_t	    *lbuf_max,
+	FILE	    *tofp,	/* copy 'to' file, or null */
+	const char  *id_query,
+	char	    *id_ret,	/* [I2MAXIDENTITYLEN+1] or null */
+	uint8_t	    *key_ret	/* [I2KEYLEN] or null */
 	);
 
 extern int
 I2WriteKeyLine(
-	I2ErrHandle	eh,
-	FILE		*fp,
-	const char	*id,		/* no more than [I2MAXIDENTITYLEN+1] */
-	const uint8_t	*key		/* [I2KEYLEN] */
+	I2ErrHandle     eh,
+	FILE	        *fp,
+	const char      *id,	/* no more than [I2MAXIDENTITYLEN+1] */
+	const uint8_t   *key	/* [I2KEYLEN] */
 	);
 
 /*
@@ -110,7 +110,7 @@ I2ParsePFFile(
 	int		rc,
         const char      *id_query,
         char            **id_ret,   /* nul terminated, points in lbuf */
-        uint8_t         **pf_ret,   /* points in lbuf */
+        char            **pf_ret,   /* points in lbuf */
         size_t          *pf_len,
 	char		**lbuf,
 	size_t		*lbuf_max
