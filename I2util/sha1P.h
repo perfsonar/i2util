@@ -29,9 +29,9 @@ BEGIN_C_DECLS
 
 struct I2Sha1ContextRec {
     I2ErrHandle eh;
-    u_int32_t   state[5];
-    u_int32_t   count[2];
-    u_int8_t    buffer[I2SHA1_BLOCK_SIZE];
+    uint32_t   	state[5];
+    uint32_t   	count[2];
+    uint8_t    	buffer[I2SHA1_BLOCK_SIZE];
 };
 
 END_C_DECLS

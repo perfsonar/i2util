@@ -23,7 +23,16 @@
  */
 #ifndef	_I2_util_h_
 #define	_I2_util_h_
+
+#if        HAVE_CONFIG_H
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
 #include <I2util/config.h>
+#endif        /* HAVE_CONFIG_H */
+
 #include <inttypes.h>
 
 #ifndef	HAVE___ATTRIBUTE__

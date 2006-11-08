@@ -82,12 +82,12 @@
  * Hash a single 512-bit block. This is the core of the algorithm.
  */
 static void sha1_transform(
-        u_int32_t       state[5],
-        const u_int8_t  buffer[I2SHA1_BLOCK_SIZE]
+        uint32_t       	state[5],
+        const uint8_t  	buffer[I2SHA1_BLOCK_SIZE]
         )
 {
-    u_int32_t a, b, c, d, e;
-    u_int32_t block[16];
+    uint32_t a, b, c, d, e;
+    uint32_t block[16];
 
     assert(buffer != 0);
     assert(state != 0);
@@ -201,7 +201,7 @@ void I2Sha1Append(
         uint32_t        len
         )
 {
-    u_int i, j;
+    uint i, j;
 
     assert(sha1 != NULL);
 
@@ -287,7 +287,7 @@ void I2Sha1Finish(
      * Return digest
      */
     for (i = 0; i < I2SHA1_DIGEST_SIZE; i++)
-            digest_ret[i] = (u_int8_t)
+            digest_ret[i] = (uint8_t)
                 ((sha1->state[i>>2] >> ((3-(i & 3)) * 8) ) & 255);
 
     /* Wipe variables */
