@@ -6,15 +6,14 @@ dnl
 dnl	This macro is used to test for the syslog prioritynames global array
 dnl
 
-AC_DEFUN(I2_C_SYSLOG_NAMES, [
+AC_DEFUN([I2_C_SYSLOG_NAMES], [
 AC_MSG_CHECKING(for syslog names)
 AC_CACHE_VAL(ac_cv_syslognames, [
-AC_TRY_COMPILE([
+AC_COMPILE_IFELSE([
 #include <stdlib.h>
 #define	SYSLOG_NAMES
 #include <syslog.h>
-],
-[
+
 static void foo(void);
 
 static void

@@ -6,7 +6,7 @@ dnl
 dnl	This macro is used to test for a kernel random device
 dnl
 
-AC_DEFUN(I2_RANDOMDEV, [
+AC_DEFUN([I2_RANDOMDEV], [
 AC_MSG_CHECKING(for kernel random dev)
 AC_CACHE_VAL(i2_cv_randomdev, [
 	i2_cv_randomdev="no"
