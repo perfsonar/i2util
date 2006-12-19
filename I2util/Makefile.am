@@ -30,4 +30,4 @@ libI2util_a_SOURCES	= ErrLog.c ErrLogImmediate.c ErrLogSyslog.c \
 EXTRA_DIST	=	Pthread.h errlog.h errlogimmediate.h errlogsyslog.h \
 			mach_dep.h io.h random.h saddr.h table.h md5.h \
 			readpassphrase.h conf.h hex.h util.h addr.h sha1.h \
-			hmac-sha1.h pbkdf2.h
+			sha1P.h hmac-sha1.h pbkdf2.h
