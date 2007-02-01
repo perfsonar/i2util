@@ -42,7 +42,7 @@ is used to create and manage files that hold identity/pass-phrase pairs. It is
 primarily used to manage the \fIowampd.pfs\fR file for \fBowampd\fR.
 .PP
 If the \fI\-d\fR option is not specified, then \fBpfstore\fR prompts
-the caller for a pass-phrase. The pass-phrase is hex encoded and
+the caller for a pass-phrase. The pass-phrase is hex-encoded and
 saved in the \fIpfsfile\fR with the associated \fIidentity\fR.
 If the given \fIidentity\fR
 already exists in the \fIpfsfile\fR, the previous pass-phrase is overwritten
@@ -55,8 +55,8 @@ with the new one.
 .LP
 test	54b0c58c7ce9f2a8b551351102ee0938
 .PP
-An \fIidentity\fR, followed by whitespace, followed by a variable length
-hex encoded pass-phrase.
+An \fIidentity\fR, followed by whitespace, followed by a variable-length
+hex-encoded pass-phrase.
 .PP
 No other text is allowed on these lines; however, comment lines may be
 added. Comment lines are any line where the first non-white space character
@@ -65,7 +65,7 @@ is '\fB#\fR'.
 \fBpfstore -f /usr/local/etc/owampd.pfs testuser\fP
 .IP
 Adds a pass-phrase for the identity \fItestuser\fR. The user is prompted for
-a passphrase. If the file does not exist, an error message will
+a pass-phrase. If the file does not exist, an error message will
 be printed and no action will be taken.
 .LP
 \fBpfstore -f /usr/local/etc/owampd.pfs -n testuser\fP
@@ -79,8 +79,8 @@ Deletes the identity \fItestuser\fR from the pfsfile.
 If the file does not exist, an error message will be printed and no action will be taken.
 .LP
 .SH SECURITY CONSIDERATIONS
-The pass-phrases in the \fIpfsfile\fR are not encrypted in any way, they
-are simply hex encoded. The security
+The pass-phrases in the \fIpfsfile\fR are not encrypted in any way; they
+are simply hex-encoded. The security
 of these pass-phrases is completely dependent upon the security of the
 filesystem and the discretion of the system administrator.
 .SH RESTRICTIONS
@@ -89,7 +89,7 @@ filesystem and the discretion of the system administrator.
 owping(1), owampd(1), owampd(1)
 and the \%http://e2epi.internet2.edu/owamp web site.
 .SH ACKNOWLEDGMENTS
-This material is based in part on work supported by the National Science
-Foundation (NSF) under Grant No. ANI-0314723. Any opinions, findings and
+This material is based, in part, on work supported by the National Science
+Foundation (NSF) under Grant No. ANI-0314723. Any opinions, findings, and
 conclusions or recommendations expressed in this material are those of
 the author(s) and do not necessarily reflect the views of the NSF.
