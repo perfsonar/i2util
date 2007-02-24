@@ -28,6 +28,7 @@
 #       Options:
 use CGI;
 use CGI::Carp 'fatalsToBrowser';
+use File::Basename;
 
 $CGI::POST_MAX=1024 * 100;  # max 100K posts
 $CGI::DISABLE_UPLOADS = 1;  # no uploads
@@ -94,6 +95,10 @@ if(!-r $q->path_translated){
 	exit(1);
 }
 	
+# chdir so man '.so' includes will work.
+my $path = dirname($q->path_translated);
+chdir($path) || die "Can't cd to $path: $!\n";
+
 # use open to fork and exec man(1)
 open(MAN,"-|") or exec($ManExe, $q->path_translated);
 
