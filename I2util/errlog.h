@@ -52,7 +52,7 @@ BEGIN_C_DECLS
 /*
  * TODO: Verify that this is a portable constant to use for LOG_PERROR...
  */
-#ifndef HAVE_SYSLOG_PERROR
+#ifndef LOG_PERROR
 #define LOG_PERROR 0x20
 #endif
 

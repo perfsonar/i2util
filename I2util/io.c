@@ -19,7 +19,7 @@
 **	Description:	This file contains the private functions to
 **			to facilitate IO that the library needs to do.
 */
-#include <I2util/util.h>
+#include <I2util/utilP.h>
 
 #include <sys/types.h>
 #include <errno.h>

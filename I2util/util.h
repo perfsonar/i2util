@@ -24,20 +24,7 @@
 #ifndef	_I2_util_h_
 #define	_I2_util_h_
 
-#if        HAVE_CONFIG_H
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_NAME
-#undef PACKAGE_STRING
-#undef PACKAGE_TARNAME
-#undef PACKAGE_VERSION
-#include <I2util/config.h>
-#endif        /* HAVE_CONFIG_H */
-
 #include <inttypes.h>
-
-#ifndef	HAVE___ATTRIBUTE__
-#define	__attribute__(x)
-#endif
 
 typedef intptr_t    I2Boolean;
 
@@ -67,9 +54,6 @@ typedef intptr_t    I2Boolean;
 
 #include <I2util/Pthread.h>
 #include <I2util/errlog.h>
-#if NOT
-#include <I2util/options.h>
-#endif
 #include <I2util/table.h>
 #include <I2util/random.h>
 #include <I2util/io.h>

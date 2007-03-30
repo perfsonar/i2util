@@ -36,17 +36,6 @@
 #define	I2RAND_DEV	1
 #define	I2RAND_EGD	2
 
-/*
- * This macro should be set by the autoconf-<I2util/config.h> stuff.
- *
- * (This macro will be used to set the "data" of I2RandomSourceInit if
- * type is I2RAND_DEV.)
- *
- */
-#ifndef	I2_RANDOMDEV_PATH
-#error	"I2RandomBytes currently requires kernel support (EGD support forthcoming)"
-#endif
-
 BEGIN_C_DECLS
 
 typedef struct I2RandomSourceRec	*I2RandomSource;

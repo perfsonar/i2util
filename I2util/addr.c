@@ -20,7 +20,7 @@
  **                 Address abstraction API. (Everybody needs one, right?)
  */
 
-#include <I2util/util.h>
+#include <I2util/utilP.h>
 
 #include <stdlib.h>
 #include <unistd.h>

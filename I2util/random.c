@@ -19,7 +19,7 @@
  *
  *	Description:	
  */
-#include <I2util/util.h>
+#include <I2util/utilP.h>
 
 #include <stdlib.h>
 #include <sys/types.h>

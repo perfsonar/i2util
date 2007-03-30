@@ -37,7 +37,7 @@
  *		in commercial licensing should contact the copyright holder.
  *
  */
-#include <I2util/util.h>
+#include <I2util/utilP.h>
 
 #include <stdio.h>
 #include <stdlib.h>

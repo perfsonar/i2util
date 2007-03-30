@@ -25,13 +25,6 @@
 #ifndef    I2ADDR_H
 #define    I2ADDR_H
 #include <I2util/util.h>
-/*
- * Portablility sanity checkes.
- */
-#if    !HAVE_GETADDRINFO || !HAVE_SOCKET
-#error    Missing needed networking capabilities! (getaddrinfo and socket)
-#endif
-
 #include <sys/types.h>
 #include <sys/socket.h>
 
