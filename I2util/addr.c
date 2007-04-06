@@ -1051,7 +1051,7 @@ I2AddrSAddr(
         len = saddr_len;
     }
 
-    if(addr->saddr){
+    if(addr && addr->saddr){
         *len = addr->saddrlen;
         return addr->saddr;
     }
@@ -1179,6 +1179,10 @@ struct addrinfo
     char            *port=NULL;
     int             gai;
 
+    if(!addr){
+        return NULL;
+    }
+
     if(addr->ai)
         return addr->ai;
 
@@ -1252,9 +1256,7 @@ I2AddrSockLen(
         I2Addr    addr
         )
 {
-    assert(addr);
-    
-    if(addr->saddr){
+    if(addr && addr->saddr){
         return addr->saddrlen;
     }
     return 0;
