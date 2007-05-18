@@ -39,7 +39,8 @@ struct I2AddrRec{
     I2Boolean       node_set;
     char            node[NI_MAXHOST+1];
 
-    uint16_t        port_set;
+    I2Boolean       port_set;
+    uint16_t        port_value;
     char            port[NI_MAXSERV+1];
 
     I2Boolean       ai_free;    /* free ai list directly...*/
@@ -129,7 +130,7 @@ _I2AddrAlloc(
 
     addr->node_set = 0;
     strncpy(addr->node,"unknown",sizeof(addr->node));
-    addr->port_set = 0;
+    addr->port_set = addr->port_value = 0;
     strncpy(addr->port,"unknown",sizeof(addr->port));
     addr->ai_free = 0;
     addr->ai = NULL;
@@ -220,7 +221,8 @@ I2AddrCopy(
 
     if(from->port_set){
         strncpy(to->port,from->port,sizeof(to->port));
-        to->port_set = from->port_set;
+        to->port_value = from->port_value;
+        to->port_set = True;
     }
 
     aip = &to->ai;
@@ -317,10 +319,11 @@ NOPORT:
 
         tint = strtol(pptr,&tstr,10);
         if(!tstr || (pptr == tstr) || (tint < 0) || (tint > (int)0xffff)){
-            addr->port_set = 0;
+            addr->port_set = addr->port_value = 0;
         }
         else{
-            addr->port_set = (uint16_t)tint;
+            addr->port_set = True;
+            addr->port_value = (uint16_t)tint;
             strncpy(addr->port,pptr,sizeof(addr->port));
         }
     }
@@ -383,7 +386,8 @@ _I2AddrSetNodePort(
         strncpy(addr->port,"unnamed",sizeof(addr->port));
 
         addr->node_set = True;
-        addr->port_set = 0;
+        addr->port_set = True;
+        addr->port_value = 0;
     }
     else{
         if( (gai = getnameinfo(addr->saddr,addr->saddrlen,
@@ -403,10 +407,11 @@ _I2AddrSetNodePort(
             tstr = NULL;
             tint = strtol(pptr,&tstr,10);
             if(!tstr || (pptr == tstr) || (tint < 0) || (tint > (int)0xffff)){
-                addr->port_set = 0;
+                addr->port_set = addr->port_value = 0;
             }
             else{
-                addr->port_set = (uint16_t)tint;
+                addr->port_set = True;
+                addr->port_value = (uint16_t)tint;
             }
         }
     }
@@ -660,7 +665,7 @@ I2AddrSetSAddr(
      * reset node/port based on new saddr
      */
     addr->node_set = False;
-    addr->port_set = 0;
+    addr->port_set = addr->port_value = 0;
     _I2AddrSetNodePort(addr);
 
     return True;
@@ -768,7 +773,8 @@ I2AddrSetPort(
     }
 
     snprintf(addr->port,sizeof(addr->port),"%u",port);
-    addr->port_set = port;
+    addr->port_set = True;
+    addr->port_value = port;
 
     return True;
 }
@@ -795,7 +801,7 @@ I2AddrPort(
     if(!addr)
         return 0;
 
-    return addr->port_set;
+    return addr->port_value;
 }
 
 /*
