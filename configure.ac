@@ -27,6 +27,7 @@
 #
 #	Options:
 # Process this file with autoconf to produce a configure script.
+
 AC_INIT(I2util, 1.0, owamp-bugs@internet2.edu)
 AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE(I2util, 1.0, [no-define])
@@ -88,5 +89,5 @@ AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([memset strdup strerror strtol strtoul socket getaddrinfo])
 
 AC_SUBST(ac_aux_dir)
-AC_OUTPUT([Makefile I2util/Makefile aespasswd/Makefile pfstore/Makefile doc/Makefile test/Makefile],
+AC_OUTPUT([Makefile I2util/Makefile aespasswd/Makefile pfstore/Makefile doc/Makefile test/Makefile I2util.spec],
 	[test -z "$CONFIG_HEADERS" || echo timestamp > I2util/stamp-h.in])
