@@ -1159,6 +1159,62 @@ bail:
 }
 
 /*
+ * Function:    I2AddrNodeServName
+ *
+ * Description:    
+ *              This function gets a char* complete IP:port name for a given
+ *              I2Addr. The len parameter is an in/out parameter.
+ *
+ * In Args:    
+ *
+ * Out Args:    
+ *
+ * Scope:    
+ * Returns:    
+ * Side Effect:    
+ */
+char *
+I2AddrNodeServName(
+        I2Addr addr,
+        char    *buf,
+        size_t  *len
+        )
+{
+    size_t  newlen;
+
+    assert(buf);
+    assert(len);
+    assert(*len > 0);
+
+    if(!addr){
+        goto bail;
+    }
+
+    if(!addr->node_set || !addr->port_set){
+        _I2AddrSetNodePort(addr);
+    }
+
+    if(!addr->node_set || !addr->port_set){
+        goto bail;
+    }
+
+    newlen = strlen("[]:") + strlen(addr->node) + strlen(addr->port);
+    *len = MIN(*len,newlen);
+
+    strncpy(buf,"[",*len);
+    strncat(buf,addr->node,*len);
+    strncat(buf,"]:",*len);
+    strncat(buf,addr->port,*len);
+
+    return buf;
+
+bail:
+    *len = 0;
+    buf[0] = '\0';
+    return NULL;
+}
+
+/*
  * Function:    I2AddrAddrInfo
  *
  * Description:    

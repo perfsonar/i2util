@@ -182,6 +182,13 @@ I2AddrServName(
         size_t  *len    /* in/out parameter for buf len */
         );
 
+extern char *
+I2AddrNodeServName(
+        I2Addr  addr,
+        char    *buf,
+        size_t  *len
+        );
+
 /*
  * return FD for given I2Addr or -1 if it doesn't refer to a socket yet.
  */
