@@ -1,0 +1,17 @@
+getaddrinfo - conditionally compile 
+
+Ah, ok. It is not v6 per-say, but the RFC 2553 advanced socket-api stuff this is the issue.
+
+So, a quick google leads me to believe there are a few reasonable paths forward:
+
+* See if early adoption of IPv6 cygwin code is reasonable:
+
+http://win6.jp/Cygwin/index.html
+
+* Pull over another getaddrinfo implementation and conditionally compile for environments that don't have getaddrinfo. (autoconf pain.)
+    - gnulib (lots here - probably too much and I'm not crazy about license)
+    - http://www.sra.co.jp/people/m-kasahr/getaddrinfo/ (needs testing)
+--------------------------------------------------------------------------------
+
+Autoconf: Update AC_CHECK_HEADERS (see bwctl)
+--------------------------------------------------------------------------------
