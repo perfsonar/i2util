@@ -1,0 +1,18 @@
+To make a new release:
+
+    1) Edit configure.ac and modify the version number in the macros.
+    2) Edit doc/index.html and modify the version number
+    3) check-in all changes
+    4) svn log > CHANGELOG
+    4.5) Review CHANGELOG and edit doc/milestones.html
+    4.6) check-in doc/milestones
+    4.7) svn log > CHANGELOG
+    5) check-in CHANGELOG
+    6) tag release ex. "svn cp trunk ../branches/"
+    7) make dist
+    8) copy tarball to dist area of website
+    9) copy tarball to /usr/src/redhat/SOURCES
+       rpmbuild -ba with .spec file 
+       copy rpm file to dist area of website
+    9) update webpages
+
