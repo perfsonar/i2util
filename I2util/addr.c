@@ -500,14 +500,14 @@ I2AddrBySAddr(
     if(!(addr = _I2AddrAlloc(eh)))
         return NULL;
 
-    if(!(ai = malloc(sizeof(struct addrinfo)))){
+    if(!(ai = calloc(1,sizeof(struct addrinfo)))){
         I2ErrLogT(addr->eh,LOG_ERR,I2EUNKNOWN,
                 "malloc():%s",strerror(errno));
         (void)I2AddrFree(addr);
         return NULL;
     }
 
-    if(!(addr->saddr = malloc(saddrlen))){
+    if(!(addr->saddr = calloc(1,saddrlen))){
         I2ErrLogT(addr->eh,LOG_ERR,I2EUNKNOWN,
                 "malloc():%s",strerror(errno));
         (void)I2AddrFree(addr);

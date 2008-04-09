@@ -58,6 +58,8 @@ I2SockAddrToSockUnion(
     assert(sau_mem);
     assert(sa);
 
+    memset(sau_mem,0,sizeof(I2SockUnion));
+
     switch(sa->sa_family){
 #ifdef	AF_INET6
         case AF_INET6:
