@@ -36,6 +36,7 @@
  *		in commercial licensing should contact the copyright holder.
  */
 #include <I2util/utilP.h>
+#include <I2util/mach_dep.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,7 +44,9 @@
 #include <string.h>
 #include <errno.h>
 
+#if !defined(HAVE_DECL_SYS_NERR) || !HAVE_DECL_SYS_NERR
 static I2ThreadMutex_T MyMutex = I2PTHREAD_MUTEX_INITIALIZER;
+#endif
 
 /*
 ** Function:	I2GetSysErrList()
@@ -68,7 +71,7 @@ static I2ThreadMutex_T MyMutex = I2PTHREAD_MUTEX_INITIALIZER;
 **
 ** Side Effects:
 */
-char	**I2GetSysErrList(
+const char	* const *I2GetSysErrList(
 	int	*count
 ) {
 	/*
@@ -79,11 +82,11 @@ char	**I2GetSysErrList(
 	 *	NUM_ERRORS should be the "largest" errno number for all the
 	 *	systems we care about.
 	 */
-#ifndef	SYSNERRWORKS
+#if !defined(HAVE_DECL_SYS_NERR) || !HAVE_DECL_SYS_NERR
 #define	NUM_ERRORS	152
 	const int	sys_nerr = NUM_ERRORS;
 	static char	*sys_errlist[NUM_ERRORS];
-	static int 		first = 1;
+	static int 	first = 1;
 
 	int		i;
 

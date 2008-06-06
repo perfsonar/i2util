@@ -61,7 +61,7 @@ I2CopyFile(
         I2ErrHandle eh,
         int         tofd,
         int         fromfd,
-        off_t       len
+        size_t      len
         );
 END_C_DECLS
 #endif	/*	_i2_io_h_	*/

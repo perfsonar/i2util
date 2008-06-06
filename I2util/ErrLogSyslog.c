@@ -372,7 +372,7 @@ void	I2ErrLogSyslog(
 	bufptr = buf;
 
 	if(*data == NULL && sa->ident){
-		openlog((char *) sa->ident, sa->logopt, sa->facility);
+		openlog(sa->ident, sa->logopt, sa->facility);
 		*data = (void *) 1;
 	}
 
@@ -401,12 +401,12 @@ void	I2ErrLogSyslog(
 	}
 
 	if(sa->line_info & I2RTIME){
-		time_t		clock;
+		time_t		curr;
 		struct tm	*tm;
 		char		ftime[64];
 
-		time(&clock);
-		tm = localtime(&clock);
+		time(&curr);
+		tm = localtime(&curr);
 		if( strftime(ftime,sizeof(ftime),sa->tformat,tm)){
 			rc = snprintf(bufptr,size,"RTIME=%s, ",ftime);
 			bufptr += rc;

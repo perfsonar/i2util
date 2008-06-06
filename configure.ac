@@ -57,6 +57,7 @@ AC_PROG_RANLIB
 AC_CANONICAL_HOST
 AC_DEFINE(_GNU_SOURCE, 1, "Use glibc features.")
 AC_DEFINE(_LARGEFILE_SOURCE, 1, "Use largefile api.")
+AM_CONDITIONAL(I2THREADS_ENABLE, 0)
 
 case $host in
 	*-*-solaris*)
@@ -84,6 +85,9 @@ I2_C_SYSLOG_PERROR
 AC_CHECK_MEMBERS([struct sockaddr.sa_len], , ,
                  [#include <sys/types.h>
                   #include <sys/socket.h>])
+AC_CHECK_DECLS([sys_nerr, sys_errlist], , ,
+               [#include <stdlib.h>
+                #include <stdio.h>])
 
 # Checks for library functions.
 AC_FUNC_MALLOC

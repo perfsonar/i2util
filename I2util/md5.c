@@ -284,10 +284,10 @@ I2MD5Update(
 	unsigned int		inputLen
 )
 {
-	unsigned int i, index, partLen;
+	unsigned int i, j, partLen;
 
 	/* Compute number of bytes mod 64 */
-	index = (unsigned int)((context->count[0] >> 3) & 0x3F);
+	j = (unsigned int)((context->count[0] >> 3) & 0x3F);
 
 	/* Update number of bits */
 	if ((context->count[0] += ((uint32_t)inputLen << 3))
@@ -295,24 +295,24 @@ I2MD5Update(
 		context->count[1]++;
 	context->count[1] += ((uint32_t)inputLen >> 29);
 
-	partLen = 64 - index;
+	partLen = 64 - j;
 
 	/* Transform as many times as possible. */
 	if (inputLen >= partLen) {
-		memcpy((void *)&context->buffer[index], (const void *)input,
+		memcpy((void *)&context->buffer[j], (const void *)input,
 		    partLen);
 		I2MD5Transform (context->state, context->buffer);
 
 		for (i = partLen; i + 63 < inputLen; i += 64)
 			I2MD5Transform (context->state, &input[i]);
 
-		index = 0;
+		j = 0;
 	}
 	else
 		i = 0;
 
 	/* Buffer remaining input */
-	memcpy ((void *)&context->buffer[index], (const void *)&input[i],
+	memcpy ((void *)&context->buffer[j], (const void *)&input[i],
 	    inputLen-i);
 }
 
@@ -326,14 +326,14 @@ I2MD5Pad(
 )
 {
 	unsigned char bits[8];
-	unsigned int index, padLen;
+	unsigned int i, padLen;
 
 	/* Save number of bits */
 	Encode (bits, context->count, 8);
 
 	/* Pad out to 56 mod 64. */
-	index = (unsigned int)((context->count[0] >> 3) & 0x3f);
-	padLen = (index < 56) ? (56 - index) : (120 - index);
+	i = (unsigned int)((context->count[0] >> 3) & 0x3f);
+	padLen = (i < 56) ? (56 - i) : (120 - i);
 	I2MD5Update (context, PADDING, padLen);
 
 	/* Append length (before padding) */

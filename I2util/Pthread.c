@@ -155,7 +155,7 @@ int	I2ThreadCondWait(
  * Hopefully we don't need these - but if macro versions don't work
  * they are still here...
  */
-#if	NOT
+#if	defined(NOT) && NOT
 int I2ThreadCreate(
 	I2Thread_T	*thread,
 	I2ThreadAttr_T	*attr,

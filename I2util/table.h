@@ -54,7 +54,7 @@ typedef I2TableDataSizeT (*I2HashFunc)(
  */
 extern I2Table I2HashInit(
 	I2ErrHandle		eh,
-	int			hint,	/* guess on number of elements */
+	size_t			hint,	/* guess on number of elements */
 	I2HashCmpFunc		cmp,
 	I2HashFunc		hash
 	);

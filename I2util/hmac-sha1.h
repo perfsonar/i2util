@@ -34,7 +34,9 @@ BEGIN_C_DECLS
 struct I2HMACSha1ContextRec;
 typedef struct I2HMACSha1ContextRec *I2HMACSha1Context;
 
-extern I2HMACSha1Context I2HMACSha1Alloc();
+extern I2HMACSha1Context I2HMACSha1Alloc(
+        I2ErrHandle eh
+        );
 extern void I2HMACSha1Free(
         I2HMACSha1Context   hmac
         );

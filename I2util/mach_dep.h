@@ -39,7 +39,7 @@
 #define	_i2_mach_dep_h_
 
 extern
-char	**I2GetSysErrList(
+const char	* const *I2GetSysErrList(
 	int	*count
 	);
 

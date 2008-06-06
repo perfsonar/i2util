@@ -224,36 +224,44 @@ I2CopyFile(
         I2ErrHandle eh,
         int         tofd,
         int         fromfd,
-        off_t       len
+        size_t      len
         )
 {
     struct stat sbuf;
     int         rc;
     void        *fptr,*tptr;
+    size_t      sbufsize;
 
     if((rc = fstat(fromfd,&sbuf)) != 0){
         I2ErrLog(eh,"I2CopyFile: fstat: %M, status of from file");
         return rc;
     }
 
-    if(len == 0){
-        len = sbuf.st_size;
-    }
-    else{
-        len = MIN(len,sbuf.st_size);
+    sbufsize = (size_t)sbuf.st_size;
+    if(sbuf.st_size != (off_t)sbufsize){
+        I2ErrLog(eh,"I2CopyFile: filesystem blocksize too large for mmap");
+        return -1;
     }
 
-    if((rc = ftruncate(tofd,len)) != 0){
+    if(len == 0){
+        len = sbufsize;
+    }
+    else{
+        len = MIN(len,sbufsize);
+    }
+
+    if((rc = ftruncate(tofd,(off_t)len)) != 0){
         I2ErrLog(eh,"I2CopyFile: ftrunctate(%llu): %M, sizing to file",len);
         return rc;
     }
 
-    if(!(fptr = mmap(NULL,len,PROT_READ|PROT_WRITE,MAP_SHARED,fromfd,0))){
+    if(!(fptr = mmap(NULL,len,PROT_READ|PROT_WRITE,MAP_SHARED,fromfd,
+                    (off_t)0))){
         I2ErrLog(eh,"I2CopyFile: mmap(from file): %M");
         return -1;
     }
 
-    if(!(tptr = mmap(NULL,len,PROT_READ|PROT_WRITE,MAP_SHARED,tofd,0))){
+    if(!(tptr = mmap(NULL,len,PROT_READ|PROT_WRITE,MAP_SHARED,tofd,(off_t)0))){
         I2ErrLog(eh,"I2CopyFile: mmap(to file): %M");
         return -1;
     }

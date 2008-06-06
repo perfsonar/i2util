@@ -18,9 +18,10 @@
  *
  *	Description:	
  */
-#include <I2util/utilP.h>
-
 #include <stdlib.h>
+#include <I2util/utilP.h>
+#include <I2util/conf.h>
+
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
@@ -830,24 +831,26 @@ I2StrToNum(
 			return -1;
 		}
 
-		switch (tolower(limstr[silen])){
-		case 'e':
-			mult *= 1000;	/* 1e18 */
-		case 'p':
-			mult *= 1000;	/* 1e15 */
-		case 't':
-			mult *= 1000;	/* 1e12 */
-		case 'g':
-			mult *= 1000;	/* 1e9 */
-		case 'm':
-			mult *= 1000;	/* 1e6 */
-		case 'k':
-			mult *= 1000;	/* 1e3 */
-			break;
-		default:
-			return -1;
-			/* UNREACHED */
-		}
+                switch (tolower(limstr[silen])){
+                    case 'z':
+                        mult *= 1000;   /* 1e21 */
+                    case 'e':
+                        mult *= 1000;	/* 1e18 */
+                    case 'p':
+                        mult *= 1000;	/* 1e15 */
+                    case 't':
+                        mult *= 1000;	/* 1e12 */
+                    case 'g':
+                        mult *= 1000;	/* 1e9 */
+                    case 'm':
+                        mult *= 1000;	/* 1e6 */
+                    case 'k':
+                        mult *= 1000;	/* 1e3 */
+                        break;
+                    default:
+                        return -1;
+                        /* UNREACHED */
+                }
 		limstr[silen] = '\0';
 	}
 	ret = strtoull(limstr, &endptr, 10);
@@ -862,7 +865,7 @@ I2StrToNum(
 
 	/* Check for overflow. */
 	*limnum = ret * mult;
-	return (*limnum < ret || *limnum < mult)? (-1) : 0;
+	return ((*limnum)/mult != ret)? (-1) : 0;
 }
 
 /*
@@ -879,7 +882,7 @@ I2StrToNum(
  * Side Effect:	
  */
 int
-I2Str2Byte(
+I2StrToByte(
 		I2numT	*limnum,
 		char	*limstr
 		)
@@ -903,24 +906,26 @@ I2Str2Byte(
 			return -1;
 		}
 
-		switch (tolower(limstr[silen])){
-		case 'e':
-			mult <<= 10;
-		case 'p':
-			mult <<= 10;
-		case 't':
-			mult <<= 10;
-		case 'g':
-			mult <<= 10;
-		case 'm':
-			mult <<= 10;
-		case 'k':
-			mult <<= 10;
-			break;
-		default:
-			return -1;
-			/* UNREACHED */
-		}
+                switch (tolower(limstr[silen])){
+                    case 'z':
+                        mult <<= 10;
+                    case 'e':
+                        mult <<= 10;
+                    case 'p':
+                        mult <<= 10;
+                    case 't':
+                        mult <<= 10;
+                    case 'g':
+                        mult <<= 10;
+                    case 'm':
+                        mult <<= 10;
+                    case 'k':
+                        mult <<= 10;
+                        break;
+                    default:
+                        return -1;
+                        /* UNREACHED */
+                }
 		limstr[silen] = '\0';
 	}
 	ret = strtoull(limstr, &endptr, 10);
@@ -935,5 +940,5 @@ I2Str2Byte(
 
 	/* Check for overflow. */
 	*limnum = ret * mult;
-	return (*limnum < ret || *limnum < mult)? (-1) : 0;
+	return ((*limnum/mult) != ret)? (-1) : 0;
 }
