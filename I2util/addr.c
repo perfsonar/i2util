@@ -1390,3 +1390,33 @@ I2ntohll(
 
     return h64;
 }
+
+/*
+ * Function:    I2AddrIsLoopback
+ *
+ * Description:    
+ *     Check whether an address is for a loopback interface.
+ *
+ * In Args:    
+ *
+ * Out Args:    
+ *
+ * Scope:    
+ * Returns:    
+ *     1 if true, 0 if false
+ * Side Effect:    
+ */
+int
+I2AddrIsLoopback(
+        I2Addr    addr
+        )
+{
+    struct sockaddr *saddr;
+    socklen_t       saddrlen;
+
+    if(!(saddr = I2AddrSAddr(addr,&saddrlen))){
+        return 0;
+    }
+
+    return I2SockAddrIsLoopback(saddr, saddrlen);
+}
