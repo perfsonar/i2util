@@ -20,13 +20,12 @@
 
 dist_man1_MANS = aespasswd.man pfstore.man
 
-# TODO
-# Build html versions of man pages and include them in dist?
-# SUFFIXES = .man .man.html
-# .man.man.html:
-#	man2html -blah_args 
-# dist-hook:
-SUFFIXES = .man .man.html
+SUFFIXES = .man
 
+if HAVE_MAN2HTML
+SUFFIXES += .man.html
 .man.man.html:
-	cp $< $@
+	man2html -r $< | grep -v Content-type | sed -e 's/..\/man[0-9]\///g' | sed -e 's/\.[0-9]\.html/.man.html/g' > $@
+
+EXTRA_DIST = aespasswd.man.html pfstore.man.html
+endif

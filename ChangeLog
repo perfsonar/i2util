@@ -1,0 +1,1333 @@
+------------------------------------------------------------------------
+r203 | aaron | 2008-12-17 15:25:02 -0500 (Wed, 17 Dec 2008) | 3 lines
+
+Add a convenience function I2AddrIsLoopback to check whether a given I2Addr has a loopback address.
+
+
+------------------------------------------------------------------------
+r202 | boote | 2008-06-06 17:37:06 -0400 (Fri, 06 Jun 2008) | 4 lines
+
+Checked much more strict compile flags and removed nearly all compiler
+warnings. (on OS X)
+
+
+------------------------------------------------------------------------
+r201 | boote | 2008-04-20 22:06:51 -0400 (Sun, 20 Apr 2008) | 3 lines
+
+Now the rest of it...
+
+
+------------------------------------------------------------------------
+r200 | boote | 2008-04-20 10:10:09 -0400 (Sun, 20 Apr 2008) | 5 lines
+
+Preparing for a release - will keep this under branches while messing with
+autoconf to try and get a reasonable 'static' compile out of it - then
+will cp to tags upon release.
+
+
+------------------------------------------------------------------------
+r199 | boote | 2008-04-09 12:13:07 -0400 (Wed, 09 Apr 2008) | 4 lines
+
+adding some initialization of memory into I2addr stuff.
+
+jeff
+
+------------------------------------------------------------------------
+r198 | boote | 2008-04-04 02:17:55 -0400 (Fri, 04 Apr 2008) | 5 lines
+
+Removed complicated rpm build rules - created a todo list for each release.
+
+Updated version numbers.
+
+
+------------------------------------------------------------------------
+r197 | boote | 2008-04-02 18:08:06 -0400 (Wed, 02 Apr 2008) | 3 lines
+
+Adding a macro for building rpm's. Might as well see if it works...
+
+
+------------------------------------------------------------------------
+r196 | boote | 2008-03-15 16:25:42 -0400 (Sat, 15 Mar 2008) | 3 lines
+
+Adding todo list.
+
+
+------------------------------------------------------------------------
+r195 | boote | 2008-02-22 23:49:59 -0500 (Fri, 22 Feb 2008) | 3 lines
+
+Adding convienence function to print "[host]:port" for an address.
+
+
+------------------------------------------------------------------------
+r194 | aaron | 2008-01-14 11:33:13 -0500 (Mon, 14 Jan 2008) | 3 lines
+
+Add a spec file
+
+
+------------------------------------------------------------------------
+r193 | boote | 2007-05-17 21:26:14 -0400 (Thu, 17 May 2007) | 5 lines
+
+Modified to use another variable to determine if the port is set for
+the I2Addr instead of using the port value. (This was required for
+unix domain sockets...)
+
+
+------------------------------------------------------------------------
+r192 | boote | 2007-04-06 03:36:53 -0400 (Fri, 06 Apr 2007) | 3 lines
+
+Making address functions accept null addr passed in.
+
+
+------------------------------------------------------------------------
+r191 | boote | 2007-03-30 19:26:38 -0400 (Fri, 30 Mar 2007) | 7 lines
+
+Modifications needed to make I2util a stand-alone installable library.
+
+(First step to creating rpm's and packages for bwctl/owamp.)
+
+jeff
+
+
+------------------------------------------------------------------------
+r186 | boote | 2007-02-24 07:37:33 -0500 (Sat, 24 Feb 2007) | 5 lines
+
+chdir to directory of man-page. (This is not generally a good solution,
+but works for our website for now. Eventually this will need to change.
+
+Dealing with 'installed' manpages is probably the right way to fix this.
+
+------------------------------------------------------------------------
+r184 | boote | 2007-02-01 14:51:00 -0500 (Thu, 01 Feb 2007) | 2 lines
+
+sevett edits
+
+------------------------------------------------------------------------
+r183 | boote | 2007-01-13 16:42:48 -0500 (Sat, 13 Jan 2007) | 4 lines
+
+Merging changes from SC06 into 'head'.
+
+jeff
+
+------------------------------------------------------------------------
+r181 | boote | 2006-12-19 17:31:35 -0500 (Tue, 19 Dec 2006) | 9 lines
+
+Makefile.am:
+    Add sha1P.h into distribution. (Now test apps can run.)
+
+api.c:
+    Fixed bug in relative wait time variable used to call select(2).
+    (Was using the wrong function to convert from owptimestamp to
+    timeval. This caused it to be off by unix_epoch.) Did not
+    cause problems in normal operation.
+
+------------------------------------------------------------------------
+r177 | boote | 2006-11-08 02:47:59 -0500 (Wed, 08 Nov 2006) | 2 lines
+
+solaris port: int types, header file reordering
+
+------------------------------------------------------------------------
+r176 | boote | 2006-11-07 00:54:55 -0500 (Tue, 07 Nov 2006) | 2 lines
+
+Merging RFC version into HEAD.
+
+------------------------------------------------------------------------
+r167 | boote | 2006-10-20 17:46:29 -0400 (Fri, 20 Oct 2006) | 9 lines
+
+Adding a utility program for managing a pass-phrase store.
+
+The store is not encrypted in any way, although the passphrases are saved
+in hex. (This is primarily to make it easier for parsing, and dealing with
+possible different character sets - if you can enter the bytes at a
+prompt somehow, this will be able to save it.)
+
+jeff
+
+------------------------------------------------------------------------
+r166 | boote | 2006-10-17 01:19:35 -0400 (Tue, 17 Oct 2006) | 4 lines
+
+Better comment.
+
+jeff
+
+------------------------------------------------------------------------
+r165 | boote | 2006-10-17 01:17:52 -0400 (Tue, 17 Oct 2006) | 5 lines
+
+Revert most of pbkdf2 code back to previous version - and fix the single index
+that was off. (It was only the 'index' of the last incomplete block
+that was wrong before - there was no reason to switch to base-1 array
+indexing to fix it.)
+
+------------------------------------------------------------------------
+r164 | boote | 2006-10-16 21:21:02 -0400 (Mon, 16 Oct 2006) | 4 lines
+
+Adding pbkdf2 test appliation for RFC 3962 test vectors.
+
+jeff
+
+------------------------------------------------------------------------
+r163 | boote | 2006-10-16 21:19:47 -0400 (Mon, 16 Oct 2006) | 5 lines
+
+Fixed a bug in the pbkdf2() impl. Did not work correctly if the
+derived key length was shorter than the prf-hlen.
+
+jeff
+
+------------------------------------------------------------------------
+r162 | boote | 2006-10-13 22:34:43 -0400 (Fri, 13 Oct 2006) | 8 lines
+
+Adding a pbkdf2 function (and test driver application).
+
+I have not been able to find test vectors for this function, so I don't
+have huge confidence that I wrote it completely correct yet. (I wrote
+it right from the RFC so I would not have to deal with licensing junk.)
+
+jeff
+
+------------------------------------------------------------------------
+r161 | boote | 2006-10-12 06:41:34 -0400 (Thu, 12 Oct 2006) | 2 lines
+
+Forgot to add sha1P.h...
+
+------------------------------------------------------------------------
+r160 | boote | 2006-10-11 03:22:28 -0400 (Wed, 11 Oct 2006) | 4 lines
+
+add program to run test vectors.
+
+jeff
+
+------------------------------------------------------------------------
+r159 | boote | 2006-10-10 19:03:02 -0400 (Tue, 10 Oct 2006) | 4 lines
+
+hmac-sha1 implementation and test vectors.
+
+jeff
+
+------------------------------------------------------------------------
+r158 | boote | 2006-10-03 15:05:47 -0400 (Tue, 03 Oct 2006) | 4 lines
+
+Just adding remaining test vectors into sha1 test application.
+
+jeff
+
+------------------------------------------------------------------------
+r157 | boote | 2006-09-29 21:27:34 -0400 (Fri, 29 Sep 2006) | 4 lines
+
+Adding an sha1 implementation and compliance test to I2util.
+
+jeff
+
+------------------------------------------------------------------------
+r156 | boote | 2006-09-16 02:11:59 -0400 (Sat, 16 Sep 2006) | 2 lines
+
+Remove non-union type punning.
+
+------------------------------------------------------------------------
+r155 | boote | 2006-09-13 13:39:17 -0400 (Wed, 13 Sep 2006) | 6 lines
+
+Removing 'options' stuff. getopt is easier...
+
+Added comments for areas of possible type punning problems.
+
+jeff
+
+------------------------------------------------------------------------
+r154 | boote | 2006-09-12 13:52:48 -0400 (Tue, 12 Sep 2006) | 4 lines
+
+Merge jslawins branch into HEAD. (with some minor cleanup due to conflicts.)
+
+jeff
+
+------------------------------------------------------------------------
+r153 | boote | 2006-07-25 19:53:36 -0400 (Tue, 25 Jul 2006) | 4 lines
+
+Updating Boolean type to be intptr_t so get/set funcitions work better.
+
+jeff
+
+------------------------------------------------------------------------
+r152 | boote | 2006-07-25 18:02:13 -0400 (Tue, 25 Jul 2006) | 13 lines
+
+addr.c:
+    Modifed the 64-bit byte swapping code so it does not violate
+    the strict alias rules for gcc's optimizing compiler.
+    (Now, instead of casting a uint8_t * into the uint64_t I do
+    a memcpy and set the memory back into the uint64_t. How is that
+    for un-optimizing...)
+
+endpoint.c:
+    Corrected a bug in the tempfile creation. (Failed permissions were
+    not being detected correctly.)
+
+jeff
+
+------------------------------------------------------------------------
+r149 | boote | 2006-06-19 10:03:19 -0400 (Mon, 19 Jun 2006) | 5 lines
+
+Using -j to update saddr.c - perhaps that will make it easier for
+jslawins to back-merge...
+
+jeff
+
+------------------------------------------------------------------------
+r148 | boote | 2006-06-19 10:01:41 -0400 (Mon, 19 Jun 2006) | 4 lines
+
+Accepting I2SockAddrLen() from jslawins branch into head.
+
+jeff
+
+------------------------------------------------------------------------
+r147 | boote | 2006-06-19 09:56:27 -0400 (Mon, 19 Jun 2006) | 4 lines
+
+pulling jslawins fix into head. (thanks)
+
+jeff
+
+------------------------------------------------------------------------
+r141 | boote | 2006-06-07 23:53:12 -0400 (Wed, 07 Jun 2006) | 2 lines
+
+typo.
+
+------------------------------------------------------------------------
+r140 | boote | 2006-06-07 19:25:31 -0400 (Wed, 07 Jun 2006) | 4 lines
+
+Incorporate patch from (jeremia@poczta.fm to fix I2SockAddrEqual).
+
+jeff
+
+------------------------------------------------------------------------
+r135 | boote | 2006-03-15 02:23:41 -0500 (Wed, 15 Mar 2006) | 6 lines
+
+Corrected header-file ordering so that the conf.h file gets included
+before system header files. This allows _LARGEFILE_SOURCE and other
+posix/STDC flags to be set more easily from autoconf macros.
+
+jeff
+
+------------------------------------------------------------------------
+r134 | boote | 2006-03-14 15:00:14 -0500 (Tue, 14 Mar 2006) | 17 lines
+
+Mostly corrections for 64-bit FreeBSD. (plus one bug fix in endpoint.c)
+
+io.c
+    adding include of <string.h>
+
+endpoint.c
+    Fixing buf for skip record allocation. (had MIN where I should have had MAX)
+    Changing type for 'waitfor' variable. - needed for 64-bit.
+
+fts.c
+    casting to remove warning on 64-bit
+
+owampd.c,owampdP.h,owping.c,owpingP.h
+    change type for 'waitfor'
+
+jeff
+
+------------------------------------------------------------------------
+r133 | boote | 2006-03-13 16:17:37 -0500 (Mon, 13 Mar 2006) | 14 lines
+
+I2util:
+    Created utility function to copy files by fd. (Uses mmap/memcpy so
+    entire copy is in kernel space.)
+
+owamp/*:
+    changed post-session processing to use two files if needed to
+    remove records from the datafile. (section 3.8 of owamp draft-14)
+
+powstream:
+    Modified to use mmap utility function. (used to use a local function
+    here - bascially moved it to I2util.)
+
+jeff
+
+------------------------------------------------------------------------
+r132 | boote | 2006-03-09 20:04:28 -0500 (Thu, 09 Mar 2006) | 11 lines
+
+Changes to make owamp compile on solaris. (This was much more of
+a pain than I realized. Solaris does not support quite the same directory
+API (fts/dirent) as the other systems owamp has been ported to.)
+
+Thank goodness FreeBSD has reasonable licensing.
+
+(I'm going to go back to FreeBSD/Linux/OS X and make sure I didn't
+break anything compile-wise before I do any tests of the running code...)
+
+jeff
+
+------------------------------------------------------------------------
+r130 | boote | 2006-01-06 12:35:10 -0500 (Fri, 06 Jan 2006) | 2 lines
+
+add cast to remove compiler warning.
+
+------------------------------------------------------------------------
+r128 | boote | 2006-01-04 20:38:18 -0500 (Wed, 04 Jan 2006) | 6 lines
+
+Fixed bug with IPv4 mapped IPv6 addresses. (Internally, these are converted
+into v4 sockaddr structures so the policy matching code gets what it expects.
+The bug was simply that configure was not initializing the macro that
+tells the code that generates that structure that it should be setting
+the sa_len field.)
+
+------------------------------------------------------------------------
+r127 | boote | 2006-01-04 19:37:29 -0500 (Wed, 04 Jan 2006) | 10 lines
+
+byte swapping functions fail if gcc -O2 is used. I still have not been
+able to figure out why. (It is very hard to examine variables when
+optimization is on.) I have broken up the algorithm in to pieces hoping
+that this will fix it. (will test now)
+
+Oh, this also only seems to be a problem on native
+64 bit hosts. computers suck.
+
+jeff
+
+------------------------------------------------------------------------
+r124 | boote | 2005-12-23 14:16:00 -0500 (Fri, 23 Dec 2005) | 18 lines
+
+addr.c:
+    comment added
+
+owamp/doc:
+    Revised for new release. Added documentation for all new features.
+
+owamp/sapi.c:
+    Changed error messages to be more consistent.
+
+owamp/stats.c:
+    Modified summary output to report hops instead of TTL.
+
+owampd.c:
+    Modified usage message to include new options.
+
+owping.c:
+    Modified usage message to include new options.
+
+------------------------------------------------------------------------
+r123 | boote | 2005-12-22 23:43:45 -0500 (Thu, 22 Dec 2005) | 22 lines
+
+configure:
+    Bumping version
+    Adding library checks for math functions
+
+I2util:
+    configure: Adding checks for socket api calls
+    Adding I2Addr abstraction api from owamp (cleaned it up too).
+
+owamp:
+    Removed addr abstraction api.
+    Now using I2Addr abstraction api.
+        (localized almost all V4/V6 code into one file!)
+    Found a memory leak in the client FetchSession api.
+
+powstream:
+    Modified the signal handling code to properly process
+    the current session when a signal comes in. It catches
+    the signal - stops the session and saves as much of the
+    current session as it can based on the process outlined
+    in the spec. (Saving only packet records earlier than the
+    last actual received packet.)
+
+------------------------------------------------------------------------
+r122 | boote | 2005-12-09 19:44:41 -0500 (Fri, 09 Dec 2005) | 23 lines
+
+I2Util:
+    table.c (Modify a signed value to an unsigned one for num table elems.)
+
+doc:
+    owping - command-line option additions for statistics.
+        added -a multiple percentile options (modified from previous)
+        added -n units option
+        added -M (machine parsable output)
+
+owamp:
+    Added stats.c functions and headers.
+    endpoint.c - cleanup
+        Corrected recv session to output missing packet records
+        for early terminated tests.
+    owping.c - totally changed statistics. They now use a fixed
+        amount of memory, and are correct in many cases where
+        they were not before. Added 'jitter' as well.
+        added options.
+
+powstream still needs to be modified to use the statistics.
+
+jeff
+
+------------------------------------------------------------------------
+r121 | boote | 2005-09-29 21:06:31 -0400 (Thu, 29 Sep 2005) | 5 lines
+
+autoconf depricated macros I was using. Modified these to use new
+ones.
+
+jeff
+
+------------------------------------------------------------------------
+r118 | boote | 2005-08-28 17:08:31 -0400 (Sun, 28 Aug 2005) | 5 lines
+
+Added a some explanitory text that mentions the name of the bwctld.keys and
+owampd.keys file based on feedback from walter (auburn)
+
+jeff
+
+------------------------------------------------------------------------
+r117 | boote | 2005-07-17 02:55:29 -0400 (Sun, 17 Jul 2005) | 4 lines
+
+Adding newline to fprintf output of PERROR code.
+
+jeff
+
+------------------------------------------------------------------------
+r116 | boote | 2005-07-16 17:34:47 -0400 (Sat, 16 Jul 2005) | 4 lines
+
+Adding autoconf magic for determining if the OS syslog supports LOG_PERROR.
+
+jeff
+
+------------------------------------------------------------------------
+r115 | boote | 2005-07-16 17:29:40 -0400 (Sat, 16 Jul 2005) | 5 lines
+
+Adding code to print error messages to stderr in the I2Util error module
+to handle LOG_PERROR directly if syslog does not provide the functionality.
+
+jeff
+
+------------------------------------------------------------------------
+r114 | boote | 2005-07-15 11:51:26 -0400 (Fri, 15 Jul 2005) | 36 lines
+
+Porting to Solaris... This compiles, I have yet to do any real testing.
+Once this is checked in, I will make sure these changes don't break
+Linux/FreeBSD.
+
+configure.ac:
+    Adding socket,nsl,rt libraries
+    Adding check for paths.h header file
+
+ErrLogSyslog.c:
+    Define LOG_AUTHPRIV and LOG_FTP if they are not defined.
+
+Options.c:
+conf.c:
+    Adding cast from char to int for all isspace/isdigit args.
+
+readpassphrase.c:
+    remove cdefs.h.
+    Add check for autoconf paths.h value, include or define _PATH_TTY.
+    Adding cast from char to int for all isspace/isdigit args.
+
+bwctl.c:
+    Adding cast from char to int for all isspace/isdigit args.
+    Change setenv to putenv to set POSIXLY_CORRECT for getopt.
+    Check for LOG_PERROR. (Add warning if -r is passed in, and
+        LOG_PERROR is not available.)
+
+bwctld.c:
+    Add check for LOG_PERROR.
+
+policy.c:
+    Remove fts.h - not even used here, this is an owamp leftover...
+    Adding cast from char to int for all isspace/isdigit args.
+
+util.c:
+    Adding cast from char to int for all isspace/isdigit args.
+
+------------------------------------------------------------------------
+r113 | boote | 2005-07-14 19:28:08 -0400 (Thu, 14 Jul 2005) | 2 lines
+
+Removing cdefs here too...
+
+------------------------------------------------------------------------
+r112 | boote | 2005-07-14 19:09:41 -0400 (Thu, 14 Jul 2005) | 2 lines
+
+changing stdint to inttypes. Sometimes standards are less than clear... !%##@
+
+------------------------------------------------------------------------
+r111 | boote | 2005-07-14 19:05:53 -0400 (Thu, 14 Jul 2005) | 2 lines
+
+Adding include of stdint.h to get the uint* types on linux.
+
+------------------------------------------------------------------------
+r110 | boote | 2005-07-14 19:00:43 -0400 (Thu, 14 Jul 2005) | 4 lines
+
+Removing reference to sys/cdefs.h.
+
+jeff
+
+------------------------------------------------------------------------
+r109 | boote | 2005-07-14 18:54:59 -0400 (Thu, 14 Jul 2005) | 6 lines
+
+changing all u_int* types to uint* types so they agree with the latest
+'C' standard. This is part of a Solaris port - I am about to make sure this
+still works on Linux/FreeBSD...
+
+jeff
+
+------------------------------------------------------------------------
+r107 | boote | 2005-04-20 18:50:43 -0400 (Wed, 20 Apr 2005) | 26 lines
+
+I2util/
+aespasswd.c:
+    Fixed C macro for creating a string out of a constant.
+
+doc/*:
+    *   Added some NTP details based on user comments. (These are old, I
+    still need to incorporate comments from the Atl workshop.
+    *   Made arch diagram a little nicer.
+
+owamp/*:
+    Changes to deal with IPC for reporting back skip ranges to control
+    process from the "sender" process. Also, changes for the file format
+    to deal with skip records and of course changes to deal with the
+    modifications to the StopSessions and FetchSession protocols.
+
+owampd/*:
+    Forgot to initialize a variable.
+
+owping:
+    formatting changes
+
+powstream:
+    change iotime to 3.
+
+jeff
+
+------------------------------------------------------------------------
+r106 | boote | 2005-03-15 16:26:41 -0500 (Tue, 15 Mar 2005) | 4 lines
+
+better comments.
+
+jeff
+
+------------------------------------------------------------------------
+r103 | boote | 2004-09-10 18:20:47 -0400 (Fri, 10 Sep 2004) | 17 lines
+
+Merging SERVLESS_CLIENT changes into HEAD.
+
+errlog.h:
+ErrLog.c:
+	Ignore messages with level "none".
+
+ErrLogSyslog.c:
+	Add "none" priority
+
+conf.h:
+conf.c:
+	Added str2num function to deal with suffix multiples. i.e. 100k 'k'.
+	Added str2byte function to deal with suffix multiples. i.e. 100k 'k'.
+	(these are different in that 'num' function uses k == 1000, and
+	byte function uses k == 1024.
+jeff
+
+------------------------------------------------------------------------
+r96 | boote | 2004-06-27 21:58:29 -0400 (Sun, 27 Jun 2004) | 4 lines
+
+Corrected reset function to return I2Boolean.
+
+jeff
+
+------------------------------------------------------------------------
+r95 | boote | 2004-06-19 00:53:58 -0400 (Sat, 19 Jun 2004) | 4 lines
+
+Some compile errors fixed... will fix the rest next week.
+
+jeff
+
+------------------------------------------------------------------------
+r92 | boote | 2004-06-09 04:35:03 -0400 (Wed, 09 Jun 2004) | 19 lines
+
+I2Util/*:
+	Adding functionality to allow error logs to be "reset" after a
+	process forks. Specifically added this functionality to the
+	"syslog" logger.
+
+owampd.conf,owampd.c:
+	Added portrange to owampd.
+	Removed current code that closed file descriptors in child.
+	Did not work correctly - can only close descriptors from other
+	parent/child pipes. Will fix this another time.
+	Added code to reset syslog after fork.
+endpoint.c:
+	Fixed bad error format string.
+
+protocol.c,owampP.h:
+	Fixed a bug that resulted in the server configured port
+	value being lost, and not saved in the owp files with the
+	rest of the TestRequest record.
+
+------------------------------------------------------------------------
+r89 | boote | 2004-03-04 12:27:15 -0500 (Thu, 04 Mar 2004) | 4 lines
+
+Susan's edits.
+
+jeff
+
+------------------------------------------------------------------------
+r88 | boote | 2004-03-03 10:52:46 -0500 (Wed, 03 Mar 2004) | 5 lines
+
+Rich, the bootstrap file I was saying you needed to change was the one in
+the top-level dir.  This one should be fine.
+
+jeff
+
+------------------------------------------------------------------------
+r87 | rcarlson | 2004-03-03 10:43:39 -0500 (Wed, 03 Mar 2004) | 2 lines
+
+changed bootstrap file for I2util per Jeff Boote comments
+
+------------------------------------------------------------------------
+r86 | rcarlson | 2004-03-02 17:47:40 -0500 (Tue, 02 Mar 2004) | 3 lines
+
+updated configure.ac to include I2UTILINC functions.  This should allow the
+NDT web100srv.c code to use the LoadConf function.
+
+------------------------------------------------------------------------
+r84 | boote | 2004-02-25 12:56:06 -0500 (Wed, 25 Feb 2004) | 7 lines
+
+mandoc.cgi:
+	calls man2html using INC path instead of using full path.
+
+*.html:
+	removed 
+'s - futile....
+
+------------------------------------------------------------------------
+r83 | boote | 2004-02-25 09:45:50 -0500 (Wed, 25 Feb 2004) | 6 lines
+
+Added check for redirect_url to make sure access checking has happened
+in apache. (This only works if the cgi is installed as an action handler, if
+it is a normal cgi, this extra security is impossible.
+
+jeff
+
+------------------------------------------------------------------------
+r81 | boote | 2004-02-20 20:11:37 -0500 (Fri, 20 Feb 2004) | 13 lines
+
+Disabled hyphenation in url references in manpages. The hypphenation broke
+the url stuff I added to man2html to make url's links in html'd man pages.
+
+This all works now, but I can't install it on e2epi because the server
+feature I need is not activated. I have made a request to websupport
+for that.
+
+To see the man pages for now, take a look at:
+
+http://people.internet2.edu/~boote/bwctl.man
+
+jeff
+
+------------------------------------------------------------------------
+r80 | boote | 2004-02-20 19:47:34 -0500 (Fri, 20 Feb 2004) | 5 lines
+
+Adding man conversion tools into CVS... (Actually... I'm going to move
+this down into I2util after checking in...)
+
+jeff
+
+------------------------------------------------------------------------
+r78 | boote | 2004-02-17 16:19:38 -0500 (Tue, 17 Feb 2004) | 5 lines
+
+Modified to support installing of man pages. This took an upgrade of the
+autoconf tools. Ugh.
+
+jeff
+
+------------------------------------------------------------------------
+r77 | boote | 2004-02-16 18:38:24 -0500 (Mon, 16 Feb 2004) | 4 lines
+
+Spell checking, and incorporating changes based on Eric's comments.
+
+jeff
+
+------------------------------------------------------------------------
+r76 | boote | 2004-02-16 11:07:01 -0500 (Mon, 16 Feb 2004) | 7 lines
+
+bwctld.c: modified error message.
+
+*.man:
+	Added acknowledgments section for NSF grant disclaimer.
+
+jeff
+
+------------------------------------------------------------------------
+r75 | boote | 2004-02-13 19:12:02 -0500 (Fri, 13 Feb 2004) | 5 lines
+
+Adding the last man pages. bwctld.limits.man is not done yet, but it is
+getting close.
+
+jeff
+
+------------------------------------------------------------------------
+r74 | boote | 2004-02-08 19:57:05 -0500 (Sun, 08 Feb 2004) | 4 lines
+
+bwctl.c: changing so remotehost is attached to the -c/-s options
+
+bwctl.1: checkpoint
+
+------------------------------------------------------------------------
+r73 | boote | 2004-02-08 17:41:26 -0500 (Sun, 08 Feb 2004) | 2 lines
+
+Adding manpage for aespasswd.
+
+------------------------------------------------------------------------
+r71 | boote | 2003-12-19 14:11:10 -0500 (Fri, 19 Dec 2003) | 5 lines
+
+Hmm - things were confused. There was a length and a num_elements entry.
+fixed.
+
+jeff
+
+------------------------------------------------------------------------
+r70 | boote | 2003-12-19 14:03:29 -0500 (Fri, 19 Dec 2003) | 5 lines
+
+Wow - I can't believe this wasn't an issue before. (num_elements was not
+initialized in the table init code.)
+
+jeff
+
+------------------------------------------------------------------------
+r69 | boote | 2003-12-19 11:15:44 -0500 (Fri, 19 Dec 2003) | 4 lines
+
+Added a '.' prefix to the lockfile name.
+
+jeff
+
+------------------------------------------------------------------------
+r68 | boote | 2003-12-19 11:10:10 -0500 (Fri, 19 Dec 2003) | 5 lines
+
+Adding an error message if the identity is not found and the -d flag
+was specified.
+
+jeff
+
+------------------------------------------------------------------------
+r67 | boote | 2003-12-19 10:53:51 -0500 (Fri, 19 Dec 2003) | 4 lines
+
+Fixed core-dump if the conf file is empty.
+
+jeff
+
+------------------------------------------------------------------------
+r66 | boote | 2003-12-19 03:53:45 -0500 (Fri, 19 Dec 2003) | 4 lines
+
+fixed bugs.
+
+jeff
+
+------------------------------------------------------------------------
+r65 | boote | 2003-12-19 03:40:20 -0500 (Fri, 19 Dec 2003) | 9 lines
+
+I2util/*:
+	Adding aespasswd into autoconf files.
+I2util/aespasswd/*:
+	Now works on FreeBSD - need to test Linux.
+bwctl/bwctlP.h:
+	Clean-up comments.
+
+jeff
+
+------------------------------------------------------------------------
+r64 | boote | 2003-12-19 02:57:21 -0500 (Fri, 19 Dec 2003) | 9 lines
+
+I2util/conf.[ch]
+	Adding a WriteKeyLine function.
+I2util/aespasswd/*
+	Adding an aespasswd command for managing keyfiles.
+bwctl/bwctl.c
+	Making some error messages pretty.
+
+jeff
+
+------------------------------------------------------------------------
+r63 | boote | 2003-12-17 23:26:11 -0500 (Wed, 17 Dec 2003) | 6 lines
+
+Now compiles on Linux.
+
+termios suck.
+
+jeff
+
+------------------------------------------------------------------------
+r62 | boote | 2003-12-17 22:21:39 -0500 (Wed, 17 Dec 2003) | 4 lines
+
+Fixed compile errors.
+
+jeff
+
+------------------------------------------------------------------------
+r61 | boote | 2003-12-17 16:21:13 -0500 (Wed, 17 Dec 2003) | 16 lines
+
+I2util:
+Added conf file handling routines, hex encode/decode, md5, readpassphrase...
+
+Basically lots of things that owamp and bwctl will both use.
+
+Modified bwctl to use the I2util versions of these functions.
+
+Modified bwctl to do aeskeys with either a keyfile or a passphrase.
+
+Modified bwctld to do aeskeys with a keyfile.
+
+(These changes have not even been compiled yet since I did this on my
+laptop. I will be checking in updates to this after actually testing it.)
+
+jeff
+
+------------------------------------------------------------------------
+r60 | boote | 2003-11-16 19:29:17 -0500 (Sun, 16 Nov 2003) | 2 lines
+
+blah
+
+------------------------------------------------------------------------
+r59 | boote | 2003-11-16 00:26:02 -0500 (Sun, 16 Nov 2003) | 5 lines
+
+Adding test for "loopback" to allow a test. "loopback" is implicitly
+trusted to an extent.
+
+jeff
+
+------------------------------------------------------------------------
+r58 | boote | 2003-10-20 12:09:57 -0400 (Mon, 20 Oct 2003) | 6 lines
+
+saddr.h:	added comment
+
+policy.c:	fixed bug in MSGCLAIM message decoding.
+
+jeff
+
+------------------------------------------------------------------------
+r56 | boote | 2003-06-13 21:52:39 -0400 (Fri, 13 Jun 2003) | 10 lines
+
+I2util/table.[ch]:
+	Added a HashClean function to clean out a hash table.
+
+powstream.c:
+	Added some diagnostics to find out why fread is failing on the
+	partial session file. Also modified the Hash table to be cleaned
+	on error.
+
+jeff
+
+------------------------------------------------------------------------
+r53 | boote | 2003-03-19 21:29:00 -0500 (Wed, 19 Mar 2003) | 4 lines
+
+Merging VERS5 into head. Wahoo!!!
+
+jeff
+
+------------------------------------------------------------------------
+r38 | boote | 2002-11-26 13:23:06 -0500 (Tue, 26 Nov 2002) | 5 lines
+
+Adding more detailed error reporting - removing "connect" of recv udp socket.
+Added socket compare function into I2Util.
+
+jeff
+
+------------------------------------------------------------------------
+r37 | owamp | 2002-11-07 17:41:25 -0500 (Thu, 07 Nov 2002) | 4 lines
+
+Fixed a bug in how syslog.h was included.
+
+jeff
+
+------------------------------------------------------------------------
+r36 | boote | 2002-11-05 18:01:08 -0500 (Tue, 05 Nov 2002) | 4 lines
+
+Added functionality to specify syslog facilities/priorities by name.
+
+jeff
+
+------------------------------------------------------------------------
+r34 | karp | 2002-09-23 10:48:51 -0400 (Mon, 23 Sep 2002) | 2 lines
+
+Cosmetic changes (tiny).
+
+------------------------------------------------------------------------
+r32 | boote | 2002-08-09 21:19:30 -0400 (Fri, 09 Aug 2002) | 4 lines
+
+see last ci.
+
+jeff
+
+------------------------------------------------------------------------
+r31 | boote | 2002-08-09 15:19:55 -0400 (Fri, 09 Aug 2002) | 21 lines
+
+I2util:
+	made random use raw io so forked processes could read from the
+	same fd without problems.
+
+	added readn/writen functions from owamp
+
+owamp:
+	made everything use I2 versions of readn/writen
+
+	removed get_timestamp_func from ctx - we are not using it.
+
+	stopped forks from closing all open descriptors
+
+owampd/owping:
+
+	PolicyInit was core dumping because we were calling it with
+	an errhand and it was expecting a ctx... I changed the apps
+	to call it with a ctx.
+
+jeff
+
+------------------------------------------------------------------------
+r30 | boote | 2002-08-08 16:50:29 -0400 (Thu, 08 Aug 2002) | 9 lines
+
+I2util: added a va_list logging function.
+
+owamp:
+	changed the OWPError function to be a macro and removed the
+	OWPErrorLine function. The I2ErrLog stuff is used by the OWPError
+	macro.
+
+jeff
+
+------------------------------------------------------------------------
+r29 | boote | 2002-08-08 14:16:03 -0400 (Thu, 08 Aug 2002) | 15 lines
+
+Modified the random functions to be relative to a random "context".
+Modified the OWPErr functions to exclusively use the I2Err functions.
+(The OWPErr functions are simply a wrapper around the I2Err functions -
+unfortunately they can't be macros due to the var-args...)
+
+This means if you want to have an application defined error function, you have
+to define the I2ErrHandler yourself, and assign it to eh in the OWPContext.
+
+This actually simplified things quite a bit. I would almost like to go
+through and remove all the OWPError and OWPErrLine calls and replace them
+with I2 varients - may do that later, doesn't seem worth it right now. It
+would make the __FILE__ and __LINE__ macro's cleaner.
+
+jeff
+
+------------------------------------------------------------------------
+r28 | boote | 2002-08-08 13:50:55 -0400 (Thu, 08 Aug 2002) | 5 lines
+
+Actually removed the lines of code I replaced - before they were just ifdef'd
+out.
+
+jeff
+
+------------------------------------------------------------------------
+r27 | boote | 2002-08-08 13:47:03 -0400 (Thu, 08 Aug 2002) | 9 lines
+
+Modified the I2ErrLog stuff to support a level or priority. You can
+access this by using the new I2ErrLogT(eh,level,code,fmt,...) error reporting
+macro/function.
+
+(You know things are good when you actually remove lines of code to add
+additional functionality.)
+
+jeff
+
+------------------------------------------------------------------------
+r26 | boote | 2002-08-07 18:25:12 -0400 (Wed, 07 Aug 2002) | 9 lines
+
+Added an autoconfig check to ensure a kernel random device is available.
+
+random.h will fail to compile if autoconfig doesn't find one.
+
+(Don't update your local copy until I check in changes to owamp - I changed
+the RAND* macro's to have I2 at the beginning.)
+
+jeff
+
+------------------------------------------------------------------------
+r25 | karp | 2002-08-06 14:14:42 -0400 (Tue, 06 Aug 2002) | 7 lines
+
+Added randomness source initialization support, and updated
+affected code elsewhere. The proper order of events now is:
+
+1. OWPContextInitialize() [calls I2RandomSourceInit()]
+2. repeated calls to I2RandomBytes() [not affected by any subsequent changes
+			             in underlying randomness source]
+
+------------------------------------------------------------------------
+r24 | karp | 2002-08-05 15:47:30 -0400 (Mon, 05 Aug 2002) | 2 lines
+
+Tiny - forgot to add a cast
+
+------------------------------------------------------------------------
+r23 | karp | 2002-08-05 15:40:48 -0400 (Mon, 05 Aug 2002) | 2 lines
+
+Re-did I2RandomBytes to use /dev/urandom
+
+------------------------------------------------------------------------
+r22 | boote | 2002-08-05 13:48:30 -0400 (Mon, 05 Aug 2002) | 8 lines
+
+Test sessions seem to work - owping doesn't wait for the test session to finish - but if you wait until the -datadir/SID.i file is renamed to -datadir/SID you
+do get a complete file.
+
+I need to modify the file-buffering some, and owping needs to be modified to
+wait for the test session to complete.
+
+jeff
+
+------------------------------------------------------------------------
+r21 | karp | 2002-07-22 16:10:07 -0400 (Mon, 22 Jul 2002) | 2 lines
+
+Remove debug checks (no longer needed).
+
+------------------------------------------------------------------------
+r20 | karp | 2002-07-22 11:43:06 -0400 (Mon, 22 Jul 2002) | 2 lines
+
+Added casts to pacify compiler.
+
+------------------------------------------------------------------------
+r19 | karp | 2002-07-17 23:09:47 -0400 (Wed, 17 Jul 2002) | 2 lines
+
+Minor clarifications in comments.
+
+------------------------------------------------------------------------
+r18 | karp | 2002-07-14 23:48:35 -0400 (Sun, 14 Jul 2002) | 4 lines
+
+Fixed a bug in hashatom() - it was sensitive to bytes
+outside the ones being hashed. Minor addition for easier
+debugging.
+
+------------------------------------------------------------------------
+r17 | boote | 2002-06-21 20:18:57 -0400 (Fri, 21 Jun 2002) | 4 lines
+
+Oops - one check too many.
+
+jeff
+
+------------------------------------------------------------------------
+r16 | boote | 2002-06-21 20:17:40 -0400 (Fri, 21 Jun 2002) | 4 lines
+
+added checks to make sure table is not modified from within iterate.
+
+jeff
+
+------------------------------------------------------------------------
+r15 | boote | 2002-06-19 03:17:41 -0400 (Wed, 19 Jun 2002) | 44 lines
+
+Tolya - I corrected some problems with the table code, and added some features.
+
+There was a mistake in the init function - you only used one malloc, and
+pointed the "buckets" pointer to the memory just past the I2table record.
+The problem is that there is nothing making sure that the memory just
+past the I2table record is aligned properly for pointers (the type of the
+array). There are two ways to fix this - one, add something to the end
+of the structure to ensure the next memory is aligned, or just malloc
+the buckets array seperately. (the extra malloc seemed easier, so that
+is what I did.)
+
+Another mistake in the init function was that you called exit. A library
+function should almost never call exit - let the calling environment
+handle the errors, just report them. In this case, it is very easy to
+just return NULL if there is a problem.
+
+I simplified the cmp function slightly - there was no reason to check for
+the MIN of the sizes in the bcmp (which I changed to memcmp) since you
+already know the sizes are equal or the first part of the || would have
+caused the value to be returned already. (lazy evaluation)
+
+In init - I reordered the primes array check for sizes so you don't have to
+have the extra 509, and the bogus INT_MAX in the array. Not really necessary,
+but I had a hard time following the logic each time I looked at it before.
+
+hash_close - I made it take an I2table instead of a pointer to an I2table. It
+wasn't clear to me why you had it the other way... I also removed the if
+checkes before the free'ing of the pointers. (If those pointers were NULL you
+would have core dumped from the lines before the if, because those pointers
+are dereferenced.)
+
+I added a hash_delete function so you can remove a key/value pair from the
+hash. (I added the iterate function earlier - you probably noticed.)
+
+I didn't do it, but I think it would be much cleaner to implement your hash
+printing using the hash_iterate function. Then you could take the hash_print
+function pointer out of the hash table structure. Also - you could take
+the I2binding structure out of the header file since it wouldn't be needed.
+
+Everything else I did was purely cosmetic - defined types for the function
+pointers and things along those lines.
+
+jeff
+
+------------------------------------------------------------------------
+r14 | boote | 2002-06-18 13:57:58 -0400 (Tue, 18 Jun 2002) | 7 lines
+
+Added I2hash_iterate function - this is similar to the "print" function, but
+allows you to specify a different function to call each time you call
+hash_iterate. It also lets you terminate the iteration by returning false
+from the function.
+
+jeff
+
+------------------------------------------------------------------------
+r13 | boote | 2002-06-14 17:06:39 -0400 (Fri, 14 Jun 2002) | 5 lines
+
+fix for __attribute__ check... I had put it in the config.h.in file, but since
+that is dynamically generated, it didn't work too well....
+
+jeff
+
+------------------------------------------------------------------------
+r12 | boote | 2002-06-10 19:54:17 -0400 (Mon, 10 Jun 2002) | 4 lines
+
+Removed compiler warnings.
+
+jeff
+
+------------------------------------------------------------------------
+r11 | boote | 2002-06-02 14:42:17 -0400 (Sun, 02 Jun 2002) | 33 lines
+
+Reorganizing things...
+
+Tolya - when you create new files please put a $Id$ comment header at the
+beginning of the file. (I don't really care that much if you use the comment
+script, but I really want the version number in there - it makes it much easier
+to determin how out-of-date printout's are.)
+
+Also - I moved your arithmatic out of I2util and put it into owamp - it is
+difficult to imagine something more specific to owamp. I2util is for code
+that is likely to be used for projects completely unrelated to owamp.
+
+I'm thinking more and more about rolling all the owpcontrib code right into
+the owamp directory, but I decided to leave it alone for now. Let me know
+if you have opionions one way or the other about it.
+
+Oh - I also broke up api.c into 3 files:
+api.c
+capi.c
+sapi.c
+
+api.c contains functions that are used by capi.c and sapi.c. capi.c is client
+api functions and sapi.c is server api functions.
+
+Now that I've reorganized the code to more easily digestable chunks, I'm going
+to start taking some of the code from owampd and putting it in sapi.c, and
+extending it to actually start test sessions.
+
+(I probably won't get enough done today to check in again today - in fact,
+considering what I will be doing, it will probably be a few days before I
+check-in again.)
+
+jeff
+
+------------------------------------------------------------------------
+r10 | karp | 2002-05-31 18:27:50 -0400 (Fri, 31 May 2002) | 2 lines
+
+Added support for arithmetic functions.
+
+------------------------------------------------------------------------
+r9 | boote | 2002-04-30 12:42:59 -0400 (Tue, 30 Apr 2002) | 15 lines
+
+owping first real check-in. Not real functional, but at least gives an
+outline. Does not implement policy hooks yet. (Should be able to use exact
+same ones as owampd after cleanup.)
+
+I2util/I2util/
+	table.c:made sure default compare function doesn't overrun memory.
+
+owping/
+Makefile.am:	added localaddr template - still working on code.
+owping.c:	organized.
+localaddr.[ch]	localaddr template.
+owpingP.h:	typedefs for owping.
+
+jeff
+
+------------------------------------------------------------------------
+r8 | boote | 2002-04-30 09:43:49 -0400 (Tue, 30 Apr 2002) | 17 lines
+
+Removed references to old table symbols are replaced them with I2hash_init
+etc...
+
+(I need to verify this compiles on a system up there - so expect another ci
+shortly.)
+
+I also changed the table code to use the I2ErrLog stuff instead of OWPError.
+
+Tolya - I think it would be much cleaner to remove the hash functions from
+owampd - and put them all into access.[ch]. I don't see any reason why
+owamp_read_ip2class, owamp_read_class2limits, and read_passwd_file couldn't
+call I2hash_init themselves and return the hash_table as the return value of
+the function. You could still call I2hash_print for debugging purposes - but
+the code could be much cleaner this way. What do you think?
+
+jeff
+
+------------------------------------------------------------------------
+r7 | boote | 2002-04-29 18:08:49 -0400 (Mon, 29 Apr 2002) | 21 lines
+
+Adding Tolya's hash table into the I2util library. Modified the symbols to
+start with I2.
+
+Makefile.am:
+	added table.h as installable.
+
+ErrLog.c:
+	Corrected comment.
+
+I2util/
+
+Makefile.am:
+	added table.c source.
+
+Options.c,options.h:
+	Added stringtoUint converter.
+	Made stringtoint converter use strtol instead of less predictable sscanf
+	Corrected arg printing routine to deal with varargs.
+util.h:
+	added include of table.h
+
+------------------------------------------------------------------------
+r6 | boote | 2002-04-26 18:47:18 -0400 (Fri, 26 Apr 2002) | 13 lines
+
+Adding ability for an -option to take variable args after it.
+
+i.e. owping -sender sendaddr [sendserv]
+
+In this example 1 or 2 args. To do this - the arg description lists the max
+number of args it will take - and it specifies it as a negative number
+in the description record.
+
+This library will eventually have to be documented to some extent - I'm
+hoping doxygen is easy...
+
+jeff
+
+------------------------------------------------------------------------
+r5 | boote | 2002-04-24 18:14:27 -0400 (Wed, 24 Apr 2002) | 4 lines
+
+Build for libI2util.a
+
+jeff
+
+------------------------------------------------------------------------
+r4 | boote | 2002-04-24 13:44:54 -0400 (Wed, 24 Apr 2002) | 4 lines
+
+Adding mach dep code.
+
+jeff
+
+------------------------------------------------------------------------
+r3 | boote | 2002-04-23 16:56:13 -0400 (Tue, 23 Apr 2002) | 4 lines
+
+Beginnings of a utility library. I don't have build files for it yet - tomorrow.
+
+jeff
+
+------------------------------------------------------------------------
+r2 | boote | 2002-04-23 16:52:24 -0400 (Tue, 23 Apr 2002) | 11 lines
+
+import of until library.
+
+Based on a utility library distributed with the "volsh" code from UCAR.
+
+	http://www.scd.ucar.edu/vets/vg/Software/volsh
+
+I have used this in the past - and it seemed silly not to use it since it
+is freely distributed.
+
+jeff
+
+------------------------------------------------------------------------
+r1 | (no author) | 2002-04-23 16:52:24 -0400 (Tue, 23 Apr 2002) | 1 line
+
+New repository initialized by cvs2svn.
+------------------------------------------------------------------------
