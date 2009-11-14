@@ -1088,6 +1088,8 @@ I2AddrNodeName(
         size_t  *len
         )
 {
+    int i;
+
     assert(buf);
     assert(len);
     assert(*len > 0);
@@ -1103,6 +1105,14 @@ I2AddrNodeName(
     if(addr->node_set){
         *len = MIN(*len,sizeof(addr->node));
         strncpy(buf,addr->node,*len);
+
+        for(i = 0; i < strlen(i); i++) {
+             if (buf[i] == '%') {
+                 buf[i] = '\0';
+                 *len = i;
+             }
+        }
+
         return buf;
     }
 
