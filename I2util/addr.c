@@ -1106,7 +1106,7 @@ I2AddrNodeName(
         *len = MIN(*len,sizeof(addr->node));
         strncpy(buf,addr->node,*len);
 
-        for(i = 0; i < strlen(i); i++) {
+        for(i = 0; i < strlen(buf); i++) {
              if (buf[i] == '%') {
                  buf[i] = '\0';
                  *len = i;
