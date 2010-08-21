@@ -6,7 +6,6 @@ License:        distributable, see LICENSE
 Group:          Development/Libraries
 Source0:        I2util-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildArch:      i386
 
 %description
 I2 Utility library. Currently contains:
@@ -44,5 +43,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/*
 
 %changelog
+* Fri Aug 20 2010 Tom Throckmorton <throck@mcnc.org> 1.1-1
+- minor spec changes only
+
 * Fri Jan 11 2008 aaron@internet2.edu 1.0-1
 - Initial RPM
