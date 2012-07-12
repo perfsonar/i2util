@@ -23,18 +23,11 @@
  *		Based on code from UCAR DCS tools. Copyright information
  *		from UCAR follows:
  *
- *		Copyright 1997 University Corporation for Atmospheric Research,
- *		Scientific Computing Division.  All rights reserved.
+ *      Copyright 2012, University Corporation for Atmospheric Research.
  *
- *			
- *		Permission to use, copy, modify and distribute this software
- *		and its	documentation for any academic, educational and
- *		scientific research purpose is hereby granted without fee,
- *		provided that the above copyright notice and this permission
- *		notice appear in all copies of this software and its
- *		documentation, and that the software is not sold and/or made
- *		the subject of any commercial activity.  Parties interested
- *		in commercial licensing should contact the copyright holder.
+ *      This software may be used, subject to the terms of OSI's BSD-2 Clause
+ *      License located at  http://www.opensource.org/licenses/bsd-license.php/
+ *
  */
 #ifndef	_i2_errlogsyslog_h_
 #define	_i2_errlogsyslog_h_
