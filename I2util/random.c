@@ -94,7 +94,7 @@ int
 I2RandomBytes(
 	I2RandomSource	src,
 	unsigned char 	*ptr,
-	int		count
+	unsigned int	count
 	)
 {
 	if(!src)
@@ -102,7 +102,7 @@ I2RandomBytes(
 
 	switch (src->type) {
 		case I2RAND_DEV:
-			if (I2Readn(src->fd, ptr, count) != count) {
+			if (I2Readn(src->fd, ptr, count) != (signed) count) {
 				I2ErrLog(src->eh,
 					"I2randomBytes: I2Readn() failed: %M");
 				return -1;

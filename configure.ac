@@ -28,11 +28,11 @@
 #	Options:
 # Process this file with autoconf to produce a configure script.
 PACKAGE=I2util
-VERISION="1.01"
+VERISION="1.1"
 
-AC_INIT(I2util, 1.01, owamp-bugs@internet2.edu)
+AC_INIT(I2util, 1.1, owamp-bugs@internet2.edu)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(I2util, 1.01, [no-define])
+AM_INIT_AUTOMAKE(I2util, 1.1, [no-define])
 AC_CONFIG_SRCDIR(I2util/ErrLog.c)
 AM_CONFIG_HEADER(I2util/config.h)
 
@@ -57,6 +57,7 @@ AC_PROG_RANLIB
 AC_CANONICAL_HOST
 AC_DEFINE(_GNU_SOURCE, 1, "Use glibc features.")
 AC_DEFINE(_LARGEFILE_SOURCE, 1, "Use largefile api.")
+AM_CONDITIONAL(I2THREADS_ENABLE, 0)
 
 case $host in
 	*-*-solaris*)
@@ -84,11 +85,23 @@ I2_C_SYSLOG_PERROR
 AC_CHECK_MEMBERS([struct sockaddr.sa_len], , ,
                  [#include <sys/types.h>
                   #include <sys/socket.h>])
+AC_CHECK_DECLS([sys_nerr, sys_errlist], , ,
+               [#include <stdlib.h>
+                #include <stdio.h>])
 
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([memset strdup strerror strtol strtoul socket getaddrinfo])
+
+# Check for MAN2HTML. The manpages will be compiled to html files if it's
+# found.
+AC_CHECK_PROGS([MAN2HTML], [man2html])
+if test -n "${MAN2HTML}"; then
+    AC_DEFINE(MAN2HTML, 1, [MAN2HTML man-page converter])
+    do_man2html=true
+fi
+AM_CONDITIONAL([HAVE_MAN2HTML], test x$do_man2html = xtrue)
 
 AC_SUBST(ac_aux_dir)
 AC_OUTPUT([Makefile I2util/Makefile aespasswd/Makefile pfstore/Makefile doc/Makefile test/Makefile I2util.spec],

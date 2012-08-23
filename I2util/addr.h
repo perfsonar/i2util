@@ -227,4 +227,9 @@ I2ntohll(
         uint64_t    n64
       );
 
+extern int
+I2AddrIsLoopback(
+        I2Addr    addr
+      );
+
 #endif    /* I2ADDR_H */

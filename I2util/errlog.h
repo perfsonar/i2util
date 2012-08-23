@@ -209,7 +209,7 @@ extern int	I2ErrList(
 	I2ErrHandle 	dpeh, 
 	unsigned 	start, 
 	unsigned 	num, 
-	const char 	**err_list
+	const char 	* const *err_list
 );
 
 END_C_DECLS

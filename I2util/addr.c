@@ -26,6 +26,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 
 /*
@@ -113,7 +115,7 @@ I2AddrFree(
     return;
 }
 
-I2Addr
+static I2Addr
 _I2AddrAlloc(
         I2ErrHandle eh
         )
@@ -722,9 +724,11 @@ I2AddrSetFD(
 I2Boolean
 I2AddrSetPort(
         I2Addr     addr,
-        uint16_t   port
+        uint16_t   p
         )
 {
+    uint16_t    sp;
+
     if(!addr)
         return False;
 
@@ -751,15 +755,16 @@ I2AddrSetPort(
         /*
          * decode v4 and v6 sockaddrs.
          */
+        sp = htons(p);
         switch(sau->sa.sa_family){
 #ifdef    AF_INET6
 
             case AF_INET6:
-            sau->sin6.sin6_port = htons(port);
+            sau->sin6.sin6_port = sp;
             break;
 #endif
             case AF_INET:
-            sau->sin.sin_port = htons(port);
+            sau->sin.sin_port = sp;
             break;
             default:
             I2ErrLogT(addr->eh,LOG_ERR,EINVAL,
@@ -772,9 +777,9 @@ I2AddrSetPort(
         }
     }
 
-    snprintf(addr->port,sizeof(addr->port),"%u",port);
+    snprintf(addr->port,sizeof(addr->port),"%u",p);
     addr->port_set = True;
-    addr->port_value = port;
+    addr->port_value = p;
 
     return True;
 }
@@ -1361,11 +1366,13 @@ I2htonll(
     t8 = (uint8_t *)&n64;
 
     /* set low-order bytes */
-    l32 = htonl(h64 & 0xFFFFFFFFUL);
+    l32 = (uint32_t)(h64 & 0xFFFFFFFFUL);
+    l32 = htonl(l32);
 
     /* set high-order bytes */
     h64 >>=32;
-    h32 = htonl(h64 & 0xFFFFFFFFUL);
+    h32 = (uint32_t)(h64 & 0xFFFFFFFFUL);
+    h32 = htonl(h32);
 
     memcpy(&t8[0],&h32,4);
     memcpy(&t8[4],&l32,4);
@@ -1392,4 +1399,34 @@ I2ntohll(
     h64 |= ntohl(t32);
 
     return h64;
+}
+
+/*
+ * Function:    I2AddrIsLoopback
+ *
+ * Description:    
+ *     Check whether an address is for a loopback interface.
+ *
+ * In Args:    
+ *
+ * Out Args:    
+ *
+ * Scope:    
+ * Returns:    
+ *     1 if true, 0 if false
+ * Side Effect:    
+ */
+int
+I2AddrIsLoopback(
+        I2Addr    addr
+        )
+{
+    struct sockaddr *saddr;
+    socklen_t       saddrlen;
+
+    if(!(saddr = I2AddrSAddr(addr,&saddrlen))){
+        return 0;
+    }
+
+    return I2SockAddrIsLoopback(saddr, saddrlen);
 }

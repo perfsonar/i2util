@@ -43,15 +43,15 @@ struct I2BindingRec{
 struct I2Table {
 	I2ErrHandle		eh;
 	I2TableDataSizeT	size;
-	int			hint;
+	size_t			hint;
 	I2HashCmpFunc		cmp;
 	I2HashFunc		hash;
 	I2TableDataSizeT	length;
 	I2Binding		*buckets;
 	I2Binding		freelist;
 	I2Binding		*alist;
-	int			num_alist;
-	int			size_alist;
+	size_t			num_alist;
+	size_t			size_alist;
 	I2Boolean		in_iterate;
 	I2TableDataSizeT	delete_nodes;
 };
@@ -87,7 +87,7 @@ alloc_freelist(
 		)
 {
 	I2Binding	t;
-	int		i;
+	unsigned int    i;
 
 	if(table->num_alist <= table->size_alist){
 		I2Binding	*alist;
@@ -162,14 +162,14 @@ I2HashNumEntries(
 I2Table 
 I2HashInit(
 	I2ErrHandle	eh,
-	int		hint,
+	size_t		hint,
 	int		cmp(I2Datum x, I2Datum y),
 	uint32_t	hash(I2Datum key)
 	)
 {
 	I2Table table;
-	int i;
-	int primes[] = {31, 67, 127, 251, 509, 1021, 2053, 4093, 8191,
+	unsigned int i;
+	unsigned int primes[] = {31, 67, 127, 251, 509, 1021, 2053, 4093, 8191,
 							16381, 32771, 65521};
 	
 	for(i=I2Number(primes)-1;
@@ -228,7 +228,8 @@ I2HashClose(
 	I2Table	table
 	)
 {
-	int	i;
+	unsigned int    i;
+
 	assert(table);
 	assert(!table->in_iterate);
 

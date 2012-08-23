@@ -51,9 +51,9 @@ static I2ThreadMutex_T	MyMutex = I2PTHREAD_MUTEX_INITIALIZER;
  *	 an error table. Error table[0] contains sys_errlist.
  */
 typedef	struct	ErrTable_ {
-	unsigned	start,		/* starting index for err_list	*/ 
-			num;		/* num elements in err_list	*/
-	const char	**err_list;	/* error messags		*/
+	unsigned	start,		    /* starting index for err_list  */ 
+			num;		    /* num elements in err_list	    */
+	const char	* const *err_list;  /* error messags		    */
 	} ErrTable;
 
 
@@ -103,7 +103,7 @@ typedef	struct	ErrHandle_ {
 static	const char	*get_error(ErrHandle *eh, int error)
 {
 	int		i;
-	unsigned int	index;
+	unsigned int	j;
 	unsigned int	errnum;
 
 	if(error < 0)
@@ -111,17 +111,17 @@ static	const char	*get_error(ErrHandle *eh, int error)
 	errnum = (unsigned int)error;
 
 	if(!eh){
-		return strerror(errnum);
+		return strerror(error);
 	}
 
 	for (i=0; i<eh->err_tab_num; i++) {
 		if(eh->err_tab[i].start > errnum)
 			continue;
-		index = errnum - eh->err_tab[i].start;
+		j = errnum - eh->err_tab[i].start;
 		if ((unsigned)errnum >= eh->err_tab[i].start && 
-					index < eh->err_tab[i].num) {
+					j < eh->err_tab[i].num) {
 
-			return(eh->err_tab[i].err_list[index]);
+			return(eh->err_tab[i].err_list[j]);
 		}
 	}
 
@@ -175,19 +175,19 @@ static int	esnprintf(
 	return(strlen(buf));
 }
 
-void	add_ansiC_errors(ErrHandle *eh)
+static void	add_ansiC_errors(ErrHandle *eh)
 {
-	char	**sys_errlist;		/* list of errors	*/
-	int	errlist_size;		/* size of $sys_errlist	*/
+	const char  * const *mach_sys_errlist;	/* list of errors	*/
+	int	    errlist_size;		/* size of $sys_errlist	*/
 
 	/*
 	**	Get the list of system errors supported on this platform
 	*/
-	sys_errlist = I2GetSysErrList(&errlist_size);
+	mach_sys_errlist = I2GetSysErrList(&errlist_size);
 
 	eh->err_tab_num = 0;
 	(void) I2ErrList(
-		(I2ErrHandle) eh, 0, errlist_size, (const char **) sys_errlist);
+		(I2ErrHandle) eh, 0, (unsigned)errlist_size, mach_sys_errlist);
 }
 
 /*
@@ -570,7 +570,7 @@ int	I2ErrList(
 	I2ErrHandle 	dpeh, 
 	unsigned 	start, 
 	unsigned 	num, 
-	const char 	**err_list
+	const char 	* const *err_list
 ) {
 
 	ErrHandle *eh = (ErrHandle *) dpeh;

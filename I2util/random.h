@@ -51,7 +51,7 @@ extern int
 I2RandomBytes(
 	I2RandomSource	src,
 	unsigned char	*ptr,
-	int		count
+	unsigned int	count
 	);
 
 extern void

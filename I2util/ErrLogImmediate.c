@@ -129,12 +129,12 @@ void	I2ErrLogImmediate(
         fprintf(fp, "DATE=%s, ", ev->date);
 
     if(la->line_info & I2RTIME){
-        time_t		clock;
+        time_t		curr;
         struct tm	*tm;
         char		ftime[64];
 
-        time(&clock);
-        tm = localtime(&clock);
+        time(&curr);
+        tm = localtime(&curr);
         if( strftime(ftime,sizeof(ftime),la->tformat,tm))
             fprintf(fp, "RTIME=%s, ", ftime);
     }
