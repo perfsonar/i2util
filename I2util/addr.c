@@ -405,10 +405,18 @@ _I2AddrSetNodePort(
         addr->port_value = 0;
     }
     else{
-        if( (gai = getnameinfo(addr->saddr,addr->saddrlen,
-                        addr->node,sizeof(addr->node),
-                        addr->port,sizeof(addr->port),
-                        NI_NUMERICSERV)) != 0){
+        gai = getnameinfo(addr->saddr,addr->saddrlen,
+                            addr->node,sizeof(addr->node),
+                            addr->port,sizeof(addr->port),
+                            NI_NUMERICSERV);
+        if (gai != 0) {
+            gai = getnameinfo(addr->saddr,addr->saddrlen,
+                                addr->node,sizeof(addr->node),
+                                addr->port,sizeof(addr->port),
+                                NI_NUMERICHOST|NI_NUMERICSERV);
+        }
+
+        if (gai != 0) {
             I2ErrLogT(addr->eh,LOG_WARNING,I2EUNKNOWN,
                     "getnameinfo(): %s",gai_strerror(gai));
             strncpy(addr->node,"unknown",sizeof(addr->node));
