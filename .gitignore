@@ -40,3 +40,15 @@ pfstore/pfstore
 test/.deps/
 test/Makefile
 test/Makefile.in
+test/hmac-sha1test
+test/hmac-sha1test.log
+test/hmac-sha1test.trs
+test/pbkdf2test
+test/pbkdf2test.log
+test/pbkdf2test.trs
+test/pfstoretests.log
+test/pfstoretests.trs
+test/sha1test
+test/sha1test.log
+test/sha1test.trs
+test/test-suite.log
