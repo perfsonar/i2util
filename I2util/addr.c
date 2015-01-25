@@ -554,8 +554,6 @@ I2AddrBySAddr(
     addr->so_type = socktype;
     addr->so_protocol = protocol;
 
-    _I2AddrSetNodePort(addr);
-
     return addr;
 }
 
@@ -689,7 +687,6 @@ I2AddrSetSAddr(
      */
     addr->node_set = False;
     addr->port_set = addr->port_value = 0;
-    _I2AddrSetNodePort(addr);
 
     return True;
 }
