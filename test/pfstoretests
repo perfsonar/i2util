@@ -126,9 +126,8 @@ check_pfstore_success "delete-2" "jdoe	74657374706173737764" \
                       "" "" -d "jdoe"
 
 # add a user with an empty password
-# FIXME - commented out due to segfault
-#check_pfstore_success "add-empty-pass" "" "jdoe	" \
-#                      "" "jdoe"
+check_pfstore_success "add-empty-pass" "" "jdoe	" \
+                      "" "jdoe"
 
 # add a user with a very long password
 check_pfstore_success "large-password" "" "$(cat passwd_3k.pfs)" \
