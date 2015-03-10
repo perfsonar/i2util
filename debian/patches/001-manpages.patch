@@ -1,0 +1,151 @@
+Description: fix manpage errors
+ this patch fixes two errors in the supplied manpages:
+ - hyphen-used-as-minus-sign
+ - missing backslash in beginning of comment lines
+Author: Raoul Gunnar Borenius <borenius@dfn.de>
+Forwarded: no
+--- a/doc/aespasswd.man
++++ b/doc/aespasswd.man
+@@ -1,26 +1,26 @@
+ .TH aespasswd 1 "2004 Feb 8"
+-." The first line of this file must contain the '"[e][r][t][v] line
+-." to tell man to run the appropriate filter "t" for table.
+-."
+-."	$Id: aespasswd.man 118 2005-08-28 21:08:31Z boote $
+-."
+-."######################################################################
+-."#									#
+-."#			   Copyright (C)  2004				#
+-."#	     			Internet2				#
+-."#			   All Rights Reserved				#
+-."#									#
+-."######################################################################
+-."
+-."	File:		aespasswd.man
+-."
+-."	Author:		Jeff Boote
+-."			Internet2
+-."
+-."	Date:		Sun Feb 08 00:23:56 MST 2004
+-."
+-."	Description:	
+-."
++.\" The first line of this file must contain the '"[e][r][t][v] line
++.\" to tell man to run the appropriate filter "t" for table.
++.\"
++.\"	$Id: aespasswd.man 118 2005-08-28 21:08:31Z boote $
++.\"
++.\"######################################################################
++.\"#									#
++.\"#			   Copyright (C)  2004				#
++.\"#	     			Internet2				#
++.\"#			   All Rights Reserved				#
++.\"#									#
++.\"######################################################################
++.\"
++.\"	File:		aespasswd.man
++.\"
++.\"	Author:		Jeff Boote
++.\"			Internet2
++.\"
++.\"	Date:		Sun Feb 08 00:23:56 MST 2004
++.\"
++.\"	Description:	
++.\"
+ .SH NAME
+ aespasswd \- Used to create and manage an AES keyfile.
+ .SH SYNOPSIS
+@@ -63,18 +63,18 @@
+ added. Comment lines are any line where the first non-white space character
+ is '\fB#\fR'.
+ .SH EXAMPLES
+-\fBaespasswd -f /usr/local/etc/bwctld.keys testuser\fP
++\fBaespasswd \-f /usr/local/etc/bwctld.keys testuser\fP
+ .IP
+ Adds a key for the identity \fItestuser\fR. The user is prompted for
+ a passphrase. If the file does not exist, an error message will
+ be printed and no action will be taken.
+ .LP
+-\fBaespasswd -f /usr/local/etc/bwctld.keys -n testuser\fP
++\fBaespasswd \-f /usr/local/etc/bwctld.keys \-n testuser\fP
+ .IP
+ Creates the file before doing the same as above. If the file already
+ exists, an error message will be printed and no action will be taken.
+ .LP
+-\fBaespasswd -f /usr/local/etc/bwctld.keys -d testuser\fP
++\fBaespasswd \-f /usr/local/etc/bwctld.keys \-d testuser\fP
+ .IP
+ Deletes the identity \fItestuser\fR from the keyfile.
+ If the file does not exist, an error message will be printed and no action will be taken.
+--- a/doc/pfstore.man
++++ b/doc/pfstore.man
+@@ -1,25 +1,25 @@
+-." The first line of this file must contain the '"[e][r][t][v] line
+-." to tell man to run the appropriate filter "t" for table.
+-."
+-."	$Id: pfstore.man 184 2007-02-01 19:51:00Z boote $
+-."
+-."######################################################################
+-."#									#
+-."#			   Copyright (C)  2006				#
+-."#	     			Internet2				#
+-."#			   All Rights Reserved				#
+-."#									#
+-."######################################################################
+-."
+-."	File:		pfstore.man
+-."
+-."	Author:		Jeff Boote
+-."			Internet2
+-."
+-."	Date:		Sun Nov  5 15:00:39 MST 2006
+-."
+-."	Description:	
+-."
++.\" The first line of this file must contain the '"[e][r][t][v] line
++.\" to tell man to run the appropriate filter "t" for table.
++.\"
++.\"	$Id: pfstore.man 184 2007-02-01 19:51:00Z boote $
++.\"
++.\"######################################################################
++.\"#									#
++.\"#			   Copyright (C)  2006				#
++.\"#	     			Internet2				#
++.\"#			   All Rights Reserved				#
++.\"#									#
++.\"######################################################################
++.\"
++.\"	File:		pfstore.man
++.\"
++.\"	Author:		Jeff Boote
++.\"			Internet2
++.\"
++.\"	Date:		Sun Nov  5 15:00:39 MST 2006
++.\"
++.\"	Description:	
++.\"
+ .TH pfstore 1 "$Date: 2007-02-01 14:51:00 -0500 (Thu, 01 Feb 2007) $"
+ .SH NAME
+ pfstore \- Used to create and manage a pass-phrase store.
+@@ -62,18 +62,18 @@
+ added. Comment lines are any line where the first non-white space character
+ is '\fB#\fR'.
+ .SH EXAMPLES
+-\fBpfstore -f /usr/local/etc/owampd.pfs testuser\fP
++\fBpfstore \-f /usr/local/etc/owampd.pfs testuser\fP
+ .IP
+ Adds a pass-phrase for the identity \fItestuser\fR. The user is prompted for
+ a pass-phrase. If the file does not exist, an error message will
+ be printed and no action will be taken.
+ .LP
+-\fBpfstore -f /usr/local/etc/owampd.pfs -n testuser\fP
++\fBpfstore \-f /usr/local/etc/owampd.pfs \-n testuser\fP
+ .IP
+ Creates the file before doing the same as above. If the file already
+ exists, an error message will be printed and no action will be taken.
+ .LP
+-\fBpfstore -f /usr/local/etc/owampd.pfs -d testuser\fP
++\fBpfstore \-f /usr/local/etc/owampd.pfs \-d testuser\fP
+ .IP
+ Deletes the identity \fItestuser\fR from the pfsfile.
+ If the file does not exist, an error message will be printed and no action will be taken.

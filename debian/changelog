@@ -1,0 +1,11 @@
+i2util (1.2.2-1) unstable; urgency=low
+
+  * Adding gbp.conf for git-buildpackage
+
+ -- Antoine Delvaux <antoine.delvaux@dante.net>  Tue, 10 Mar 2015 14:18:01 +0000
+
+i2util (1.2-1) unstable; urgency=low
+
+  * Initial release (Closes: #753894)
+
+ -- Raoul Gunnar Borenius <borenius@dfn.de>  Mon, 06 Oct 2014 08:24:01 +0200

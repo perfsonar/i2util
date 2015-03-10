@@ -1,0 +1,30 @@
+Source: i2util
+Priority: optional
+Maintainer: Raoul Gunnar Borenius <borenius@dfn.de>
+Build-Depends: debhelper (>= 9), autotools-dev
+Standards-Version: 3.9.6
+Section: libs
+Homepage: http://software.internet2.edu
+
+Package: libi2util-dev
+Section: libdevel
+Architecture: any
+#Depends: libi2util (= ${binary:Version}), ${misc:Depends}
+Depends: ${misc:Depends}
+Description: Internet2 utility library (development files)
+ I2utils is a small support library with a set of command line tools 
+ needed by several software projects from Internet2, most notably bwctl.
+ .
+ This is the development package which contains headers files and the
+ static i2util library.
+
+Package: i2util-tools
+Section: net
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Breaks: bwctl-server (<= 1.4.1~rc2-1)
+Description: Internet2 utility tools
+ I2utils is a small support library with a set of command line tools
+ needed by several software projects from Internet2, most notably bwctl.
+ .
+ This package contains the command line tools.
