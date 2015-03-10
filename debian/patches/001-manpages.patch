@@ -11,7 +11,7 @@ Forwarded: no
 -." The first line of this file must contain the '"[e][r][t][v] line
 -." to tell man to run the appropriate filter "t" for table.
 -."
--."	$Id: aespasswd.man 118 2005-08-28 21:08:31Z boote $
+-."	$Id$
 -."
 -."######################################################################
 -."#									#
@@ -33,7 +33,7 @@ Forwarded: no
 +.\" The first line of this file must contain the '"[e][r][t][v] line
 +.\" to tell man to run the appropriate filter "t" for table.
 +.\"
-+.\"	$Id: aespasswd.man 118 2005-08-28 21:08:31Z boote $
++.\"	$Id$
 +.\"
 +.\"######################################################################
 +.\"#									#
@@ -77,13 +77,19 @@ Forwarded: no
  .IP
  Deletes the identity \fItestuser\fR from the keyfile.
  If the file does not exist, an error message will be printed and no action will be taken.
+@@ -94,4 +94,4 @@
+ This material is based in part on work supported by the National Science
+ Foundation (NSF) under Grant No. ANI-0314723. Any opinions, findings and
+ conclusions or recommendations expressed in this material are those of
+-the author(s) and do not necessarily reflect the views of the NSF.
++he author(s) and do not necessarily reflect the views of the NSF.
 --- a/doc/pfstore.man
 +++ b/doc/pfstore.man
 @@ -1,25 +1,25 @@
 -." The first line of this file must contain the '"[e][r][t][v] line
 -." to tell man to run the appropriate filter "t" for table.
 -."
--."	$Id: pfstore.man 184 2007-02-01 19:51:00Z boote $
+-."	$Id$
 -."
 -."######################################################################
 -."#									#
@@ -105,7 +111,7 @@ Forwarded: no
 +.\" The first line of this file must contain the '"[e][r][t][v] line
 +.\" to tell man to run the appropriate filter "t" for table.
 +.\"
-+.\"	$Id: pfstore.man 184 2007-02-01 19:51:00Z boote $
++.\"	$Id$
 +.\"
 +.\"######################################################################
 +.\"#									#
@@ -124,7 +130,7 @@ Forwarded: no
 +.\"
 +.\"	Description:	
 +.\"
- .TH pfstore 1 "$Date: 2007-02-01 14:51:00 -0500 (Thu, 01 Feb 2007) $"
+ .TH pfstore 1 "$Date$"
  .SH NAME
  pfstore \- Used to create and manage a pass-phrase store.
 @@ -62,18 +62,18 @@
