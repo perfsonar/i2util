@@ -1,8 +1,9 @@
 i2util (1.2.2-1) unstable; urgency=low
 
   * Adding gbp.conf for git-buildpackage
+  * Calling bootstrap.sh before launching the build process
 
- -- Antoine Delvaux <antoine.delvaux@dante.net>  Tue, 10 Mar 2015 14:18:01 +0000
+ -- Antoine Delvaux <antoine.delvaux@dante.net>  Tue, 10 Mar 2015 19:46:03 +0000
 
 i2util (1.2-1) unstable; urgency=low
 
