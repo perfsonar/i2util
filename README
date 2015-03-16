@@ -1,14 +1,13 @@
-#I2 Utility library. 
-
-Currently contains:
-* error logging
-* command-line parsing
-* threading
+	$Id$
+ 			I2 Utility library. Currently contains:
+ 				* error logging
+ 				* command-line parsing
+				* threading
 
 The error logging and command-line parsing are taken from a utility library
 that is distributed with the "volsh" code from UCAR.
 
-http://www.scd.ucar.edu/vets/vg/Software/volsh
+        http://www.scd.ucar.edu/vets/vg/Software/volsh
 
 I have used this in the past - and it seemed silly not to use it since it
 is freely distributed.
@@ -16,5 +15,5 @@ is freely distributed.
 	jeff
 
 We have locally added:
-* random number support
-* hash table support
+	* random number support
+	* hash table support
