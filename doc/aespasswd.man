@@ -1,26 +1,26 @@
 .TH aespasswd 1 "2004 Feb 8"
-." The first line of this file must contain the '"[e][r][t][v] line
-." to tell man to run the appropriate filter "t" for table.
-."
-."	$Id$
-."
-."######################################################################
-."#									#
-."#			   Copyright (C)  2004				#
-."#	     			Internet2				#
-."#			   All Rights Reserved				#
-."#									#
-."######################################################################
-."
-."	File:		aespasswd.man
-."
-."	Author:		Jeff Boote
-."			Internet2
-."
-."	Date:		Sun Feb 08 00:23:56 MST 2004
-."
-."	Description:	
-."
+.\" The first line of this file must contain the '"[e][r][t][v] line
+.\" to tell man to run the appropriate filter "t" for table.
+.\"
+.\"	$Id$
+.\"
+.\"######################################################################
+.\"#									#
+.\"#			   Copyright (C)  2004				#
+.\"#	     			Internet2				#
+.\"#			   All Rights Reserved				#
+.\"#									#
+.\"######################################################################
+.\"
+.\"	File:		aespasswd.man
+.\"
+.\"	Author:		Jeff Boote
+.\"			Internet2
+.\"
+.\"	Date:		Sun Feb 08 00:23:56 MST 2004
+.\"
+.\"	Description:	
+.\"
 .SH NAME
 aespasswd \- Used to create and manage an AES keyfile.
 .SH SYNOPSIS
@@ -63,18 +63,18 @@ No other text is allowed on these lines; however, comment lines may be
 added. Comment lines are any line where the first non-white space character
 is '\fB#\fR'.
 .SH EXAMPLES
-\fBaespasswd -f /usr/local/etc/bwctld.keys testuser\fP
+\fBaespasswd \-f /usr/local/etc/bwctld.keys testuser\fP
 .IP
 Adds a key for the identity \fItestuser\fR. The user is prompted for
 a passphrase. If the file does not exist, an error message will
 be printed and no action will be taken.
 .LP
-\fBaespasswd -f /usr/local/etc/bwctld.keys -n testuser\fP
+\fBaespasswd \-f /usr/local/etc/bwctld.keys \-n testuser\fP
 .IP
 Creates the file before doing the same as above. If the file already
 exists, an error message will be printed and no action will be taken.
 .LP
-\fBaespasswd -f /usr/local/etc/bwctld.keys -d testuser\fP
+\fBaespasswd \-f /usr/local/etc/bwctld.keys \-d testuser\fP
 .IP
 Deletes the identity \fItestuser\fR from the keyfile.
 If the file does not exist, an error message will be printed and no action will be taken.
