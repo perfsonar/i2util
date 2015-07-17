@@ -39,6 +39,7 @@ typedef struct  I2ErrLogSyslogAttr_ {
 	int		logopt;
 	int		facility;
 	int		priority;
+	int		report_level;
 	unsigned long	line_info;
 	const char	*tformat;
 	} I2ErrLogSyslogAttr;

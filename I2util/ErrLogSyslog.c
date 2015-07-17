@@ -420,8 +420,8 @@ void	I2ErrLogSyslog(
 	else
             prio = sa->priority;
 
-        if(prio != I2LOG_NONE)
-	    syslog(prio, "%s", buf);
+	if(prio != I2LOG_NONE && sa->report_level >= prio)
+		syslog(prio, "%s", buf);
 
 #ifndef HAVE_SYSLOG_PERROR
         if(sa->logopt | LOG_PERROR){
