@@ -1,1 +1,40 @@
-.pc
+# Ignore mac hidden file
+.DS_Store
+# Ignore quilt cache directory
+.pc/
+#Ignore autoconf, automake and make results
+*.o
+I2util.spec
+I2util/.deps/
+I2util/Makefile
+I2util/Makefile.in
+I2util/config.h
+I2util/config.h.in
+I2util/libI2util.a
+I2util/stamp-h.in
+I2util/stamp-h1
+Makefile
+Makefile.in
+aclocal.m4
+aespasswd/.deps/
+aespasswd/Makefile
+aespasswd/Makefile.in
+aespasswd/aespasswd
+autom4te.cache/
+config.log
+config.status
+config/config.guess
+config/config.sub
+config/depcomp
+config/install-sh
+config/missing
+configure
+doc/Makefile
+doc/Makefile.in
+pfstore/.deps/
+pfstore/Makefile
+pfstore/Makefile.in
+pfstore/pfstore
+test/.deps/
+test/Makefile
+test/Makefile.in
