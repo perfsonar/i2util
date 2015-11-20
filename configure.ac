@@ -28,11 +28,11 @@
 #	Options:
 # Process this file with autoconf to produce a configure script.
 PACKAGE=I2util
-VERISION="1.2"
+VERISION="1.4"
 
-AC_INIT(I2util, 1.2, owamp-bugs@internet2.edu)
+AC_INIT(I2util, 1.4, owamp-bugs@internet2.edu)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(I2util, 1.2, [no-define])
+AM_INIT_AUTOMAKE(I2util, 1.4, [no-define])
 AC_CONFIG_SRCDIR(I2util/ErrLog.c)
 AM_CONFIG_HEADER(I2util/config.h)
 

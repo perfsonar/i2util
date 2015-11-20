@@ -1,25 +1,25 @@
-." The first line of this file must contain the '"[e][r][t][v] line
-." to tell man to run the appropriate filter "t" for table.
-."
-."	$Id$
-."
-."######################################################################
-."#									#
-."#			   Copyright (C)  2006				#
-."#	     			Internet2				#
-."#			   All Rights Reserved				#
-."#									#
-."######################################################################
-."
-."	File:		pfstore.man
-."
-."	Author:		Jeff Boote
-."			Internet2
-."
-."	Date:		Sun Nov  5 15:00:39 MST 2006
-."
-."	Description:	
-."
+.\" The first line of this file must contain the '"[e][r][t][v] line
+.\" to tell man to run the appropriate filter "t" for table.
+.\"
+.\"	$Id$
+.\"
+.\"######################################################################
+.\"#									#
+.\"#			   Copyright (C)  2006				#
+.\"#	     			Internet2				#
+.\"#			   All Rights Reserved				#
+.\"#									#
+.\"######################################################################
+.\"
+.\"	File:		pfstore.man
+.\"
+.\"	Author:		Jeff Boote
+.\"			Internet2
+.\"
+.\"	Date:		Sun Nov  5 15:00:39 MST 2006
+.\"
+.\"	Description:	
+.\"
 .TH pfstore 1 "$Date$"
 .SH NAME
 pfstore \- Used to create and manage a pass-phrase store.
@@ -62,18 +62,18 @@ No other text is allowed on these lines; however, comment lines may be
 added. Comment lines are any line where the first non-white space character
 is '\fB#\fR'.
 .SH EXAMPLES
-\fBpfstore -f /usr/local/etc/owampd.pfs testuser\fP
+\fBpfstore \-f /usr/local/etc/owampd.pfs testuser\fP
 .IP
 Adds a pass-phrase for the identity \fItestuser\fR. The user is prompted for
 a pass-phrase. If the file does not exist, an error message will
 be printed and no action will be taken.
 .LP
-\fBpfstore -f /usr/local/etc/owampd.pfs -n testuser\fP
+\fBpfstore \-f /usr/local/etc/owampd.pfs \-n testuser\fP
 .IP
 Creates the file before doing the same as above. If the file already
 exists, an error message will be printed and no action will be taken.
 .LP
-\fBpfstore -f /usr/local/etc/owampd.pfs -d testuser\fP
+\fBpfstore \-f /usr/local/etc/owampd.pfs \-d testuser\fP
 .IP
 Deletes the identity \fItestuser\fR from the pfsfile.
 If the file does not exist, an error message will be printed and no action will be taken.
