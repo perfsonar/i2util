@@ -42,6 +42,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <assert.h>
+#include <sys/time.h>
 
 #include <I2util/pbkdf2.h>
 #include <I2util/hmac-sha1.h>
