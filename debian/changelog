@@ -1,3 +1,9 @@
+i2util (1.4-2) unstable; urgency=medium
+
+  * Update package version for Jessie.
+
+ -- Valentin Vidic <Valentin.Vidic@CARNet.hr>  Fri, 20 Nov 2015 11:13:08 +0100
+
 i2util (1.4-1) unstable; urgency=low
 
   * New upstream release
