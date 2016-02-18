@@ -269,7 +269,7 @@ I2CopyFile(
     }
 
     fptr = mmap(NULL,len,PROT_READ|PROT_WRITE,MAP_SHARED,fromfd,(off_t)0);
-    if(ftpr == MAP_FAILED){
+    if(fptr == MAP_FAILED){
         I2ErrLog(eh,"I2CopyFile: mmap(from file): %M");
         return -1;
     }
