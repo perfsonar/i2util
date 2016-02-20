@@ -1,8 +1,15 @@
-i2util (1.4-2~bpo70+1) unstable; urgency=medium
+i2util (1.5-1~bpo70+1) unstable; urgency=low
 
-  * Update package version for Wheezy.
+  * Backport to Wheezy.
 
- -- Valentin Vidic <Valentin.Vidic@CARNet.hr>  Fri, 20 Nov 2015 11:02:38 +0100
+ -- Antoine Delvaux <adelvaux@man.poznan.pl>  Sat, 20 Feb 2016 16:04:30 +0000
+
+i2util (1.5-1) unstable; urgency=low
+
+  * Update package version for Jessie.
+  * New upstream release
+
+ -- Antoine Delvaux <adelvaux@man.poznan.pl>  Sat, 20 Feb 2016 15:37:07 +0000
 
 i2util (1.4-1) unstable; urgency=low
 
