@@ -268,13 +268,14 @@ I2CopyFile(
         return rc;
     }
 
-    if(!(fptr = mmap(NULL,len,PROT_READ|PROT_WRITE,MAP_SHARED,fromfd,
-                    (off_t)0))){
+    fptr = mmap(NULL,len,PROT_READ|PROT_WRITE,MAP_SHARED,fromfd,(off_t)0);
+    if(fptr == MAP_FAILED){
         I2ErrLog(eh,"I2CopyFile: mmap(from file): %M");
         return -1;
     }
 
-    if(!(tptr = mmap(NULL,len,PROT_READ|PROT_WRITE,MAP_SHARED,tofd,(off_t)0))){
+    tptr = mmap(NULL,len,PROT_READ|PROT_WRITE,MAP_SHARED,tofd,(off_t)0);
+    if(tptr == MAP_FAILED){
         I2ErrLog(eh,"I2CopyFile: mmap(to file): %M");
         return -1;
     }
