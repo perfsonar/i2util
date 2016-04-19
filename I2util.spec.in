@@ -1,6 +1,6 @@
 Name:           I2util
 Version:        @VERSION@
-Release:        1
+Release:        1%{?dist}
 Summary:        I2 Utility Library
 License:        distributable, see LICENSE
 Group:          Development/Libraries
