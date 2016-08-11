@@ -32,15 +32,18 @@
  *      License located at  http://www.opensource.org/licenses/bsd-license.php/
  *
  */
+#include <I2util/config.h>
+#ifdef HAVE_SYSLOG_NAMES
+/* utilP.h indirectly includes syslog.h, define SYSLOG_NAMES before */
+#define SYSLOG_NAMES
+#endif
+
 #include <I2util/utilP.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#ifdef  HAVE_SYSLOG_NAMES
-#define SYSLOG_NAMES
-#endif
 #include <syslog.h>
 
 /*
