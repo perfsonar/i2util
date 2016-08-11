@@ -9,7 +9,7 @@ dnl
 AC_DEFUN([I2_C_SYSLOG_NAMES], [
 AC_MSG_CHECKING(for syslog names)
 AC_CACHE_VAL(ac_cv_syslognames, [
-AC_COMPILE_IFELSE([
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 #include <stdlib.h>
 #define	SYSLOG_NAMES
 #include <syslog.h>
@@ -30,7 +30,7 @@ foo(void)
 
   exit(0);
 }
-],
+]])],
 ac_cv_syslognames=yes,
 ac_cv_syslognames=no)])
 if test "$ac_cv_syslognames" = "yes"; then
