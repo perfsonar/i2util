@@ -27,14 +27,16 @@
 #
 #	Options:
 # Process this file with autoconf to produce a configure script.
-PACKAGE=I2util
-VERISION="1.5"
 
-AC_INIT(I2util, 1.5, owamp-bugs@internet2.edu)
+AC_INIT(I2util, 1.5, owamp-bugs@internet2.edu, I2util, https://github.com/perfsonar/i2util/)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(I2util, 1.5, [no-define])
+AC_CONFIG_MACRO_DIR(config)
+AM_INIT_AUTOMAKE([no-define])
 AC_CONFIG_SRCDIR(I2util/ErrLog.c)
 AM_CONFIG_HEADER(I2util/config.h)
+
+# catch unexpanded macros
+m4_pattern_forbid([^I2_])
 
 # Insert local symbols
 I2UTILINCS='-I${top_srcdir}'
@@ -57,14 +59,12 @@ AC_PROG_RANLIB
 AC_CANONICAL_HOST
 AC_DEFINE(_GNU_SOURCE, 1, "Use glibc features.")
 AC_DEFINE(_LARGEFILE_SOURCE, 1, "Use largefile api.")
-AM_CONDITIONAL(I2THREADS_ENABLE, 0)
+AM_CONDITIONAL(I2THREADS_ENABLE, false)
 
-case $host in
-	*-*-solaris*)
-	AC_DEFINE(__EXTENSIONS__, 1, "get decl for sockaddr_storage on Solaris")
-	AC_DEFINE(_XOPEN_SOURCE, 500, "get decl for msg_control on Solaris")
-	;;
-esac
+AS_CASE($host,
+	*-*-solaris*,[dnl
+	AC_DEFINE(__EXTENSIONS__, 1, "get decl for sockaddr_storage on Solaris")dnl
+	AC_DEFINE(_XOPEN_SOURCE, 500, "get decl for msg_control on Solaris")])
 
 # Checks for libraries.
 AC_SEARCH_LIBS(getaddrinfo, [socket nsl])
@@ -97,10 +97,9 @@ AC_CHECK_FUNCS([memset strdup strerror strtol strtoul socket getaddrinfo])
 # Check for MAN2HTML. The manpages will be compiled to html files if it's
 # found.
 AC_CHECK_PROGS([MAN2HTML], [man2html])
-if test -n "${MAN2HTML}"; then
-    AC_DEFINE(MAN2HTML, 1, [MAN2HTML man-page converter])
-    do_man2html=true
-fi
+AS_IF([test -n "${MAN2HTML}"],
+    [AC_DEFINE(MAN2HTML, 1, [MAN2HTML man-page converter])dnl
+    do_man2html=true])
 AM_CONDITIONAL([HAVE_MAN2HTML], test x$do_man2html = xtrue)
 
 AC_SUBST(ac_aux_dir)

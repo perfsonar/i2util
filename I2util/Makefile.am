@@ -20,7 +20,7 @@
 
 #include $(top_srcdir)/config/Make-rules
 
-INCLUDES	=	-I$(top_builddir) -I$(top_srcdir)
+AM_CPPFLAGS	=	-I$(top_builddir) -I$(top_srcdir)
 
 MACH_SOURCES	= mach_dep.c mach_dep.h
 
