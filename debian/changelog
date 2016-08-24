@@ -1,8 +1,8 @@
-i2util (1.5-1~bpo70+1) unstable; urgency=low
+i2util (1.5+0-1~bpo70+1) UNRELEASED; urgency=low
 
-  * Backport to Wheezy.
+  * New upstream release
 
- -- Antoine Delvaux <adelvaux@man.poznan.pl>  Sat, 20 Feb 2016 16:04:30 +0000
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Wed, 24 Aug 2016 16:06:16 +0000
 
 i2util (1.5-1) unstable; urgency=low
 
