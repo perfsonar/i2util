@@ -18,7 +18,7 @@
 #
 #	Description:
 
-INCLUDES	= $(I2UTILINCS)
+AM_CPPFLAGS	= $(I2UTILINCS)
 
 bin_PROGRAMS		= aespasswd
 aespasswd_SOURCES	= aespasswd.c

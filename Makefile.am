@@ -21,6 +21,9 @@
 
 #include $(top_srcdir)/config/Make-rules
 
+ACLOCAL_AMFLAGS = -I config
+AUTOMAKE_OPTIONS = foreign
+
 SUBDIRS = I2util aespasswd pfstore test doc
 
 # uncomment when automake is unbroken 1.5 doesn't work with this...
