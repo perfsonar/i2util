@@ -1,8 +1,8 @@
-i2util (1.5+0-1) UNRELEASED; urgency=low
+i2util (1.6-1) perfsonar-jessie-release; urgency=low
 
   * New upstream release
 
- -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Thu, 18 Aug 2016 16:35:56 +0000
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Tue, 20 Sep 2016 21:58:03 +0000
 
 i2util (1.5-1) unstable; urgency=low
 
