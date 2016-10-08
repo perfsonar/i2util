@@ -1,1 +1,17 @@
+aclocal.m4
+configure
+Makefile.in
+aespasswd/Makefile.in
+config/compile
+config/config.guess
+config/config.sub
+config/depcomp
+config/install-sh
+config/missing
+config/test-driver
+doc/Makefile.in
+I2util/config.h.in
+I2util/Makefile.in
 I2util/stamp-h.in
+pfstore/Makefile.in
+test/Makefile.in
