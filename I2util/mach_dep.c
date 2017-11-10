@@ -36,9 +36,7 @@
 #include <string.h>
 #include <errno.h>
 
-#if !defined(HAVE_DECL_SYS_NERR) || !HAVE_DECL_SYS_NERR
 static I2ThreadMutex_T MyMutex = I2PTHREAD_MUTEX_INITIALIZER;
-#endif
 
 /*
 ** Function:	I2GetSysErrList()
@@ -74,31 +72,28 @@ const char	* const *I2GetSysErrList(
 	 *	NUM_ERRORS should be the "largest" errno number for all the
 	 *	systems we care about.
 	 */
-#if !defined(HAVE_DECL_SYS_NERR) || !HAVE_DECL_SYS_NERR
 #define	NUM_ERRORS	152
-	const int	sys_nerr = NUM_ERRORS;
-	static char	*sys_errlist[NUM_ERRORS];
+	const int	nerr = NUM_ERRORS;
+	static char	*errlist[NUM_ERRORS];
 	static int 	first = 1;
 
 	int		i;
 
 	/*
-	**	Build the `sys_errlist' for Solaris systems. We only need
+	**	Build the `sys_errlist' for this system. We only need
 	**	to do this once since the table is immutable
 	*/
 	I2ThreadMutexLock(&MyMutex);
 
 	if (first) {
-		for(i=0; i<sys_nerr; i++) {
-			sys_errlist[i] = (char *) strdup(strerror(i));
+		for(i=0; i<nerr; i++) {
+			errlist[i] = (char *) strdup(strerror(i));
 		}
 		first = 0;
 	}
 
 	I2ThreadMutexUnlock(&MyMutex);
 
-#endif
-
-	*count = sys_nerr;	
-	return(sys_errlist);
+	*count = nerr;
+	return((const char * const *)errlist);
 }
