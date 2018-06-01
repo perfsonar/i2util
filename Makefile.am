@@ -26,6 +26,8 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = I2util aespasswd pfstore test doc
 
+EXTRA_DIST	=	LICENSE
+
 # uncomment when automake is unbroken 1.5 doesn't work with this...
 # (then remove these from DIST_EXTRA in subdir)
 #nobase_include_HEADERS = I2util/util.h I2util/Pthread.h I2util/config.h \
