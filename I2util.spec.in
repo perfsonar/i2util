@@ -2,7 +2,7 @@ Name:           I2util
 Version:        @VERSION@
 Release:        1%{?dist}
 Summary:        I2 Utility Library
-License:        distributable, see LICENSE
+License:        ASL 2.0 
 Group:          Development/Libraries
 Source0:        I2util-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -36,6 +36,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 #%doc Changes LICENSE README
+%license LICENSE
 %doc README
 %{_bindir}/*
 %{_libdir}/libI2util.a
