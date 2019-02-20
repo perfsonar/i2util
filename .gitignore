@@ -49,6 +49,8 @@ test/hmac-sha1test.trs
 test/pbkdf2test
 test/pbkdf2test.log
 test/pbkdf2test.trs
+test/pfstoretests.log
+test/pfstoretests.trs
 test/sha1test
 test/sha1test.log
 test/sha1test.trs

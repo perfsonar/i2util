@@ -1,0 +1,152 @@
+#! /bin/sh
+#########################################################################
+#                                                                       #
+#                          Copyright (C)  2015                          #
+#                         Brocade Communications                        #
+#                                                                       #
+#########################################################################
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+pfstore="../pfstore/pfstore"
+failed_tests=""
+
+fail () {
+    echo "Test ${1} failed"
+    exit ${2}
+}
+
+check_pfstore_success () {
+    testdesc="$1"; shift
+    starting_store_content="$1"; shift
+    expected_store_content="$1"; shift
+    input="$1"; shift
+    storedir="$(mktemp -d)"
+    store="${storedir}/test.pfs"
+    new_file_arg=""
+
+    if [ -n "${starting_store_content}" ]; then
+        echo "${starting_store_content}" > "${store}"
+    else
+        new_file_arg="-n"
+    fi
+
+    echo "${input}" | setsid "${pfstore}" -f "${store}" ${new_file_arg} "$@"
+    rc=$?
+    if [ ${rc} != 0 ]; then
+        echo "FAIL ${testdesc}: ${pfstore} exited with code ${rc}"
+        rm "${store}" > /dev/null 2>&1
+        rmdir "${storedir}"
+        failed_tests="${failed_tests} ${testdesc}"
+        return ${rc}
+    fi
+
+    actual_store_content="$(cat ${store})"
+    rm "${store}" > /dev/null 2>&1
+    rmdir "${storedir}"
+
+    if [ "${actual_store_content}" != "${expected_store_content}" ]; then
+        echo "FAIL ${testdesc}: Differing store content"
+        echo "Expected store content:"
+        echo "${expected_store_content}"
+        echo "Got store content:"
+        echo "${actual_store_content}"
+
+        failed_tests="${failed_tests} ${testdesc}"
+        return 1
+    fi
+
+    echo "SUCCESS ${testdesc}"
+    return
+}
+
+check_pfstore_rc () {
+    testdesc="$1"; shift
+    starting_store_content="$1"; shift
+    input="$1"; shift
+    expected_rc="$1"; shift
+    storedir="$(mktemp -d)"
+    store="${storedir}/test.pfs"
+    new_file_arg=""
+
+    if [ -n "${starting_store_content}" ]; then
+        echo "${starting_store_content}" > "${store}"
+    else
+        new_file_arg="-n"
+    fi
+
+    echo "${input}" | setsid "${pfstore}" -f "${store}" ${new_file_arg} "$@"
+    rc=$?
+    if [ ${rc} != ${expected_rc} ]; then
+        echo "FAIL ${testdesc}: ${pfstore} exited with code ${rc}, expected ${expected_rc}"
+        rm "${store}" > /dev/null 2>&1
+        rmdir "${storedir}"
+        failed_tests="${failed_tests} ${testdesc}"
+        return ${rc}
+    fi
+
+    echo "SUCCESS ${testdesc}"
+    return
+}
+
+# create new file with regular length user and password
+check_pfstore_success "add" \
+                      "" \
+                      "jdoe	74657374706173737764" \
+                      "testpasswd" "jdoe"
+
+# modify store to add another user
+check_pfstore_success "modify" \
+                      "jdoe	74657374706173737764" \
+                      "jdoe	74657374706173737764
+jsmith	7465737470617373" \
+                      "testpass" "jsmith"
+
+# delete second user
+check_pfstore_success "delete-1" \
+                      "jdoe	74657374706173737764
+jsmith	7465737470617373" \
+                      "jdoe	74657374706173737764" \
+                      "" -d "jsmith"
+
+
+# delete first user
+check_pfstore_success "delete-2" "jdoe	74657374706173737764" \
+                      "" "" -d "jdoe"
+
+# add a user with an empty password
+check_pfstore_success "add-empty-pass" "" "jdoe	" \
+                      "" "jdoe"
+
+# add a user with a very long password
+check_pfstore_success "large-password" "" "$(cat passwd_3k.pfs)" \
+                      "$(cat string_3k.dat)" "jdoe" 
+
+# add a user with a very long id - verify that it fails with an exit code
+# of 1
+check_pfstore_rc "large-password" "" "testpasswd" 1 "$(cat string_3k.dat)"
+
+# add a user with an empty id - verify that it fails with an exit code
+# of 1
+check_pfstore_rc "add-empty-id" "" "testpasswd" 1 ""
+
+
+echo ""
+if [ -z "${failed_tests}" ]; then
+    echo "All tests passed"
+    exit 0
+else
+    echo "Tests failed:${failed_tests}"
+    exit 1
+fi

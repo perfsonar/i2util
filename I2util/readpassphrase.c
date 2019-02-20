@@ -276,9 +276,12 @@ restart:
     p = line = *lbuf;
     while(((nr = read(input, &ch, 1)) == 1)&&(ch != '\n')&&(ch != '\r')){
 
-        /* alloc more memory if required */
-        if((pf_len+2) > *lbuf_max){
-            while((pf_len+2) > *lbuf_max){
+        /*
+         * alloc more memory if required for content up to this point
+         * plus this character
+         */
+        if((pf_len+1) > *lbuf_max){
+            while((pf_len+1) > *lbuf_max){
                 *lbuf_max += I2LINEBUFINC;
             }
             *lbuf = realloc(line,sizeof(char) * *lbuf_max);
@@ -305,6 +308,22 @@ restart:
         /* save the char */
         *p++ = ch;
         pf_len++;
+    }
+
+    /* alloc more memory if required for nul terminator character */
+    if((pf_len+1) > *lbuf_max){
+        while((pf_len+1) > *lbuf_max){
+            *lbuf_max += I2LINEBUFINC;
+        }
+        *lbuf = realloc(line,sizeof(char) * *lbuf_max);
+        if(!*lbuf){
+            if(line){
+                free(line);
+            }
+            return NULL;
+        }
+        line = *lbuf;
+        p = line + pf_len;
     }
 
     /* terminate pf */

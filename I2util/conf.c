@@ -772,6 +772,7 @@ I2WritePFLine(
 
 	if(!id || (id[0] == '\0')){
 		I2ErrLogP(eh,EINVAL,"I2WriteKeyLine(): Invalid identity name");
+                errno = EINVAL;
 		return -1;
 	}
 

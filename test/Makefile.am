@@ -20,8 +20,9 @@
 
 AM_CPPFLAGS	= $(I2UTILINCS)
 
-TESTS			= sha1test hmac-sha1test pbkdf2test addrtest
-check_PROGRAMS		= $(TESTS)
+TESTS			= sha1test hmac-sha1test pbkdf2test pfstoretests addrtest
+check_PROGRAMS		= sha1test hmac-sha1test pbkdf2test addrtest
+
 sha1test_SOURCES	= sha1test.c
 sha1test_LDADD		= $(I2UTILLIBS) $(MALLOCDEBUGLIBS)
 sha1test_DEPENDENCIES	= $(I2UTILLIBDEPS)
