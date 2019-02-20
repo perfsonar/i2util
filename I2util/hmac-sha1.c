@@ -138,7 +138,6 @@ void I2HMACSha1Init(
 {
     uint8_t     ipad[I2SHA1_BLOCK_SIZE];
     uint8_t     key[I2SHA1_BLOCK_SIZE];
-    uint32_t    keylen;
     uint32_t    i;
 
     assert(hmac);
@@ -154,11 +153,9 @@ void I2HMACSha1Init(
      */
     if(len > I2SHA1_BLOCK_SIZE){
         I2Sha1(inkey,len,key);
-        keylen = I2SHA1_DIGEST_SIZE;
     }
     else{
         memcpy(key,inkey,len);
-        keylen = len;
     }
 
     /*
