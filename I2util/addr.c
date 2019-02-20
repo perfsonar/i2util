@@ -383,7 +383,7 @@ I2AddrByWildcard(
 }
 
 static void
-_I2AddrSetNodePort(
+_I2AddrSetPort(
         I2Addr  addr
         )
 {
@@ -392,40 +392,27 @@ _I2AddrSetNodePort(
     char    *tstr=NULL;
     int     tint;
 
-    if(!addr->saddr || (addr->node_set && addr->port_set)){
+    if(!addr->saddr || addr->port_set){
         return;
     }
 
     if(addr->saddr->sa_family == AF_UNIX){
-        strncpy(addr->node,"unixsock",sizeof(addr->node));
         strncpy(addr->port,"unnamed",sizeof(addr->port));
-
-        addr->node_set = True;
         addr->port_set = True;
         addr->port_value = 0;
     }
     else{
         gai = getnameinfo(addr->saddr,addr->saddrlen,
-                            addr->node,sizeof(addr->node),
+                            NULL,0,
                             addr->port,sizeof(addr->port),
                             NI_NUMERICSERV);
-        if (gai != 0) {
-            gai = getnameinfo(addr->saddr,addr->saddrlen,
-                                addr->node,sizeof(addr->node),
-                                addr->port,sizeof(addr->port),
-                                NI_NUMERICHOST|NI_NUMERICSERV);
-        }
 
         if (gai != 0) {
             I2ErrLogT(addr->eh,LOG_WARNING,I2EUNKNOWN,
                     "getnameinfo(): %s",gai_strerror(gai));
-            strncpy(addr->node,"unknown",sizeof(addr->node));
             strncpy(addr->port,"unknown",sizeof(addr->port));
         }
         else{
-
-            addr->node_set = True;
-
             pptr = addr->port;
             tstr = NULL;
             tint = strtol(pptr,&tstr,10);
@@ -436,6 +423,46 @@ _I2AddrSetNodePort(
                 addr->port_set = True;
                 addr->port_value = (uint16_t)tint;
             }
+        }
+    }
+
+    return;
+}
+
+static void
+_I2AddrSetNodePort(
+        I2Addr  addr
+        )
+{
+    int gai;
+
+    if(!addr->saddr || (addr->node_set && addr->port_set)){
+        return;
+    }
+
+    if(addr->saddr->sa_family == AF_UNIX){
+        strncpy(addr->node,"unixsock",sizeof(addr->node));
+        addr->node_set = True;
+        _I2AddrSetPort(addr);
+    }
+    else{
+        gai = getnameinfo(addr->saddr,addr->saddrlen,
+                            addr->node,sizeof(addr->node),
+                            NULL,0,0);
+        if (gai != 0) {
+            gai = getnameinfo(addr->saddr,addr->saddrlen,
+                                addr->node,sizeof(addr->node),
+                                NULL,0, NI_NUMERICHOST);
+        }
+
+        if (gai != 0) {
+            I2ErrLogT(addr->eh,LOG_WARNING,I2EUNKNOWN,
+                    "getnameinfo(): %s",gai_strerror(gai));
+            strncpy(addr->node,"unknown",sizeof(addr->node));
+        }
+        else{
+            addr->node_set = True;
+            _I2AddrSetPort(addr);
         }
     }
 
@@ -553,8 +580,6 @@ I2AddrBySAddr(
     addr->ai_free = True;
     addr->so_type = socktype;
     addr->so_protocol = protocol;
-
-    _I2AddrSetNodePort(addr);
 
     return addr;
 }
@@ -689,7 +714,6 @@ I2AddrSetSAddr(
      */
     addr->node_set = False;
     addr->port_set = addr->port_value = 0;
-    _I2AddrSetNodePort(addr);
 
     return True;
 }
@@ -826,6 +850,9 @@ I2AddrPort(
 
     if(!addr)
         return 0;
+
+    if(!addr->port_set)
+        _I2AddrSetPort(addr);
 
     return addr->port_value;
 }

@@ -20,8 +20,9 @@
 
 AM_CPPFLAGS	= $(I2UTILINCS)
 
-TESTS			= sha1test hmac-sha1test pbkdf2test pfstoretests
-check_PROGRAMS		= sha1test hmac-sha1test pbkdf2test
+TESTS			= sha1test hmac-sha1test pbkdf2test pfstoretests addrtest
+check_PROGRAMS		= sha1test hmac-sha1test pbkdf2test addrtest
+
 sha1test_SOURCES	= sha1test.c
 sha1test_LDADD		= $(I2UTILLIBS) $(MALLOCDEBUGLIBS)
 sha1test_DEPENDENCIES	= $(I2UTILLIBDEPS)
@@ -33,6 +34,10 @@ hmac_sha1test_DEPENDENCIES	= $(I2UTILLIBDEPS)
 pbkdf2test_SOURCES		= pbkdf2test.c
 pbkdf2test_LDADD		= $(I2UTILLIBS) $(MALLOCDEBUGLIBS)
 pbkdf2test_DEPENDENCIES	= $(I2UTILLIBDEPS)
+
+addrtest_SOURCES		= addrtest.c
+addrtest_LDADD		= $(I2UTILLIBS) $(MALLOCDEBUGLIBS)
+addrtest_DEPENDENCIES	= $(I2UTILLIBDEPS)
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
