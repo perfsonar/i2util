@@ -94,6 +94,7 @@ char *
 I2ReadPassPhrase(const char *prompt, char *buf, size_t bufsiz, int flags)
 {
 	ssize_t nr;
+	ssize_t nw __attribute__((unused));
 	int input, output, save_errno;
 	char ch, *p, *end;
 	struct termios term, oterm;
@@ -151,7 +152,7 @@ restart:
 		memset(&oterm, 0, sizeof(oterm));
 	}
 
-	(void)write(output, prompt, strlen(prompt));
+	nw = write(output, prompt, strlen(prompt));
 	end = buf + bufsiz - 1;
 	for (p = buf; (nr = read(input, &ch, 1)) == 1 && ch != '\n' && ch != '\r';) {
 		if (p < end) {
@@ -169,7 +170,7 @@ restart:
 	*p = '\0';
 	save_errno = errno;
 	if (!(term.c_lflag & ECHO))
-		(void)write(output, "\n", 1);
+		nw = write(output, "\n", 1);
 
 	/* Restore old terminal settings and signals. */
 	if (memcmp(&term, &oterm, sizeof(term)) != 0)
@@ -212,6 +213,7 @@ I2ReadPassPhraseAlloc(
         )
 {
     ssize_t nr;
+    ssize_t nw __attribute__((unused));
     size_t  pf_len = 0;
     int input, output, save_errno;
     char *line;
@@ -268,7 +270,7 @@ restart:
     /*
      * Write prompt
      */
-    (void)write(output, prompt, strlen(prompt));
+    nw = write(output, prompt, strlen(prompt));
 
     /*
      * Read pass-phrase
@@ -312,7 +314,7 @@ restart:
 
     save_errno = errno;
     if (!(term.c_lflag & ECHO))
-        (void)write(output, "\n", 1);
+        nw = write(output, "\n", 1);
 
     /* Restore old terminal settings and signals. */
     if (memcmp(&term, &oterm, sizeof(term)) != 0)
