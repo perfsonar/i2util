@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+FILE=$AUTOPKGTEST_TMP/aesfile
+
+echo test | aespasswd -n -f $FILE autotest 2>&1
+grep autotest $FILE
+echo User added: OK
+
+echo test2 | aespasswd -f $FILE autotest 2>&1
+grep autotest $FILE
+echo User modified: OK
+
+aespasswd -f $FILE -d autotest
+test ! -s $FILE
+echo User deleted: OK

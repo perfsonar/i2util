@@ -1,0 +1,5 @@
+#!/usr/bin/make -f
+
+%:
+	./bootstrap.sh
+	dh $@  --with autotools-dev

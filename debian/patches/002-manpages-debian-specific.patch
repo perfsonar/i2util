@@ -1,0 +1,29 @@
+Description: change paths in manpage
+ this patch changes the supplied example paths to the paths
+ that are used in Debian
+Author: Raoul Gunnar Borenius <borenius@dfn.de>
+Forwarded: no
+--- a/doc/aespasswd.man
++++ b/doc/aespasswd.man
+@@ -63,18 +63,18 @@
+ added. Comment lines are any line where the first non-white space character
+ is '\fB#\fR'.
+ .SH EXAMPLES
+-\fBaespasswd \-f /usr/local/etc/bwctld.keys testuser\fP
++\fBaespasswd \-f /etc/bwctl/bwctld.keys testuser\fP
+ .IP
+ Adds a key for the identity \fItestuser\fR. The user is prompted for
+ a passphrase. If the file does not exist, an error message will
+ be printed and no action will be taken.
+ .LP
+-\fBaespasswd \-f /usr/local/etc/bwctld.keys \-n testuser\fP
++\fBaespasswd \-f /etc/bwctl/bwctld.keys \-n testuser\fP
+ .IP
+ Creates the file before doing the same as above. If the file already
+ exists, an error message will be printed and no action will be taken.
+ .LP
+-\fBaespasswd \-f /usr/local/etc/bwctld.keys \-d testuser\fP
++\fBaespasswd \-f /etc/bwctl/bwctld.keys \-d testuser\fP
+ .IP
+ Deletes the identity \fItestuser\fR from the keyfile.
+ If the file does not exist, an error message will be printed and no action will be taken.
