@@ -67,7 +67,7 @@ Files: debian/*
 Copyright: 2014 Raoul Gunnar Borenius <borenius@dfn.de>
 License: BSD-2-clause
 
-File: debian/*
+Files: debian/*
 Copyright: 2015-2018 perfSONAR project
 License: Apache-2.0
 
