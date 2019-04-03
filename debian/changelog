@@ -1,8 +1,8 @@
-i2util (1.8~0-1) perfsonar-release; urgency=low
+i2util (1.7.1~0-1) perfsonar-patch-snapshot; urgency=low
 
   * New upstream release
 
- -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Wed, 27 Feb 2019 17:07:18 +0000
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Wed, 03 Apr 2019 15:05:46 +0000
 
 i2util (1.7-1) perfsonar-jessie-release; urgency=low
 
