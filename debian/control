@@ -1,6 +1,8 @@
 Source: i2util
 Priority: optional
-Maintainer: Raoul Gunnar Borenius <borenius@dfn.de>
+Maintainer: perfSONAR developers <debian@perfsonar.net>
+Uploaders: Antoine Delvaux <antoine.delvaux@man.poznan.pl>,
+ Valentin Vidic <Valentin.Vidic@CARNet.hr>
 Build-Depends: debhelper (>= 9), autotools-dev, automake, autoconf
 Standards-Version: 3.9.6
 Section: libs
