@@ -90,9 +90,8 @@ AC_CHECK_DECLS([sys_nerr, sys_errlist], , ,
                 #include <stdio.h>])
 
 # Checks for library functions.
-AC_FUNC_MALLOC
 AC_FUNC_STRFTIME
-AC_CHECK_FUNCS([memset strdup strerror strtol strtoul socket getaddrinfo])
+AC_CHECK_FUNCS([malloc memset strdup strerror strtol strtoul socket getaddrinfo])
 
 # Check for MAN2HTML. The manpages will be compiled to html files if it's
 # found.
