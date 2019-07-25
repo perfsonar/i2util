@@ -28,7 +28,7 @@
 #	Options:
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT(I2util, 1.7, owamp-bugs@internet2.edu, I2util, https://github.com/perfsonar/i2util/)
+AC_INIT(I2util, 1.8, owamp-bugs@internet2.edu, I2util, https://github.com/perfsonar/i2util/)
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR(config)
 AM_INIT_AUTOMAKE([no-define])
