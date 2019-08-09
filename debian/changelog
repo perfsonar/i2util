@@ -1,8 +1,8 @@
-i2util (4.2.0~b2.1-1) perfsonar-minor-staging; urgency=low
+i2util (4.2.0~5.b2-1) perfsonar-minor-staging; urgency=low
 
   * New upstream release
 
- -- Andy Lake <andy@es.net>  Thu, 08 Aug 2019 19:08:52 +0000
+ -- Andy Lake <andy@es.net>  Fri, 09 Aug 2019 13:07:36 +0000
 
 i2util (1.7-1) perfsonar-jessie-release; urgency=low
 
