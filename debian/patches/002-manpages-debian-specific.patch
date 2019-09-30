@@ -3,8 +3,8 @@ Description: change paths in manpage
  that are used in Debian
 Author: Raoul Gunnar Borenius <borenius@dfn.de>
 Forwarded: no
---- a/doc/aespasswd.man	2019-08-15 01:11:21.174396489 +0000
-+++ b/doc/aespasswd.man	2019-08-15 01:11:21.662400682 +0000
+--- a/doc/aespasswd.man	2019-09-30 09:56:18.150762784 -0400
++++ b/doc/aespasswd.man	2019-09-30 09:56:19.163683004 -0400
 @@ -63,18 +63,18 @@
  added. Comment lines are any line where the first non-white space character
  is '\fB#\fR'.
