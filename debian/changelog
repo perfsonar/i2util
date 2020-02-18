@@ -4,9 +4,23 @@ i2util (4.3.0~a1.0-1) perfsonar-4.3-snapshot; urgency=low
 
  -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Sun, 25 Aug 2019 18:39:41 +0000
 
+i2util (4.2.3~a0.0-1) perfsonar-4.2-snapshot; urgency=low
+
+  * New upstream version.
+
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Thu, 17 Oct 2019 14:31:57 +0200
+
+i2util (4.2.1-1) perfsonar-4.2; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Mon, 30 Sep 2019 09:56:18 -0400
+
 i2util (4.2.0-1) perfsonar-minor-staging; urgency=low
 
-  * New upstream release
+  * New upstream release.
+  * Include pfstore binary and manpage.
+  * Building on Stretch.
 
  -- Andy Lake <andy@es.net>  Thu, 15 Aug 2019 01:11:21 +0000
 
