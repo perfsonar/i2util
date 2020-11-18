@@ -1,8 +1,8 @@
-i2util (4.3.2~a1.0-1) perfsonar-4.3-snapshot; urgency=low
+i2util (4.3.2-1) perfsonar-4.3; urgency=low
 
   * New upstream version.
 
- -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Fri, 13 Nov 2020 17:54:10 +0000
+ -- perfSONAR developers <debian@perfsonar.net>  Wed, 18 Nov 2020 15:44:05 +0000
 
 i2util (4.3.0-1) perfsonar-4.3; urgency=low
 
