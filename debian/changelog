@@ -4,17 +4,23 @@ i2util (4.3.4-1) perfsonar-4.3; urgency=low
 
  -- perfSONAR developers <debian@perfsonar.net>  Wed, 17 Mar 2021 01:10:48 +0000
 
+i2util (4.3.3-1) perfsonar-4.3; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Tue, 02 Feb 2021 16:38:37 +0000
+
+i2util (4.3.2-1) perfsonar-4.3; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Wed, 18 Nov 2020 15:44:05 +0000
+
 i2util (4.3.0-1) perfsonar-4.3; urgency=low
 
   * New upstream version.
 
  -- perfSONAR developers <debian@perfsonar.net>  Fri, 30 Oct 2020 14:45:45 +0000
-
-i2util (4.2.4-1) perfsonar-4.2; urgency=low
-
-  * New upstream version.
-
- -- perfSONAR developers <debian@perfsonar.net>  Thu, 26 Mar 2020 10:10:37 -0400
 
 i2util (4.2.3-1) perfsonar-4.2; urgency=low
 
