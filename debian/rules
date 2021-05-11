@@ -5,25 +5,6 @@ export DEB_CFLAGS_MAINT_APPEND  = -fPIC
 export DEB_LDFLAGS_MAINT_APPEND = -fPIC
 export DEB_BUILD_MAINT_OPTIONS  = hardening=+all
 
-override_dh_auto_clean:
-	[ ! -f Makefile ] || $(MAKE) distclean
-	rm -f aclocal.m4
-	rm -f aespasswd/Makefile.in
-	rm -f config/compile
-	rm -f config/config.guess
-	rm -f config/config.sub
-	rm -f config/depcomp
-	rm -f config/install-sh
-	rm -f config/missing
-	rm -f config/test-driver
-	rm -f configure
-	rm -f doc/Makefile.in
-	rm -f I2util/config.h.in
-	rm -f I2util/Makefile.in
-	rm -f Makefile.in
-	rm -f pfstore/Makefile.in
-	rm -f test/Makefile.in
-
 override_dh_auto_configure:
 	./bootstrap.sh
 	dh_auto_configure

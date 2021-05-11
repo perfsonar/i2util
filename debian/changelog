@@ -10,7 +10,7 @@ i2util (1.6-1) unstable; urgency=medium
 i2util (1.2-2) unstable; urgency=medium
 
   * added multiarch support
-  * include pfstore (Closes: #774286) 
+  * include pfstore (Closes: #774286)
 
  -- Raoul Gunnar Borenius <borenius@dfn.de>  Wed, 29 Jul 2015 11:03:23 +0200
 
