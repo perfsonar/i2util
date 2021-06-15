@@ -4,16 +4,17 @@ Maintainer: perfSONAR developers <debian@perfsonar.net>
 Uploaders: Antoine Delvaux <antoine.delvaux@man.poznan.pl>,
  Valentin Vidic <Valentin.Vidic@CARNet.hr>
 Build-Depends: debhelper (>= 9), autotools-dev, automake, autoconf
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Section: libs
-Homepage: http://software.internet2.edu
+Homepage: https://github.com/perfsonar/i2util
 
 Package: libi2util-dev
 Section: libdevel
 Architecture: any
+Multi-Arch: same
 Depends: ${misc:Depends}
 Description: Internet2 utility library (development files)
- I2utils is a small support library with a set of command line tools 
+ I2utils is a small support library with a set of command line tools
  needed by several software projects from Internet2, most notably bwctl.
  .
  This is the development package which contains headers files and the

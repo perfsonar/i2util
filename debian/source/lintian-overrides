@@ -1,0 +1,2 @@
+# Upstream does not provide a cryptographic signature
+i2util source: debian-watch-may-check-gpg-signature
