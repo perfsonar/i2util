@@ -1,3 +1,9 @@
+i2util (4.4.1-1) perfsonar-4.4; urgency=low
+
+  * New upstream version.
+
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Thu, 26 Aug 2021 02:45:31 +0100
+
 i2util (4.4.0-1) perfsonar-4.4; urgency=low
 
   * New upstream version.
