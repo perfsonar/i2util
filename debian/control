@@ -1,9 +1,8 @@
 Source: i2util
 Priority: optional
 Maintainer: perfSONAR developers <debian@perfsonar.net>
-Uploaders: Antoine Delvaux <antoine.delvaux@man.poznan.pl>,
- Valentin Vidic <Valentin.Vidic@CARNet.hr>
-Build-Depends: debhelper (>= 9), autotools-dev, automake, autoconf
+Uploaders: Antoine Delvaux <antoine.delvaux@man.poznan.pl>
+Build-Depends: debhelper (>= 10), automake, autoconf
 Standards-Version: 3.9.8
 Section: libs
 Homepage: https://github.com/perfsonar/i2util
