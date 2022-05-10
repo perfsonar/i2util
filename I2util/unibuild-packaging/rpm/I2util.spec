@@ -29,7 +29,7 @@ that is distributed with the "volsh" code from UCAR.
 %setup -q
 
 %build
-./bootstrap.sh
+./bootstrap
 %configure
 make
 
