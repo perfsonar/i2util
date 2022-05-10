@@ -8,6 +8,9 @@ Summary:        I2 Utility Library
 License:        ASL 2.0
 Group:          Development/Libraries
 Source0:        %{name}-%{version}.tar.gz
+BuildRequires:  gcc
+BuildRequires:  autoconf
+BuildRequires:  automake
 
 %description
 I2 Utility library. Currently contains:
@@ -26,7 +29,9 @@ that is distributed with the "volsh" code from UCAR.
 %setup -q
 
 %build
+./bootstrap.sh
 %configure
+make
 
 %install
 rm -rf $RPM_BUILD_ROOT

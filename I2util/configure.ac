@@ -102,5 +102,5 @@ AS_IF([test -n "${MAN2HTML}"],
 AM_CONDITIONAL([HAVE_MAN2HTML], test x$do_man2html = xtrue)
 
 AC_SUBST(ac_aux_dir)
-AC_OUTPUT([Makefile I2util/Makefile aespasswd/Makefile pfstore/Makefile doc/Makefile test/Makefile I2util.spec],
+AC_OUTPUT([Makefile I2util/Makefile aespasswd/Makefile pfstore/Makefile doc/Makefile test/Makefile],
 	[test -z "$CONFIG_HEADERS" || echo timestamp > I2util/stamp-h.in])
