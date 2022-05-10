@@ -1,11 +1,13 @@
+#Version variables set by automated scripts
+%define perfsonar_auto_version 5.0.0
+%define perfsonar_auto_relnum 0.0.a1
 Name:           I2util
-Version:        @VERSION@
-Release:        1%{?dist}
+Version:        %{perfsonar_auto_version}
+Release:        %{perfsonar_auto_relnum}%{?dist}
 Summary:        I2 Utility Library
-License:        ASL 2.0 
+License:        ASL 2.0
 Group:          Development/Libraries
-Source0:        I2util-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Source0:        %{name}-%{version}.tar.gz
 
 %description
 I2 Utility library. Currently contains:

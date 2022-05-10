@@ -14,31 +14,26 @@
 #	Author:		Jeff Boote
 #			Internet2
 #
-#	Date:		Wed Apr 24 09:50:44 EDT 2002
+#	Date:		Wed Apr 24 09:49:28 EDT 2002
 #
-#	Description:	libI2util build description.
+#	Description:	toplevel build for I2util library
+#
 
 #include $(top_srcdir)/config/Make-rules
 
-AM_CPPFLAGS	=	-I$(top_builddir) -I$(top_srcdir)
+ACLOCAL_AMFLAGS = -I config
+AUTOMAKE_OPTIONS = foreign
 
-MACH_SOURCES	= mach_dep.c mach_dep.h
+SUBDIRS = I2util aespasswd pfstore test doc
 
-lib_LIBRARIES		= libI2util.a
-libI2util_a_SOURCES	= utilP.h ErrLog.c ErrLogImmediate.c ErrLogSyslog.c \
-			random.c io.c saddr.c md5.c readpassphrase.c hex.c \
-			conf.c addr.c sha1.c hmac-sha1.c pbkdf2.c table.c \
-			$(MACH_SOURCES)
+EXTRA_DIST	=	LICENSE
 
-I2utilincludedir = $(pkgincludedir)
-I2utilinclude_HEADERS	= Pthread.h errlog.h errlogimmediate.h errlogsyslog.h \
-			mach_dep.h io.h random.h saddr.h table.h md5.h \
-			readpassphrase.h conf.h hex.h util.h addr.h sha1.h \
-			sha1P.h hmac-sha1.h pbkdf2.h
-
-if I2THREADS_ENABLE
-MACH_SOURCES	+= Pthread.c
-endif
+# uncomment when automake is unbroken 1.5 doesn't work with this...
+# (then remove these from DIST_EXTRA in subdir)
+#nobase_include_HEADERS = I2util/util.h I2util/Pthread.h I2util/config.h \
+#		I2util/errlog.h I2util/errlogimmediate.h I2util/errlogsyslog.h \
+#		I2util/options.h I2util/table.h I2util/random.h I2util/io.h \
+#		I2util/saddr.h
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
