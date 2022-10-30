@@ -1,8 +1,82 @@
-i2util (1.8.0~0-1) perfsonar-minor-snapshot; urgency=low
+i2util (5.0.0~b2.1-1) perfsonar-5.0; urgency=low
 
-  * New upstream release
+  * New upstream version.
+  * Building on buster.
 
- -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Wed, 03 Apr 2019 15:43:43 +0000
+ -- perfSONAR developers <debian@perfsonar.net>  Thu, 27 Oct 2022 10:34:44 -0400
+
+i2util (4.5.0~a1.0-1) perfsonar-4.5-snapshot; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Fri, 16 Jul 2021 17:12:56 +0000
+i2util (4.4.2-1) perfsonar-4.4; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Wed, 12 Jan 2022 09:34:06 -0500
+
+i2util (4.4.1-1) perfsonar-4.4; urgency=low
+
+  * New upstream version.
+
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Thu, 26 Aug 2021 02:45:31 +0100
+
+i2util (4.4.0-1) perfsonar-4.4; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Wed, 07 Jul 2021 15:20:44 +0000
+
+i2util (4.3.4-1) perfsonar-4.3; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Wed, 17 Mar 2021 01:10:48 +0000
+
+i2util (4.3.3-1) perfsonar-4.3; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Tue, 02 Feb 2021 16:38:37 +0000
+
+i2util (4.3.2-1) perfsonar-4.3; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Wed, 18 Nov 2020 15:44:05 +0000
+
+i2util (4.3.0-1) perfsonar-4.3; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Fri, 30 Oct 2020 14:45:45 +0000
+
+i2util (4.2.4-1) perfsonar-4.2; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Thu, 26 Mar 2020 10:10:37 -0400
+
+i2util (4.2.3-1) perfsonar-4.2; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Wed, 19 Feb 2020 15:38:46 +0000
+
+i2util (4.2.1-1) perfsonar-4.2; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Mon, 30 Sep 2019 09:56:18 -0400
+
+i2util (4.2.0-1) perfsonar-minor-staging; urgency=low
+
+  * New upstream release.
+  * Include pfstore binary and manpage.
+  * Building on Stretch.
+
+ -- Andy Lake <andy@es.net>  Thu, 15 Aug 2019 01:11:21 +0000
 
 i2util (1.7-1) perfsonar-jessie-release; urgency=low
 
@@ -12,7 +86,7 @@ i2util (1.7-1) perfsonar-jessie-release; urgency=low
  -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Tue, 26 Jun 2018 16:43:56 +0000
 
 i2util (1.6-1) perfsonar-jessie-release; urgency=low
-
+ 
   * New upstream release
 
  -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Tue, 20 Sep 2016 21:58:03 +0000
@@ -33,15 +107,18 @@ i2util (1.4-1) unstable; urgency=low
 i2util (1.3-1) unstable; urgency=low
 
   * New upstream release
+  * enabled compiler flags for hardening
+  * enabled PIC compiler flag (Closes: #837400)
+  * bumped Standards-Version to 3.9.8
 
- -- Antoine Delvaux <adelvaux@man.poznan.pl>  Wed, 08 Jul 2015 19:41:06 +0000
+ -- Raoul Gunnar Borenius <borenius@dfn.de>  Mon, 19 Sep 2016 14:42:33 +0200
 
-i2util (1.2.2-1~bpo70+1) unstable; urgency=low
+i2util (1.2-2) unstable; urgency=medium
 
-  * Backport to Wheezy
-  * Adding gbp.conf for git-buildpackage
+  * added multiarch support
+  * include pfstore (Closes: #774286)
 
- -- Antoine Delvaux <antoine.delvaux@dante.net>  Tue, 10 Mar 2015 19:10:54 +0000
+ -- Raoul Gunnar Borenius <borenius@dfn.de>  Wed, 29 Jul 2015 11:03:23 +0200
 
 i2util (1.2-1) unstable; urgency=low
 

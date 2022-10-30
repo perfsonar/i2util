@@ -1,5 +1,13 @@
 #!/usr/bin/make -f
 
-%:
+
+export DEB_CFLAGS_MAINT_APPEND  = -fPIC
+export DEB_LDFLAGS_MAINT_APPEND = -fPIC
+export DEB_BUILD_MAINT_OPTIONS  = hardening=+all
+
+override_dh_auto_configure:
 	./bootstrap.sh
-	dh $@  --with autotools-dev
+	dh_auto_configure
+
+%:
+	dh $@
