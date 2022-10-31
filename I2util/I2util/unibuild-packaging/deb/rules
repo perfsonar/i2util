@@ -6,7 +6,7 @@ export DEB_LDFLAGS_MAINT_APPEND = -fPIC
 export DEB_BUILD_MAINT_OPTIONS  = hardening=+all
 
 override_dh_auto_configure:
-	./bootstrap.sh
+	./bootstrap
 	dh_auto_configure
 
 %:

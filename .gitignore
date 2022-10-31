@@ -3,6 +3,8 @@
 # Ignore unibuild files 
 unibuild-log
 unibuild-work/
+unibuild-repo/
+multiarch_build/
 # Ignore quilt cache directory
 .pc/
 #Ignore autoconf, automake and make results
