@@ -3,3 +3,51 @@ Description: change paths in manpage
  that are used in Debian
 Author: Raoul Gunnar Borenius <borenius@dfn.de>
 Forwarded: no
+--- a/doc/aespasswd.man	2022-11-09 19:33:25.729174000 +0000
++++ b/doc/aespasswd.man	2022-11-09 19:38:05.200825360 +0000
+@@ -63,18 +63,18 @@
+ added. Comment lines are any line where the first non-white space character
+ is '\fB#\fR'.
+ .SH EXAMPLES
+-\fBaespasswd \-f /usr/local/etc/bwctld.keys testuser\fP
++\fBaespasswd \-f /etc/bwctl-server/bwctld.keys testuser\fP
+ .IP
+ Adds a key for the identity \fItestuser\fR. The user is prompted for
+ a passphrase. If the file does not exist, an error message will
+ be printed and no action will be taken.
+ .LP
+-\fBaespasswd \-f /usr/local/etc/bwctld.keys \-n testuser\fP
++\fBaespasswd \-f /etc/bwctl-server/bwctld.keys \-n testuser\fP
+ .IP
+ Creates the file before doing the same as above. If the file already
+ exists, an error message will be printed and no action will be taken.
+ .LP
+-\fBaespasswd \-f /usr/local/etc/bwctld.keys \-d testuser\fP
++\fBaespasswd \-f /etc/bwctl-server/bwctld.keys \-d testuser\fP
+ .IP
+ Deletes the identity \fItestuser\fR from the keyfile.
+ If the file does not exist, an error message will be printed and no action will be taken.
+--- a/doc/pfstore.man	2022-11-09 19:33:25.729174000 +0000
++++ b/doc/pfstore.man	2022-11-09 19:38:05.202076245 +0000
+@@ -62,18 +62,18 @@
+ added. Comment lines are any line where the first non-white space character
+ is '\fB#\fR'.
+ .SH EXAMPLES
+-\fBpfstore \-f /usr/local/etc/owampd.pfs testuser\fP
++\fBpfstore \-f /etc/owamp-server/owampd.pfs testuser\fP
+ .IP
+ Adds a pass-phrase for the identity \fItestuser\fR. The user is prompted for
+ a pass-phrase. If the file does not exist, an error message will
+ be printed and no action will be taken.
+ .LP
+-\fBpfstore \-f /usr/local/etc/owampd.pfs \-n testuser\fP
++\fBpfstore \-f /etc/owamp-server/owampd.pfs \-n testuser\fP
+ .IP
+ Creates the file before doing the same as above. If the file already
+ exists, an error message will be printed and no action will be taken.
+ .LP
+-\fBpfstore \-f /usr/local/etc/owampd.pfs \-d testuser\fP
++\fBpfstore \-f /etc/owamp-server/owampd.pfs \-d testuser\fP
+ .IP
+ Deletes the identity \fItestuser\fR from the pfsfile.
+ If the file does not exist, an error message will be printed and no action will be taken.
