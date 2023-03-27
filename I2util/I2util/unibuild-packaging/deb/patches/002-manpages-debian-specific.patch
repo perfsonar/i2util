@@ -3,8 +3,8 @@ Description: change paths in manpage
  that are used in Debian
 Author: Raoul Gunnar Borenius <borenius@dfn.de>
 Forwarded: no
---- a/doc/aespasswd.man	2022-10-27 10:34:43.187775719 -0400
-+++ b/doc/aespasswd.man	2022-10-27 10:34:44.347662488 -0400
+--- a/doc/aespasswd.man	2023-03-22 11:35:43.887201459 +0000
++++ b/doc/aespasswd.man	2023-03-27 16:07:08.966811315 +0000
 @@ -63,18 +63,18 @@
  added. Comment lines are any line where the first non-white space character
  is '\fB#\fR'.
@@ -27,8 +27,8 @@ Forwarded: no
  .IP
  Deletes the identity \fItestuser\fR from the keyfile.
  If the file does not exist, an error message will be printed and no action will be taken.
---- a/doc/pfstore.man	2022-10-27 10:34:43.187908672 -0400
-+++ b/doc/pfstore.man	2022-10-27 10:34:44.348205926 -0400
+--- a/doc/pfstore.man	2023-03-22 11:35:43.887467547 +0000
++++ b/doc/pfstore.man	2023-03-27 16:07:08.968131150 +0000
 @@ -62,18 +62,18 @@
  added. Comment lines are any line where the first non-white space character
  is '\fB#\fR'.
