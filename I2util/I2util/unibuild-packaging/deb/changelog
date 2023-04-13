@@ -1,9 +1,9 @@
-i2util (5.0.0~b2.8-2) perfsonar-5.0; urgency=low
+i2util (5.0.0-1) perfsonar-5.0; urgency=low
 
   * New upstream version.
   * Building on buster.
 
- -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Wed, 12 Apr 2023 14:15:19 +0200
+ -- perfSONAR developers <debian@perfsonar.net>  Thu, 13 Apr 2023 19:05:51 -0400
 
 i2util (4.4.6-2) perfsonar-4.4; urgency=low
 
