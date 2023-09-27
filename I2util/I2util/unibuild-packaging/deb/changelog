@@ -1,8 +1,8 @@
-i2util (5.0.5~a1.0-1) perfsonar-5.0-snapshot; urgency=low
+i2util (5.0.5-1) perfsonar-5.0; urgency=low
 
   * New upstream version.
 
- -- perfSONAR developers <debian@perfsonar.net>  Wed, 26 Jul 2023 11:49:05 -0400
+ -- perfSONAR developers <debian@perfsonar.net>  Wed, 27 Sep 2023 10:29:52 -0400
 
 i2util (5.0.4-1) perfsonar-5.0; urgency=low
 
