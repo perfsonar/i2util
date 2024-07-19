@@ -5,8 +5,8 @@ Author: Raoul Gunnar Borenius <borenius@dfn.de>
 Forwarded: no
 Index: b/doc/aespasswd.man
 ===================================================================
---- a/doc/aespasswd.man	2024-06-28 10:52:22.528204651 -0400
-+++ b/doc/aespasswd.man	2024-06-28 10:52:23.392467589 -0400
+--- a/doc/aespasswd.man	2024-07-19 14:39:47.092703638 -0400
++++ b/doc/aespasswd.man	2024-07-19 14:39:48.114319615 -0400
 @@ -63,18 +63,18 @@
  added. Comment lines are any line where the first non-white space character
  is '\fB#\fR'.
@@ -31,8 +31,8 @@ Index: b/doc/aespasswd.man
  If the file does not exist, an error message will be printed and no action will be taken.
 Index: b/doc/pfstore.man
 ===================================================================
---- a/doc/pfstore.man	2024-06-28 10:52:22.528316317 -0400
-+++ b/doc/pfstore.man	2024-06-28 10:52:23.392970126 -0400
+--- a/doc/pfstore.man	2024-07-19 14:39:47.092793053 -0400
++++ b/doc/pfstore.man	2024-07-19 14:39:48.114850359 -0400
 @@ -62,18 +62,18 @@
  added. Comment lines are any line where the first non-white space character
  is '\fB#\fR'.
