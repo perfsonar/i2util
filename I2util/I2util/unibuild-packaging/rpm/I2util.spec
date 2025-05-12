@@ -1,6 +1,6 @@
 #Version variables set by automated scripts
 %define perfsonar_auto_version 5.2.0
-%define perfsonar_auto_relnum 0.1.b1
+%define perfsonar_auto_relnum 0.2.b1
 Name:           I2util
 Version:        %{perfsonar_auto_version}
 Release:        %{perfsonar_auto_relnum}%{?dist}
